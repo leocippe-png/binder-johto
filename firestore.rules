@@ -1,0 +1,28 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Leo: l'unico utente con email e password, riconosciuto dal suo UID
+    function leo() { return request.auth != null && request.auth.uid == "SvNboXHbUnNilhE40d3hB6wNIsF3"; }
+
+    // stato delle tasche e date di arrivo: tutti leggono, solo Leo scrive
+    match /binder/{doc} {
+      allow read: if true;
+      allow write: if leo();
+    }
+    // prezzi, priorità e note della mancolista: solo Leo
+    match /privato/{doc} {
+      allow read, write: if leo();
+    }
+    // messaggi degli amici: chiunque li manda (accesso anonimo), solo Leo li legge e li gestisce
+    match /messaggi/{id} {
+      allow read, update, delete: if leo();
+      allow create: if request.auth != null
+        && request.resource.data.keys().hasOnly(['kind','slot','slots','from','text','ts','status','fonte','uid'])
+        && request.resource.data.kind in ['offerta','suggerimento','commento']
+        && request.resource.data.text is string && request.resource.data.text.size() <= 1500
+        && request.resource.data.from is string && request.resource.data.from.size() <= 40
+        && request.resource.data.status == 'nuova'
+        && request.resource.data.uid == request.auth.uid;
+    }
+  }
+}
