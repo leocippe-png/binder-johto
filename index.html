@@ -558,6 +558,30 @@ body.preview .preview-bar{display:flex}
 .sheet.picking>:not(.k):not(#sh-name):not(#sh-close):not(#pk-panel){display:none!important}
 .sw-panel,.pk-panel{display:grid;gap:10px}
 .sync[data-state="offline"]::before{background:var(--order)}
+/* Miniature nelle sezioni satellite */
+.th{--w:38px;position:relative;flex:none;display:block;width:var(--w);aspect-ratio:63/88;border-radius:4px;overflow:hidden;background:var(--era,var(--leather));box-shadow:0 0 0 1px var(--line)}
+.th img,.th svg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.th-ph{position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-family:var(--f-display);font-weight:800;font-size:calc(var(--w)*.42);opacity:.85}
+.th.s2{box-shadow:0 0 0 2px var(--own)}.th.s1{box-shadow:0 0 0 2px var(--order)}
+.th.s2::after{content:"✓";position:absolute;right:2px;bottom:2px;width:13px;height:13px;border-radius:50%;background:var(--own);color:#fff;font-size:9px;font-weight:700;display:grid;place-items:center;line-height:1}
+.th.big{--w:min(190px,44vw);border-radius:9px;box-shadow:var(--shadow)}
+.th.big.s2::after{width:22px;height:22px;font-size:13px}
+.item{grid-template-columns:auto auto minmax(0,1fr) auto}
+.fiera .item .th{--w:58px}
+.ck-row{grid-template-columns:auto minmax(0,1fr) auto}
+@media (max-width:520px){.item{grid-template-columns:auto auto minmax(0,1fr)}.item .r{grid-column:3}}
+.ck-main{grid-template-columns:auto minmax(0,1fr) minmax(0,240px)}
+@media (max-width:760px){.ck-main{grid-template-columns:auto minmax(0,1fr)}.ck-main .ck-mini{grid-column:1/-1}}
+@media (max-width:420px){.ck-main{grid-template-columns:minmax(0,1fr)}.ck-main .th.big{--w:min(220px,60vw);justify-self:center}}
+div.of-row{grid-template-columns:auto minmax(0,1fr) auto}
+div.of-row input[type=text]{grid-column:1/-1}
+.of-sent{font-size:12px;color:var(--own);font-weight:700}
+.px-head{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:start}
+.px-pro{display:flex;gap:10px;align-items:center;background:var(--bg);border:1px dashed var(--gold);border-radius:10px;padding:8px 10px}
+.px-pro img{width:52px;aspect-ratio:63/88;object-fit:cover;border-radius:4px}
+.wl-prog{height:4px;border-radius:2px;background:var(--line);overflow:hidden;margin-top:4px;width:min(160px,40vw)}
+.wl-prog i{display:block;height:100%;background:var(--own)}
+.group h3 .gh{display:grid;gap:2px}
 /* Cambia carta (solo Leo) */
 .sheet{max-height:calc(100dvh - 12px);overflow-y:auto;overscroll-behavior:contain}
 .sheet.editing>:not(.k):not(#sh-name):not(#sh-close):not(#cc-form){display:none!important}
@@ -1086,6 +1110,8 @@ const upUrl=v=>typeof v==="string"&&v.startsWith("url:")?v.slice(4):"";
 function imgTag(x,q,cls){const v=UP[x.id];const ov=upUrl(v);
  if(v&&!ov){const k=x.id+"@"+v;return `<img class="${cls}" data-up="${x.id}" alt=""${UPIMG[k]?` src="${UPIMG[k]}"`:""}>`}
  const base=ov||x.img;const u=base?`${base}/${q||"low"}.webp`:tcgUrl(x,q);return u?`<img class="${cls}" alt="" loading="lazy" decoding="async" crossorigin="anonymous" src="${u}" onerror="imgFail(this)">`:""}
+function th(x,big){const st=getS(x.id),im=imgTag(x,big?"high":"low","");
+ return `<span class="th${big?" big":""} s${st}" style="--era:${x.t==="c"?era(x).c:"#15301f"}" aria-hidden="true">${im||(x.t==="p"?art(x):`<span class="th-ph">${esc(itName(x.n).slice(0,1))}</span>`)}</span>`}
 function imgFail(i){const m=i.src.match(/assets\.tcgdex\.net\/it\/(.+)\/[^/]+\.webp$/);
  if(m){const k=decodeURIComponent(m[1]);IMGEN[k]=1;try{localStorage.setItem(KEY+"-imgen",JSON.stringify(IMGEN))}catch(e){}i.src=i.src.replace("/it/","/en/");return}
  i.removeAttribute("src");i.removeAttribute("onerror")}
@@ -1259,8 +1285,8 @@ let COMMENTS=null;
 (async()=>{if(await rolePromise==="owner")return;let c=null;try{c=await claude.use("comments")}catch(e){}COMMENTS=c;renderLists()})();
 function vtoast(html,ms){const t=document.getElementById("vtoast");t.innerHTML=html+'<button class="linkbtn" id="vtoast-x">Chiudi</button>';t.hidden=false;
  document.getElementById("vtoast-x").onclick=()=>{t.hidden=true};clearTimeout(vtoast.tm);vtoast.tm=setTimeout(()=>{t.hidden=true},ms||16000)}
-function sendToLeo(text,el,btn){if(window.APP){if(!text)return;if(btn)btn.disabled=true;
-  APP.send(text).then(r=>{vtoast(r==="in coda"?"<span><b>Messaggio pronto.</b> Sei senza rete: parte da solo appena torni online.</span>":"<span><b>Mandato!</b> Leo lo vede subito nell'app.</span>",8000)})
+function sendToLeo(text,el,btn){if(window.APP){if(!text)return Promise.reject();if(btn)btn.disabled=true;
+  return APP.send(text).then(r=>{vtoast(r==="in coda"?"<span><b>Messaggio pronto.</b> Sei senza rete: parte da solo appena torni online.</span>":"<span><b>Mandato!</b> Leo lo vede subito nell'app.</span>",8000)})
   .catch(()=>vtoast("<span>Non sono riuscito a mandarlo: riprova tra poco.</span>")).finally(()=>{if(btn)btn.disabled=false});return}
  if(!COMMENTS){vtoast("<span>Per mandare qualcosa a Leo serve aver fatto l'accesso a Claude e un link che permetta di commentare: chiedilo a Leo.</span>");return}
  let copied=false;try{navigator.clipboard.writeText(text).then(()=>{copied=true},()=>{})}catch(e){}
@@ -1343,7 +1369,7 @@ function matches(x,q){if(!q)return true;const p=parseSet(x);
  return norm([x.n,enName(x.n),x.s,p.set,setIt(p.set),"p. "+x.page,"p"+x.page,x.pageTitle,M(x.id).note||""].join(" ")).includes(norm(q))}
 function visCard(x){const st=getS(x.id),c=WL.carte;if(st===2&&!c.owned)return false;if(st===1&&!c.ordered)return false;
  if(c.era&&eraOf(x)[0]!==c.era)return false;if(c.prio&&!M(x.id).p)return false;return matches(x,c.q)}
-function visPrint(x){const st=getS(x.id);if(st===2&&!WL.stampe.owned)return false;return matches(x,WL.stampe.q)}
+function visPrint(x){const st=getS(x.id);if(st===2&&!WL.stampe.owned)return false;if(WL.stampe.nofile&&UP[x.id]&&!upUrl(UP[x.id]))return false;return matches(x,WL.stampe.q)}
 const setRank=s=>{const i=SET_ORDER.indexOf(s);return i<0?99:i};
 function sortCards(list){return list.map(x=>[x,parseSet(x)]).sort((a,b)=>setRank(a[1].set)-setRank(b[1].set)||numKey(a[1].num)-numKey(b[1].num)||a[0].n.localeCompare(b[0].n))}
 function groupCards(list){const rows=sortCards(list),out=[],ix={};
@@ -1375,11 +1401,11 @@ function cardRow(x,p){const st=getS(x.id),m=M(x.id),isOpen=WL.carte.open.has(x.i
    ${x.note?`<p class="cnote">${esc(x.note)}</p>`:""}
   </div>`}
  return `<div class="item card${st===2?" done":""}${isOpen?" open":""}" id="it-${x.id}">
-  <input type="checkbox" id="wl-${x.id}" data-id="${x.id}" data-f="cb-${x.id}" ${st===2?"checked":""} aria-label="${esc(x.n)}: presa">
+  <input type="checkbox" id="wl-${x.id}" data-id="${x.id}" data-f="cb-${x.id}" ${st===2?"checked":""} aria-label="${esc(x.n)}: presa">${th(x)}
   <button class="t open-btn" data-act="open" data-id="${x.id}" data-f="open-${x.id}" aria-expanded="${isOpen}" aria-controls="det-${x.id}"><span class="num">${esc(p.num||"—")}</span><b>${esc(itName(x.n))}</b>${m.p?'<span class="star" aria-label="prioritaria">★</span>':""}${sub?`<small>${esc(sub)}</small>`:""}${m.note&&!isOpen?`<small class="notepv">${esc(m.note)}</small>`:""}</button>
   <span class="r">${pills}</span>${det}</div>`}
 function printRow(x){const st=getS(x.id);
- return `<label class="item${st===2?" done":""}" id="it-${x.id}"><input type="checkbox" id="wl-${x.id}" data-id="${x.id}" data-f="cb-${x.id}" ${st===2?"checked":""} aria-label="${esc(x.n)}: nel binder"><span class="t"><b>${esc(x.n)}</b><small>${esc(x.note||x.s)}</small></span><span class="r">${st===2?'<span class="pill own">in collezione</span>':st===1?'<span class="pill ord">in tipografia</span>':""}<span class="pill pg">${posLabel(x)}</span></span></label>`}
+ return `<label class="item${st===2?" done":""}" id="it-${x.id}"><input type="checkbox" id="wl-${x.id}" data-id="${x.id}" data-f="cb-${x.id}" ${st===2?"checked":""} aria-label="${esc(x.n)}: nel binder">${th(x)}<span class="t"><b>${esc(x.n)}</b><small>${esc(x.note||x.s)}</small></span><span class="r">${UP[x.id]&&!upUrl(UP[x.id])?'<span class="pill own">file pronto</span>':isOwnerView()?`<button type="button" class="btn" data-up-go="${x.id}">Carica immagine</button>`:""}${st===2?'<span class="pill own">in collezione</span>':st===1?'<span class="pill ord">in tipografia</span>':""}<span class="pill pg">${posLabel(x)}</span></span></label>`}
 
 document.getElementById("v-carte").innerHTML=`<div class="wl-head"><div><h2><span class="owner-only">Mancolista carte</span><span class="viewer-only">Cosa manca a Leo</span></h2><p id="sum-carte"></p></div>
   <div class="wl-modes owner-only" role="group" aria-label="Modalità"><button data-mode="online">Online</button><button data-mode="fiera">In fiera</button></div></div>
@@ -1399,7 +1425,7 @@ document.getElementById("v-carte").innerHTML=`<div class="wl-head"><div><h2><spa
 document.getElementById("v-stampe").innerHTML=`<div class="wl-head"><div><h2>Mancolista stampe</h2><p id="sum-stampe"></p></div></div>
  <div class="spec">Formato 63×88 mm · file a 300 dpi (744×1039 px) · carta opaca 250–300 g · palette verde bosco e oro.</div>
  <div class="wl-bar"><label class="search"><span class="sr">Cerca</span><input type="search" id="q-stampe" placeholder="Cerca per nome o pagina" autocomplete="off"></label>
-  <div class="wl-tools"><button class="btn" id="own-stampe" aria-pressed="true">Già in collezione: mostrate</button><button class="btn primary" id="cp-stampe">Copia la mancolista</button></div></div>
+  <div class="wl-tools"><button class="btn" id="own-stampe" aria-pressed="true">Già in collezione: mostrate</button><button class="btn" id="nofile-stampe" aria-pressed="false">Solo senza file</button><button class="btn primary" id="cp-stampe">Copia la mancolista</button></div></div>
  <div id="list-stampe" class="wl-list"></div>`;
 
 document.getElementById("v-offer").innerHTML=`<div class="wl-head"><div><h2>Le carte che hai</h2><p id="sum-offer"></p></div></div>
@@ -1412,20 +1438,21 @@ function renderOffers(){const ids=Object.keys(OFF).filter(id=>byId[id]&&byId[id]
  const still=ids.filter(id=>getS(id)===0),gone=ids.filter(id=>getS(id)!==0);
  const n=still.length;["n-offer","n-offer-m"].forEach(k=>{const e=document.getElementById(k);if(e)e.textContent=n||""});
  document.getElementById("sum-offer").textContent=n?`${n} ${n===1?"carta che a Leo manca":"carte che a Leo mancano"}. Aggiungi condizioni o prezzo se vuoi, poi premi «Manda a Leo».`:"";
- document.getElementById("offer-send").hidden=!n;
+ document.getElementById("offer-send").hidden=!n;const fresh=still.filter(id=>!OFF[id].sent).length,og=document.getElementById("offer-go");
+ og.textContent=!n?"Manda a Leo":fresh===n?"Manda a Leo":fresh?(fresh===1?"Manda a Leo quella nuova":`Manda a Leo le ${fresh} nuove`):"Già mandate: manda di nuovo";og.dataset.only=fresh&&fresh<n?"new":"";
  if(!ids.length){OL.innerHTML=`<div class="ce-empty"><b>Hai carte che mancano a Leo?</b><ol class="ce-steps"><li>Apri <b>Cosa gli manca</b>, oppure tocca una tasca nel binder, oppure usa <b>Controlla</b> con la carta in mano.</li><li>Segna con <b>Ce l'ho</b> le carte che hai.</li><li>Torna qui e premi <b>Manda a Leo</b>: gli arriva direttamente nell'app.</li></ol></div>`;return}
- const row=(id,ok)=>{const x=byId[id],p=parseSet(x);return `<div class="of-row"><div><b>${esc(itName(x.n))}</b><small>${esc(setIt(p.set))} · ${esc(p.num||"—")}${p.variant?" · "+esc(p.variant):""} · ${posLabel(x)}</small>${ok?"":'<small>Leo nel frattempo l\'ha già presa</small>'}</div><div class="of-acts"><button class="linkbtn" data-of="open" data-id="${id}">Vedi</button><button class="linkbtn" data-of="del" data-id="${id}">Togli</button></div>${ok?`<input type="text" data-of="note" data-id="${id}" maxlength="120" value="${esc(OFF[id].note||"")}" placeholder="Condizioni, prezzo o scambio (facoltativo)" aria-label="Nota per ${esc(x.n)}">`:""}</div>`};
+ const row=(id,ok)=>{const x=byId[id],p=parseSet(x);return `<div class="of-row">${th(x)}<div><b>${esc(itName(x.n))}</b><small>${esc(setIt(p.set))} · ${esc(p.num||"—")}${p.variant?" · "+esc(p.variant):""} · ${posLabel(x)}</small>${ok?"":'<small>Leo nel frattempo l\'ha già presa</small>'}</div><div class="of-acts">${OFF[id].sent?`<span class="of-sent">mandata ${ago(OFF[id].sent)}</span>`:""}<button class="linkbtn" data-of="open" data-id="${id}">Vedi</button><button class="linkbtn" data-of="del" data-id="${id}">Togli</button></div>${ok?`<input type="text" data-of="note" data-id="${id}" maxlength="120" value="${esc(OFF[id].note||"")}" placeholder="Condizioni, prezzo o scambio (facoltativo)" aria-label="Nota per ${esc(x.n)}">`:""}</div>`};
  OL.innerHTML=sortCards(still.map(id=>byId[id])).map(([x])=>row(x.id,true)).join("")+sortCards(gone.map(id=>byId[id])).map(([x])=>row(x.id,false)).join("")}
 OL.addEventListener("click",e=>{const b=e.target.closest("[data-of]");if(!b||b.tagName==="INPUT")return;const id=b.dataset.id;
  if(b.dataset.of==="del"){toggleOffer(id,false)}else if(b.dataset.of==="open"){goBinder(byId[id])}});
 OL.addEventListener("change",e=>{const t=e.target;if(t.dataset.of==="note"&&OFF[t.dataset.id]){OFF[t.dataset.id].note=t.value.trim().slice(0,120);saveOff()}});
-document.getElementById("offer-go").onclick=e=>{const ids=sortCards(Object.keys(OFF).filter(id=>byId[id]&&getS(id)===0).map(id=>byId[id]));if(!ids.length)return;
+document.getElementById("offer-go").onclick=e=>{const only=e.currentTarget.dataset.only==="new";const ids=sortCards(Object.keys(OFF).filter(id=>byId[id]&&getS(id)===0&&(!only||!OFF[id].sent)).map(id=>byId[id]));if(!ids.length)return;
  const nome=document.getElementById("of-name").value.trim().slice(0,40);try{localStorage.setItem(KEY+"-nome",nome)}catch(err){}
  const lines=ids.map(([x,p])=>"- "+itName(x.n)+" "+[p.num,p.variant].filter(Boolean).join(" · ")+" ("+setIt(p.set)+")"+(OFF[x.id].note?" — "+OFF[x.id].note:"")+" #johto "+x.id);
  const text="Ce l'ho!"+(nome?" — da "+nome:"")+"\nHo queste carte che ti mancano per il binder Johto:\n"+lines.join("\n")+"\n#johto offerta";
- if(!COMMENTS)return sendToLeo(text,null,e.currentTarget);goView("binder");const el=document.getElementById("slot-"+ids[0][0].id);el&&el.scrollIntoView({block:"center"});sendToLeo(text,el,e.currentTarget)};
+ if(!COMMENTS){const p=sendToLeo(text,null,e.currentTarget);if(p&&p.then)p.then(()=>{const t=Date.now();ids.forEach(([x])=>{if(OFF[x.id])OFF[x.id].sent=t});saveOff();renderOffers()}).catch(()=>{});return}goView("binder");const el=document.getElementById("slot-"+ids[0][0].id);el&&el.scrollIntoView({block:"center"});sendToLeo(text,el,e.currentTarget)};
 function viewerRow(x,p){const off=!!OFF[x.id],en=enName(x.n);
- return `<label class="item card vrow${off?" offered":""}" id="it-${x.id}"><input type="checkbox" id="wl-${x.id}" data-offer="${x.id}" ${off?"checked":""} aria-label="Ce l'ho: ${esc(x.n)}"><span class="t"><span class="num">${esc(p.num||"—")}</span><b>${esc(itName(x.n))}</b><small>${esc([ui.group==="set"?"":setIt(p.set),p.variant,en!==itName(x.n)?"EN: "+en:""].filter(Boolean).join(" · "))}</small></span><span class="r">${off?'<span class="pill max">ce l\'hai</span>':""}<span class="pill pg">${posLabel(x)}</span></span></label>`}
+ return `<label class="item card vrow${off?" offered":""}" id="it-${x.id}"><input type="checkbox" id="wl-${x.id}" data-offer="${x.id}" ${off?"checked":""} aria-label="Ce l'ho: ${esc(x.n)}">${th(x)}<span class="t"><span class="num">${esc(p.num||"—")}</span><b>${esc(itName(x.n))}</b><small>${esc([ui.group==="set"?"":setIt(p.set),p.variant,en!==itName(x.n)?"EN: "+en:""].filter(Boolean).join(" · "))}</small></span><span class="r">${off?'<span class="pill max">ce l\'hai</span>':""}<span class="pill pg">${posLabel(x)}</span></span></label>`}
 const VC=document.getElementById("v-carte"),LC=document.getElementById("list-carte");
 function toggleBtn(id,key,on,off){const b=document.getElementById(id);b.onclick=()=>{WL.carte[key]=!WL.carte[key];b.setAttribute("aria-pressed",WL.carte[key]);b.textContent=WL.carte[key]?on:off;renderLists()}}
 toggleBtn("prio-carte","prio","★ Solo prioritarie","★ Solo prioritarie");
@@ -1485,24 +1512,24 @@ function renderLists(){
  document.getElementById("n-carte-m").textContent=missC.length;document.getElementById("n-stampe-m").textContent=missP.length;
  const prio=missC.filter(x=>M(x.id).p).length,withMax=missC.filter(x=>getS(x.id)===0&&M(x.id).max),budget=withMax.reduce((s,x)=>s+M(x.id).max,0);
  document.getElementById("sum-carte").textContent=`${missC.length-ordC.length} da trovare e ${ordC.length} ordinate su ${allC.length} carte · ${prio} ${prio===1?"prioritaria":"prioritarie"}`+(withMax.length?` · tetto di spesa ${eur(budget)} su ${withMax.length} ${withMax.length===1?"carta":"carte"}`:"");
- document.getElementById("sum-stampe").textContent=`${missP.length} da preparare su ${allP.length}, in ordine di pagina. "Ordinata" vale come "in tipografia".`;
+ const ready=allP.filter(x=>UP[x.id]&&!upUrl(UP[x.id])).length;document.getElementById("sum-stampe").textContent=`${missP.length} da preparare su ${allP.length}, in ordine di pagina · ${ready} con il file pronto (immagine caricata). "Ordinata" vale come "in tipografia".`;
  renderEras();renderOffers();renderMine();renderProps();
  if(!isOwnerView()){const miss=allC.filter(x=>getS(x.id)===0);
   document.getElementById("sum-carte").textContent=`A Leo mancano ${miss.length} carte su ${allC.length}. Spunta quelle che hai: le ritrovi in «Le carte che hai», pronte da mandargli.`;
   document.getElementById("n-carte-m").textContent=miss.length;
   const vg=groupCards(miss.filter(x=>(!WL.carte.era||eraOf(x)[0]===WL.carte.era)&&matches(x,WL.carte.q)));
   LC.innerHTML=vg.length?vg.map(g=>`<div class="group"><h3><span class="gh">${esc(g.h)}${g.sub?`<small>${esc(g.sub)}</small>`:""}</span><span>${g.rows.length} ${g.rows.length===1?"manca":"mancano"}</span></h3>${g.rows.map(([x,p])=>viewerRow(x,p)).join("")}</div>`).join(""):`<div class="empty">${WL.carte.q?"Nessuna carta mancante corrisponde alla ricerca.":"A Leo non manca nessuna carta con questi filtri."}</div>`;
-  if(typeof ckRefresh==="function")ckRefresh();return}
+  if(typeof ckRefresh==="function")ckRefresh();if(typeof observeUps==="function")observeUps();return}
  const groups=groupCards(allC.filter(visCard));
  LC.innerHTML=groups.length?groups.map(g=>{const miss=g.rows.filter(([x])=>getS(x.id)===0).length;
    return `<div class="group"><h3><span class="gh">${esc(g.h)}${g.sub?`<small>${esc(g.sub)}</small>`:""}</span><span>${miss} da trovare · ${g.rows.length} in lista</span></h3>${g.rows.map(([x,p])=>cardRow(x,p)).join("")}</div>`}).join("")
   :`<div class="empty">${WL.carte.q?"Nessuna carta corrisponde alla ricerca.":WL.carte.prio?"Nessuna carta prioritaria con questi filtri: apri una carta e tocca «Segna prioritaria».":"Nessuna carta da mostrare con questi filtri."}</div>`;
  const prints=allP.filter(visPrint),byPage={};prints.forEach(x=>{(byPage[x.page]=byPage[x.page]||[]).push(x)});
  document.getElementById("list-stampe").innerHTML=prints.length?Object.keys(byPage).sort((a,b)=>a-b).map(pg=>{const rows=byPage[pg];
-   return `<div class="group"><h3>Pagina ${pg} · ${esc(rows[0].pageTitle)}<span>${rows.filter(x=>getS(x.id)<2).length} da preparare</span></h3>${rows.map(printRow).join("")}</div>`}).join("")
+   return `<div class="group"><h3>Pagina ${pg} · ${esc(rows[0].pageTitle)}<span>${rows.filter(x=>getS(x.id)<2).length} da preparare · ${rows.filter(x=>UP[x.id]&&!upUrl(UP[x.id])).length} file pronti</span></h3>${rows.map(printRow).join("")}</div>`}).join("")
   :`<div class="empty">${WL.stampe.q?"Nessuna stampa corrisponde alla ricerca.":"Nessuna stampa da mostrare con questi filtri."}</div>`;
  if(f){const el=document.querySelector(`[data-f="${f}"]`);el&&el.focus({preventScroll:true})}
- if(typeof ckRefresh==="function")ckRefresh();
+ if(typeof ckRefresh==="function")ckRefresh();if(typeof observeUps==="function")observeUps();
 }
 function copyList(lang){const rows=allCardsForCopy();const by={},order=[];
  rows.forEach(([x,p])=>{const k=p.set;if(!(k in by)){by[k]=[];order.push(k)}by[k].push([x,p])});
@@ -1561,7 +1588,7 @@ const SG_KINDS={
  idea:{label:"Un'idea nuova",slot:"Riguarda una tasca precisa? (facoltativo)",nu:"Qual è l'idea?",ph:"Es. una pagina per gli Unown, o una carta che manca del tutto",only:"",need:false}};
 const SKEY=KEY+"-suggerimenti";let MINE=[];try{MINE=JSON.parse(localStorage.getItem(SKEY)||"[]")||[]}catch(e){MINE=[]}
 const saveMine=()=>{try{localStorage.setItem(SKEY,JSON.stringify(MINE))}catch(e){}};
-let sgSlot=null,sgFlash=null;
+let sgSlot=null,sgFlash=null,sgTcg=null;
 const VS=document.getElementById("v-sugg");
 VS.innerHTML=`<div class="wl-head"><div><h2>Suggerisci una modifica</h2><p>Un'idea per il binder di Leo? Una carta più bella, una stampa diversa, una tasca da spostare: preparala qui e mandagliela.</p></div></div>
  <form class="sg-form" id="sg-form" novalidate>
@@ -1570,6 +1597,7 @@ VS.innerHTML=`<div class="wl-head"><div><h2>Suggerisci una modifica</h2><p>Un'id
    <input type="search" id="sg-slot-q" placeholder="Cerca nel binder per nome, numero o pagina (es. 27)" autocomplete="off" aria-labelledby="sg-slot-l"><div class="sg-res" id="sg-res"></div>
    <span class="sg-hint">Puoi anche toccare una tasca nel binder e scegliere «Suggerisci una modifica».</span></div>
   <label class="sg-field"><span class="sg-lbl" id="sg-new-l"></span><input id="sg-new" maxlength="160" autocomplete="off"></label>
+  <div class="tq" id="sg-tq"><div class="tq-row"><button type="button" class="btn" id="sg-qb">Cerca questa carta e scegli l'immagine</button></div><span class="sg-hint" id="sg-qh"></span><div class="tq-res" id="sg-res2"></div></div>
   <label class="sg-field"><span class="sg-lbl">Perché?</span><textarea id="sg-why" maxlength="500" placeholder="Facoltativo: cosa la rende più adatta al binder"></textarea></label>
   <label class="sg-field"><span class="sg-lbl">Il tuo nome</span><input id="sg-name" maxlength="40" placeholder="Così Leo sa chi ringraziare" autocomplete="nickname"></label>
   <div class="sg-warn" id="sg-warn" aria-live="polite"></div>
@@ -1579,7 +1607,7 @@ VS.innerHTML=`<div class="wl-head"><div><h2>Suggerisci una modifica</h2><p>Un'id
 const $=id=>document.getElementById(id);
 try{$("sg-name").value=localStorage.getItem(KEY+"-nome")||""}catch(e){}
 const sgKind=()=>(VS.querySelector('input[name="sgk"]:checked')||{}).value||"carta";
-function sgLabels(){const k=SG_KINDS[sgKind()];$("sg-slot-l").textContent=k.slot;$("sg-new-l").textContent=k.nu;$("sg-new").placeholder=k.ph;
+function sgLabels(){const k=SG_KINDS[sgKind()];const tq=document.getElementById("sg-tq");if(tq)tq.hidden=!(sgKind()==="carta"||sgKind()==="idea");$("sg-slot-l").textContent=k.slot;$("sg-new-l").textContent=k.nu;$("sg-new").placeholder=k.ph;
  if(sgSlot&&k.only&&byId[sgSlot].t!==k.only)sgSlot=null;sgPicked();sgSearch();sgWarn()}
 function slotLine(x){const p=parseSet(x);return x.t==="p"?"Stampa · "+posLabel(x):`${setIt(p.set)} ${p.num||""}${p.variant?" · "+p.variant:""} · ${posLabel(x)}`}
 function stLabel(x){const s=getS(x.id);return x.t==="p"?(s===2?"Leo l'ha già stampata":"stampa ancora da fare"):(s===2?"Leo ce l'ha già":s===1?"Leo l'ha ordinata":"a Leo manca")}
@@ -1591,7 +1619,7 @@ function sgSearch(){const q=$("sg-slot-q").value.trim(),out=$("sg-res");if(!q||s
  if(pg)list=all.filter(x=>x.page===pg);
  else{const Q=ckParse(q);list=all.map(x=>[x,x.t==="c"?ckScore(x,Q):(norm(x.n+" "+x.pageTitle).includes(norm(q))?5:0)]).filter(r=>r[1]>0).sort((a,b)=>b[1]-a[1]).map(r=>r[0])}
  if(k.only)list=list.filter(x=>x.t===k.only);
- out.innerHTML=list.length?list.slice(0,9).map(x=>`<button type="button" class="ck-row" data-pick="${x.id}"><span class="ck-dot s${getS(x.id)}"></span><span class="ck-rt"><b>${esc(itName(x.n))}</b> <span>${esc(slotLine(x))}</span></span><span class="ck-rs">${stLabel(x)}</span></button>`).join(""):`<p class="sg-hint">Nessuna tasca trovata${k.only==="c"?" tra le carte":k.only==="p"?" tra le stampe":""}.</p>`}
+ out.innerHTML=list.length?list.slice(0,9).map(x=>`<button type="button" class="ck-row" data-pick="${x.id}">${th(x)}<span class="ck-rt"><b>${esc(itName(x.n))}</b> <span>${esc(slotLine(x))}</span></span><span class="ck-rs">${stLabel(x)}</span></button>`).join(""):`<p class="sg-hint">Nessuna tasca trovata${k.only==="c"?" tra le carte":k.only==="p"?" tra le stampe":""}.</p>`}
 $("sg-slot-q").addEventListener("input",sgSearch);
 $("sg-res").addEventListener("click",e=>{const b=e.target.closest("[data-pick]");if(!b)return;sgSlot=b.dataset.pick;$("sg-slot-q").value="";sgPicked();sgWarn();$("sg-new").focus()});
 VS.querySelectorAll('input[name="sgk"]').forEach(r=>r.addEventListener("change",sgLabels));
@@ -1615,21 +1643,21 @@ function sgText(s){const x=s.slot?byId[s.slot]:null,k=SG_KINDS[s.kind];
  return ["Suggerimento per il binder Johto"+(s.nome?" — da "+s.nome:""),
   k.label+(x?": "+itName(x.n)+" ("+slotLine(x)+")":""),
   (s.kind==="sposta"?"Dove: ":s.kind==="idea"?"Idea: ":"Proposta: ")+s.nuova,
-  s.perche?"Perché: "+s.perche:"",
+  s.perche?"Perché: "+s.perche:"",s.tcg?"TCGdex: "+s.tcg:"",
   ...s.warn.map(t=>"Nota: "+t),
   "#johto "+(s.slot||"idea")].filter(Boolean).join("\n")}
 $("sg-form").addEventListener("submit",e=>{e.preventDefault();const k=sgKind(),K=SG_KINDS[k],nu=$("sg-new").value.trim(),err=$("sg-err");
  if(K.need&&!sgSlot){err.textContent="Scegli prima la tasca.";$("sg-slot-q").focus();return}
  if(!nu){err.textContent=k==="sposta"?"Scrivi dove la metteresti.":"Scrivi cosa proponi.";$("sg-new").focus();return}
  err.textContent="";const nome=$("sg-name").value.trim().slice(0,40);try{localStorage.setItem(KEY+"-nome",nome)}catch(e){}
- const s={id:"s"+Date.now(),kind:k,slot:sgSlot,nuova:nu.slice(0,160),perche:$("sg-why").value.trim().slice(0,500),nome,ts:Date.now(),warn:sgWarnings().filter(w=>w[0]!=="info"||/già/.test(w[1])).map(w=>w[1])};
+ const s={id:"s"+Date.now(),kind:k,slot:sgSlot,tcg:(k==="carta"||k==="idea")&&sgTcg?sgTcg.id+" "+sgTcg.img:"",nuova:nu.slice(0,160),perche:$("sg-why").value.trim().slice(0,500),nome,ts:Date.now(),warn:sgWarnings().filter(w=>w[0]!=="info"||/già/.test(w[1])).map(w=>w[1])};
  MINE.unshift(s);MINE=MINE.slice(0,30);saveMine();sgFlash=s.id;sgReset(true);renderMine();sendSugg(s,e.submitter||null)});
 function sendSugg(s,btn){if(window.APP||!COMMENTS)return sendToLeo(window.APP?sgText(s):"",null,btn);let el=document.querySelector(".cover");if(s.slot){goView("binder");el=document.getElementById("slot-"+s.slot);el&&el.scrollIntoView({block:"center"})}sendToLeo(sgText(s),el,btn)}
-function sgReset(keepKind){sgSlot=null;$("sg-new").value="";$("sg-why").value="";$("sg-slot-q").value="";$("sg-err").textContent="";if(!keepKind){const r=VS.querySelector('input[name="sgk"][value="carta"]');r.checked=true}sgLabels()}
+function sgReset(keepKind){sgSlot=null;sgTcg=null;const r2=document.getElementById("sg-res2");if(r2){r2.innerHTML="";document.getElementById("sg-qh").textContent=""}$("sg-new").value="";$("sg-why").value="";$("sg-slot-q").value="";$("sg-err").textContent="";if(!keepKind){const r=VS.querySelector('input[name="sgk"][value="carta"]');r.checked=true}sgLabels()}
 $("sg-reset").onclick=()=>sgReset(false);
 function renderMine(){const box=$("sg-mine");
  if(MYMSG&&Object.keys(MYMSG).length){const it=Object.values(MYMSG).sort((a,b)=>b.ts-a.ts);$("sg-mine-h").textContent="Tutto quello che hai mandato a Leo, con la sua risposta.";
-  box.innerHTML=it.map(m=>{const st=ST_AM[m.status]||ST_AM.nuova;return `<article class="sg-item"><div class="sg-meta"><span class="st-b ${st[1]}">${st[0]}</span><span>${new Date(m.ts).toLocaleDateString("it-IT",{day:"numeric",month:"short"})}</span></div><pre>${esc(String(m.text||"").replace(/\n?#johto.*$/gm,"").trim())}</pre>${m.risposta?`<div class="leo-r"><b>Leo:</b> ${esc(m.risposta)}</div>`:""}</article>`}).join("");return}$("sg-mine-h").textContent=MINE.length?"I suggerimenti che hai mandato a Leo.":"Qui ritrovi i suggerimenti che mandi a Leo.";
+  box.innerHTML=it.map(m=>{const st=ST_AM[m.status]||ST_AM.nuova;return `<article class="sg-item"><div class="sg-meta"><span class="st-b ${st[1]}">${st[0]}</span><span>${new Date(m.ts).toLocaleDateString("it-IT",{day:"numeric",month:"short"})}</span></div><pre>${esc(String(m.text||"").replace(/\n?#johto.*$/gm,"").replace(/^TCGdex: .*$/m,"").trim())}</pre>${m.risposta?`<div class="leo-r"><b>Leo:</b> ${esc(m.risposta)}</div>`:""}</article>`}).join("");return}$("sg-mine-h").textContent=MINE.length?"I suggerimenti che hai mandato a Leo.":"Qui ritrovi i suggerimenti che mandi a Leo.";
  box.innerHTML=MINE.map(s=>`<article class="sg-item${sgFlash===s.id?" fresh":""}" id="sg-${s.id}"><pre>${esc(sgText(s))}</pre><div class="sg-acts"><button class="btn" data-sg="send" data-id="${s.id}">Manda di nuovo</button>${s.slot?`<button class="btn" data-sg="open" data-id="${s.id}">Vedi la tasca</button>`:""}<button class="linkbtn" data-sg="del" data-id="${s.id}">Elimina</button></div></article>`).join("")}
 $("sg-mine").addEventListener("click",e=>{const b=e.target.closest("[data-sg]");if(!b)return;const s=MINE.find(m=>m.id===b.dataset.id);if(!s)return;
  if(b.dataset.sg==="send")sendSugg(s,b);
@@ -1676,19 +1704,22 @@ function renderProps(){const items=Object.entries(PROPS).filter(([,p])=>p&&p.sta
  if(typeof renderMods==="function")renderMods();
  $("px-list").innerHTML=list.length?list.map(([id,p])=>{const x=p.slot?byId[p.slot]:null;
   const many=(p.slots||[]).map(id=>byId[id]).filter(Boolean);
-  const offerBox=many.length?`<div class="of-list">${many.map(y=>`<div class="sg-w ${getS(y.id)===2?"own":"info"}">${esc(itName(y.n))} ${esc(parseSet(y).num)} · ${posLabel(y)} — ${getS(y.id)===2?"ce l'hai già":getS(y.id)===1?"ordinata":"ti manca"}</div>`).join("")}</div>`:"";
+  const offerBox=many.length?`<div class="of-list">${many.map(y=>`<div class="sg-w ${getS(y.id)===2?"own":"info"}" style="display:flex;gap:10px;align-items:center">${th(y)}<span style="flex:1;min-width:0">${esc(itName(y.n))} ${esc(parseSet(y).num)} · ${posLabel(y)} — ${getS(y.id)===2?"ce l'hai già":getS(y.id)===1?"ordinata":"ti manca"}</span>${getS(y.id)===0?`<button class="btn" data-pa="ord" data-id="${id}" data-slot="${y.id}">Me la dà: ordinata</button>`:""}</div>`).join("")}</div>`:"";
   const live=x?(x.t==="c"&&getS(x.id)===2?'<div class="sg-w own">Questa carta ce l\'hai già nel binder.</div>':x.t==="c"&&getS(x.id)===1?'<div class="sg-w">Questa carta l\'hai già ordinata.</div>':""):"";
-  return `<article class="sg-item st-${p.status}"><div class="sg-meta"><b>${esc(p.from||"Amico")}</b>${p.fonte==="commento"?'<span class="src">dai commenti</span>':""}<span>${new Date(p.ts).toLocaleDateString("it-IT",{day:"numeric",month:"short"})}</span>${p.kind==="offerta"?`<span class="src">ce l'ha: ${many.length} ${many.length===1?"carta":"carte"}</span>`:x?`<span>${esc(itName(x.n))} · ${posLabel(x)}</span>`:"<span>idea generale</span>"}
+  const pro=(String(p.text).match(/^TCGdex: (\S+) (\S+)$/m)||[]);
+  return `<article class="sg-item st-${p.status}"><div class="px-head">${x?th(x):""}<div style="display:grid;gap:6px;min-width:0"><div class="sg-meta"><b>${esc(p.from||"Amico")}</b>${p.fonte==="commento"?'<span class="src">dai commenti</span>':""}<span>${new Date(p.ts).toLocaleDateString("it-IT",{day:"numeric",month:"short"})}</span>${p.kind==="offerta"?`<span class="src">ce l'ha: ${many.length} ${many.length===1?"carta":"carte"}</span>`:x?`<span>${esc(itName(x.n))} · ${posLabel(x)}</span>`:"<span>idea generale</span>"}
    <span class="sg-st" role="group" aria-label="Decisione">${Object.entries(P_ST).map(([k,l])=>`<button data-ps="${k}" data-v="${k}" data-id="${id}" aria-pressed="${p.status===k}">${l}</button>`).join("")}</span></div>
-   ${live}${offerBox}<pre>${esc(p.text)}</pre><div class="px-r"><textarea data-pr="${id}" maxlength="500" placeholder="Rispondi a ${esc(p.from||"chi l'ha mandata")}: lo legge nell'app">${esc(p.risposta||"")}</textarea></div><div class="sg-acts"><button class="btn" data-pa="reply" data-id="${id}">${p.risposta?"Aggiorna risposta":"Manda risposta"}</button>${x&&canApply(p)?`<button class="btn primary" data-pa="apply" data-id="${id}">${x.t==="p"?"Cambia la stampa":"Cambia la carta"}</button>`:""}${x?`<button class="btn" data-pa="open" data-id="${id}">Vedi la tasca</button>`:""}<button class="linkbtn" data-pa="del" data-id="${id}">Elimina</button></div></article>`}).join("")
+   </div></div>${live}${offerBox}${pro[2]?`<div class="px-pro"><img alt="" src="${esc(pro[2])}/low.webp" onerror="imgFail(this)"><span>La carta proposta, scelta dall'amico su TCGdex.</span></div>`:""}<pre>${esc(String(p.text).replace(/^TCGdex: .*$/m,"").trim())}</pre><div class="px-r"><textarea data-pr="${id}" maxlength="500" placeholder="Rispondi a ${esc(p.from||"chi l'ha mandata")}: lo legge nell'app">${esc(p.risposta||"")}</textarea></div><div class="sg-acts"><button class="btn" data-pa="reply" data-id="${id}">${p.risposta?"Aggiorna risposta":"Manda risposta"}</button>${x&&canApply(p)?`<button class="btn primary" data-pa="apply" data-id="${id}">${x.t==="p"?"Cambia la stampa":"Cambia la carta"}</button>`:""}${x?`<button class="btn" data-pa="open" data-id="${id}">Vedi la tasca</button>`:""}<button class="linkbtn" data-pa="del" data-id="${id}">Elimina</button></div></article>`}).join("")
   :`<div class="ce-empty">${pFilter==="nuova"?"Nessuna proposta da valutare.":"Nessuna proposta in questo elenco."}</div>`}
 $("px-filter").addEventListener("click",e=>{const b=e.target.closest("[data-pf]");if(b){pFilter=b.dataset.pf;renderProps()}});
 $("px-list").addEventListener("click",e=>{const b=e.target.closest("[data-ps],[data-pa]");if(!b)return;const id=b.dataset.id,p=PROPS[id];if(!p)return;
  if(b.dataset.ps)setProp(id,{...p,status:b.dataset.ps});
  else if(b.dataset.pa==="del")setProp(id,{...p,status:"eliminata"});
  else if(b.dataset.pa==="reply"){const ta=document.querySelector(`[data-pr="${id}"]`);const r=clean(ta.value).slice(0,500);setProp(id,{...p,risposta:r,rts:Date.now()});flashBtn(b,r?"Risposta inviata":"Risposta tolta")}
+ else if(b.dataset.pa==="ord"){setSlot(b.dataset.slot,1);flashBtn(b,"Segnata ordinata")}
  else if(b.dataset.pa==="open")goBinder(byId[p.slot]);
- else if(b.dataset.pa==="apply"){const x=byId[p.slot];goBinder(x);const nu=propNew(p);startEdit(x,{prop:id,ref:nu||p.text,guess:x.t==="c"?guessCard(nu):{n:nu,s:""}})}});
+ else if(b.dataset.pa==="apply"){const x=byId[p.slot];goBinder(x);const nu=propNew(p);startEdit(x,{prop:id,ref:nu||p.text,guess:x.t==="c"?guessCard(nu):{n:nu,s:""}});
+  const tid=(String(p.text).match(/^TCGdex: (\S+)/m)||[])[1];if(tid&&x.t==="c")tcgCard(tid).then(c=>{if(c&&ccSlot===x.id)ccApply(c)})}});
 document.getElementById("v-prop").addEventListener("click",e=>{const b=e.target.closest("[data-md]");if(!b)return;const x=byId[b.dataset.id];if(!x)return;
  if(b.dataset.md==="open")goBinder(x);else{undoMod(x.id)}});
 function toastProps(ids){const t=document.getElementById("toast");const p=PROPS[ids[0]];
@@ -1893,11 +1924,7 @@ async function tqRun(k){const q=document.getElementById(k+"-q").value,hint=docum
  res.innerHTML=r.map(c=>`<button type="button" class="tq-it" data-tq="${esc(c.id)}"><img loading="lazy" alt="" src="${esc(c.img)}/low.webp" onerror="imgFail(this)"><b>${esc(c.name)}</b><small>${esc(TCG_REV[c.set]?setIt(TCG_REV[c.set]):c.set)} · ${esc(c.localId)}${c.lang==="en"?" · EN":""}</small></button>`).join("")}
 let tqT={};["cc","pk"].forEach(k=>{const i=document.getElementById(k+"-q");i.addEventListener("input",()=>{clearTimeout(tqT[k]);tqT[k]=setTimeout(()=>tqRun(k),450)});
  i.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();clearTimeout(tqT[k]);tqRun(k)}});document.getElementById(k+"-qb").onclick=()=>tqRun(k)});
-document.getElementById("cc-res").addEventListener("click",async e=>{const b=e.target.closest("[data-tq]");if(!b)return;const c=TQ.cc.find(z=>z.id===b.dataset.tq);if(!c)return;markPick("cc",c.id);
- const si=await setInfo(c.set);ccForm.querySelector('input[name="cct"][value="c"]').checked=true;ccLabels();
- document.getElementById("cc-n").value=c.name;document.getElementById("cc-s").value=`${si.name} ${c.localId}${si.tot?"/"+si.tot:""}`;
- ccPick={img:c.img,en:c.en||(c.lang==="en"?c.name:"")};if(!ccPick.en)fetch(`${TCGAPI}en/cards/${encodeURIComponent(c.id)}`).then(r=>r.json()).then(d=>{if(ccPick&&ccPick.img===c.img&&d&&d.name)ccPick.en=d.name}).catch(()=>{});
- ccWarn();ccPrev()});
+document.getElementById("cc-res").addEventListener("click",e=>{const b=e.target.closest("[data-tq]");if(!b)return;const c=TQ.cc.find(z=>z.id===b.dataset.tq);if(!c)return;markPick("cc",c.id);ccApply(c)});
 // scegli solo l'immagine (la carta resta quella)
 function startPick(x){if(!isOwnerView())return;const q=document.getElementById("pk-q");q.value=x.t==="c"?`${enName(x.n)===x.n?itName(x.n):itName(x.n)} ${parseSet(x).num.split("/")[0]}`.trim():itName(x.n);
  document.getElementById("pk-qh").textContent="";document.getElementById("pk-res").innerHTML="";sheet.classList.add("picking");document.getElementById("pk-panel").hidden=false;sheet.scrollTop=0;tqRun("pk").then(()=>{if(!TQ.pk.length&&x.t==="c"&&enName(x.n)!==itName(x.n)){q.value=enName(x.n);tqRun("pk")}})}
@@ -1920,7 +1947,7 @@ document.getElementById("sh-swap").onclick=()=>{if(cur)startSwap(cur)};
 document.getElementById("sw-cancel").onclick=()=>{const x=cur;endSwap();if(x)open(x)};
 document.getElementById("sw-q").addEventListener("input",()=>{const q=document.getElementById("sw-q").value.trim(),out=document.getElementById("sw-res");swB=null;document.getElementById("sw-ok").disabled=true;document.getElementById("sw-warn").innerHTML="";
  if(!q){out.innerHTML="";return}const pg=/^\d{1,2}$/.test(q)?+q:null;let list=pg?all.filter(y=>y.page===pg):all.map(y=>[y,y.t==="c"?ckScore(y,ckParse(q)):(norm(y.n+" "+y.pageTitle).includes(norm(q))?5:0)]).filter(r=>r[1]>0).sort((a,b)=>b[1]-a[1]).map(r=>r[0]);
- list=list.filter(y=>y.id!==swA);out.innerHTML=list.slice(0,12).map(y=>`<button type="button" class="ck-row" data-sw="${y.id}"><span class="ck-dot s${getS(y.id)}"></span><span class="ck-rt"><b>${esc(itName(y.n))}</b> <span>${esc(slotLine(y))}</span></span></button>`).join("")||'<p class="sg-hint">Nessuna tasca trovata.</p>'});
+ list=list.filter(y=>y.id!==swA);out.innerHTML=list.slice(0,12).map(y=>`<button type="button" class="ck-row" data-sw="${y.id}">${th(y)}<span class="ck-rt"><b>${esc(itName(y.n))}</b> <span>${esc(slotLine(y))}</span></span></button>`).join("")||'<p class="sg-hint">Nessuna tasca trovata.</p>'});
 document.getElementById("sw-res").addEventListener("click",e=>{const b=e.target.closest("[data-sw]");if(!b)return;swB=b.dataset.sw;const y=byId[swB],x=byId[swA];
  document.querySelectorAll("#sw-res .ck-row").forEach(r=>r.style.outline=r===b?"2px solid var(--gold)":"");
  const w=[];if(x.t!==y.t)w.push(`Attenzione: scambi una ${x.t==="c"?"carta":"stampa"} con una ${y.t==="c"?"carta":"stampa"}.`);if(x.f.includes("anchor")||y.f.includes("anchor"))w.push("Una delle due è un pezzo chiave della pagina: la cornice dorata resta alla tasca, non segue la carta.");
@@ -1933,6 +1960,24 @@ function swapSlots(a,b){const ca=contentOf(a),cb=contentOf(b),sa=getS(a.id),sb=g
  [[a.id,sb,wb],[b.id,sa,wa]].forEach(([id,s,w])=>{state[id]=s;WHEN[id]=w;pending[id]=s;whenPending[id]=w});save();try{localStorage.setItem(KEY+"-when",JSON.stringify(WHEN))}catch(e){}if(remote)flush();
  setMeta(a.id,mb||{p:0,max:null,note:""});setMeta(b.id,ma||{p:0,max:null,note:""});
  if((ua||ub)&&upRef){setUps({[a.id]:ub,[b.id]:ua}).catch(()=>{});const u={...UP};if(ub)u[a.id]=ub;else delete u[a.id];if(ua)u[b.id]=ua;else delete u[b.id];UP=u}}
+
+// ---- Carta TCGdex da id (per i suggerimenti degli amici) e compilazione del cambio ----
+async function tcgCard(id){for(const l of["it","en"]){try{const r=await fetch(`${TCGAPI}${l}/cards/${encodeURIComponent(id)}`);if(!r.ok)continue;const d=await r.json();if(d&&d.image)return{id:d.id,set:(d.set&&d.set.id)||d.id.slice(0,d.id.lastIndexOf("-")),localId:d.localId,name:d.name,img:d.image,lang:l,en:l==="en"?d.name:""}}catch(e){}}return null}
+async function ccApply(c){const si=await setInfo(c.set);ccForm.querySelector('input[name="cct"][value="c"]').checked=true;ccLabels();
+ document.getElementById("cc-n").value=c.name;document.getElementById("cc-s").value=`${si.name} ${c.localId}${si.tot?"/"+si.tot:""}`;
+ ccPick={img:c.img,en:c.en||(c.lang==="en"?c.name:"")};if(!ccPick.en)fetch(`${TCGAPI}en/cards/${encodeURIComponent(c.id)}`).then(r=>r.json()).then(d=>{if(ccPick&&ccPick.img===c.img&&d&&d.name)ccPick.en=d.name}).catch(()=>{});
+ ccWarn();ccPrev()}
+// Suggerisci: l'amico sceglie la carta esatta (con immagine), Leo la ritrova già compilata
+document.getElementById("sg-qb").onclick=async()=>{const q=document.getElementById("sg-new").value.trim(),hint=document.getElementById("sg-qh"),res=document.getElementById("sg-res2");
+ if(q.length<2){hint.textContent="Scrivi prima il nome della carta qui sopra.";document.getElementById("sg-new").focus();return}
+ hint.textContent="Cerco…";const r=await tcgSearch(q);TQ.sg=r;hint.textContent=r.length?"Tocca la carta giusta: Leo la vedrà con l'immagine.":"Nessuna carta trovata: prova il nome inglese, o togli il numero.";
+ res.innerHTML=r.map(c=>`<button type="button" class="tq-it" data-tq="${esc(c.id)}" aria-pressed="${sgTcg&&sgTcg.id===c.id}"><img loading="lazy" alt="" src="${esc(c.img)}/low.webp" onerror="imgFail(this)"><b>${esc(c.name)}</b><small>${esc(TCG_REV[c.set]?setIt(TCG_REV[c.set]):c.set)} · ${esc(c.localId)}</small></button>`).join("")};
+document.getElementById("sg-res2").addEventListener("click",async e=>{const b=e.target.closest("[data-tq]");if(!b)return;const c=(TQ.sg||[]).find(z=>z.id===b.dataset.tq);if(!c)return;sgTcg=c;
+ document.querySelectorAll("#sg-res2 .tq-it").forEach(z=>z.setAttribute("aria-pressed",z===b));const si=await setInfo(c.set);document.getElementById("sg-new").value=`${c.name} ${si.name} ${c.localId}${si.tot?"/"+si.tot:""}`;sgWarn()});
+document.getElementById("sg-new").addEventListener("input",()=>{if(sgTcg){sgTcg=null;document.querySelectorAll("#sg-res2 .tq-it").forEach(z=>z.setAttribute("aria-pressed","false"))}});
+// Mancolista stampe: carica il file direttamente dalla riga
+document.getElementById("list-stampe").addEventListener("click",e=>{const b=e.target.closest("[data-up-go]");if(!b)return;e.preventDefault();e.stopPropagation();const x=byId[b.dataset.upGo];open(x);document.getElementById("sh-up").click()},true);
+(()=>{const b=document.getElementById("nofile-stampe");if(!b)return;b.onclick=()=>{WL.stampe.nofile=!WL.stampe.nofile;b.setAttribute("aria-pressed",WL.stampe.nofile);b.textContent=WL.stampe.nofile?"Solo senza file: sì":"Solo senza file";renderLists()}})();
 
 // ---- Rete: in fiera si lavora anche offline, e lo diciamo ----
 function netState(){if(!navigator.onLine){setSync("offline")}else if(document.getElementById("sync").dataset.state==="offline")setSync(isOwnerView()?"on":"view")}
@@ -1976,7 +2021,7 @@ function verdict(x,lead){const st=getS(x.id),p=parseSet(x),pos=posOf(x);
   const head=st===2?["own","Leo ce l'ha già","È già nel binder: questa tienila tu."]:st===1?["ord","Leo l'ha già ordinata","Sta già arrivando: grazie lo stesso!"]:off?["done","Segnata per Leo","La trovi in «Le carte che hai», pronta da mandargli."]:["need","A Leo serve!","Andrebbe a "+where+"."];
   const acts=st===0?(off?`<button class="btn primary" data-ck="next">Controlla la prossima</button><button class="btn" data-ck="unoffer" data-id="${x.id}">Togli</button>`:`<button class="btn primary" data-ck="offer" data-id="${x.id}">Ce l'ho, la segno per Leo</button><button class="btn" data-ck="open" data-id="${x.id}">Vedi nel binder</button>`):`<button class="btn primary" data-ck="next">Controlla la prossima</button><button class="btn" data-ck="open" data-id="${x.id}">Vedi nel binder</button>`;
   return `<article class="ck-card ${head[0]}">${lead?`<p class="ck-lead">${lead}</p>`:""}<div class="ck-verdict"><span class="ck-badge">${head[1]}</span><span class="ck-where">${head[2]}</span></div>
-  <div class="ck-main"><div class="ck-info"><h3>${esc(itName(x.n))}</h3><p class="ck-set">${esc(setIt(p.set))}${setIt(p.set)!==p.set?` <span>(${esc(p.set)})</span>`:""} · <b>${esc(p.num||"senza numero")}</b>${p.variant?" · "+esc(p.variant):""}</p>
+  <div class="ck-main">${th(x,true)}<div class="ck-info"><h3>${esc(itName(x.n))}</h3><p class="ck-set">${esc(setIt(p.set))}${setIt(p.set)!==p.set?` <span>(${esc(p.set)})</span>`:""} · <b>${esc(p.num||"senza numero")}</b>${p.variant?" · "+esc(p.variant):""}</p>
    <p class="ck-note">Leo la cerca in italiano${NO_IT[p.set]?" (questa esiste solo in inglese)":""}.</p><div class="ck-act">${acts}</div></div>${miniPage(x)}</div></article>`}
  const head=ckJust&&ckJust.id===x.id?["done","Fatto: è nel binder","Mettila a "+where+"."]
   :st===2?["own","Ce l'hai già","È nel binder a "+where+": questa è un doppione."]
@@ -1988,14 +2033,14 @@ function verdict(x,lead){const st=getS(x.id),p=parseSet(x),pos=posOf(x);
   :`<button class="btn primary" data-ck="put" data-id="${x.id}">Mettila nel binder</button>${st===0?`<button class="btn" data-ck="ord" data-id="${x.id}">L'ho ordinata</button>`:""}<button class="btn" data-ck="open" data-id="${x.id}">Vedi nel binder</button>`;
  return `<article class="ck-card ${head[0]}">${lead?`<p class="ck-lead">${lead}</p>`:""}
   <div class="ck-verdict"><span class="ck-badge">${head[1]}</span><span class="ck-where">${head[2]}</span></div>
-  <div class="ck-main"><div class="ck-info"><h3>${esc(itName(x.n))}</h3>
+  <div class="ck-main">${th(x,true)}<div class="ck-info"><h3>${esc(itName(x.n))}</h3>
    <p class="ck-set">${esc(setIt(p.set))}${setIt(p.set)!==p.set?` <span>(${esc(p.set)})</span>`:""} · <b>${esc(p.num||"senza numero")}</b>${p.variant?" · "+esc(p.variant):""}</p>
    <p class="ck-pos"><span class="ck-big">p. ${x.page}</span><span class="ck-big">riga ${pos.r}</span><span class="ck-big">col. ${pos.c}</span></p>
    <p class="ck-side">${sideOf(x.page)} · ${esc(x.pageTitle)}</p>${lang}
    <div class="ck-act">${acts}</div></div>${miniPage(x)}</div></article>`}
 function ckRow(x){const st=getS(x.id),p=parseSet(x);
  const lbl=isOwnerView()?(st===2?"già nel binder":st===1?"ordinata":"ti serve"):(st===2?"Leo ce l'ha":st===1?"ordinata da Leo":"a Leo manca");
- return `<button class="ck-row" data-ck="pick" data-id="${x.id}"><span class="ck-dot s${st}"></span><span class="ck-rt"><b>${esc(itName(x.n))}</b> <span>${esc(setIt(p.set))} · ${esc(p.num||"—")}${p.variant?" · "+esc(p.variant):""}</span></span><span class="ck-rs">${lbl} · p. ${x.page}</span></button>`}
+ return `<button class="ck-row" data-ck="pick" data-id="${x.id}">${th(x)}<span class="ck-rt"><b>${esc(itName(x.n))}</b> <span>${esc(setIt(p.set))} · ${esc(p.num||"—")}${p.variant?" · "+esc(p.variant):""}</span></span><span class="ck-rs">${lbl} · p. ${x.page}</span></button>`}
 let ckPick=null;
 function ckRun(){const q=ckQ.value.trim();
  if(!q){ckOut.innerHTML=`<div class="ck-empty"><p>Cosa scrivere:</p><ul><li>il <b>numero</b> stampato in basso, con o senza il totale: <code>12/165</code>, <code>016/128</code>, <code>TG12</code>, <code>XY177</code></li><li>oppure il <b>nome</b>, in italiano o in inglese: <code>Feraligatr</code>, <code>Psyduck di Misty</code></li><li>meglio ancora entrambi: <code>Meganium 18/165</code></li></ul></div>`;return}
@@ -2020,7 +2065,7 @@ ckQ.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();clearT
 const ckLog=[];
 function logCk(x,what){ckLog.unshift({id:x.id,what});ckLog.length=Math.min(ckLog.length,12);renderLog()}
 function renderLog(){document.getElementById("ck-log").hidden=!ckLog.length;
- document.getElementById("ck-log-list").innerHTML=ckLog.map(e=>{const y=byId[e.id],p=parseSet(y);return `<li><button class="ck-row" data-ck="pick" data-id="${y.id}"><span class="ck-dot s${getS(y.id)}"></span><span class="ck-rt"><b>${esc(itName(y.n))}</b> <span>${esc(p.num||"")}</span></span><span class="ck-rs">${e.what} · p. ${y.page} r${posOf(y).r} c${posOf(y).c}</span></button></li>`}).join("")}
+ document.getElementById("ck-log-list").innerHTML=ckLog.map(e=>{const y=byId[e.id],p=parseSet(y);return `<li><button class="ck-row" data-ck="pick" data-id="${y.id}">${th(y)}<span class="ck-rt"><b>${esc(itName(y.n))}</b> <span>${esc(p.num||"")}</span></span><span class="ck-rs">${e.what} · p. ${y.page} r${posOf(y).r} c${posOf(y).c}</span></button></li>`}).join("")}
 document.getElementById("ck-log-clear").onclick=()=>{ckLog.length=0;document.getElementById("ck-log").hidden=true};
 function ckNext(){ckJust=null;ckPick=null;ckQ.value="";ckStatus.textContent="";ckRun();ckQ.focus()}
 CK.addEventListener("click",e=>{const b=e.target.closest("[data-ck]");if(!b)return;const a=b.dataset.ck,x=byId[b.dataset.id];
