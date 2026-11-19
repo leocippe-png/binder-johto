@@ -495,6 +495,26 @@ body.preview .preview-bar{display:flex}
 .sh-status[data-s="2"]::before{background:var(--own);border-color:var(--own)}
 .sh-status[data-s="1"]::before{background:var(--order);border-color:var(--order)}
 .sh-acts{display:flex;gap:6px;flex-wrap:wrap}
+/* Cambia carta (solo Leo) */
+.sheet{max-height:calc(100dvh - 12px);overflow-y:auto;overscroll-behavior:contain}
+.sheet.editing>:not(.k):not(#sh-name):not(#sh-close):not(#cc-form){display:none!important}
+.sh-chg{margin:0;font-size:13px;background:var(--bg);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:8px;padding:8px 10px;display:grid;gap:4px}
+.sh-chg .linkbtn{justify-self:start}
+.sh-own-acts{display:flex;gap:6px;flex-wrap:wrap}
+.cc-form{display:grid;gap:12px}
+.cc-form fieldset{border:0;margin:0;padding:0;display:grid;gap:6px}
+.cc-form legend{font-weight:700;font-size:14px;margin-bottom:2px;padding:0}
+.cc-was{margin:0;font-size:13px;color:var(--muted)}
+.cc-was b{color:var(--ink)}
+.cc-ref{font-size:13px;background:var(--gold-soft);border-radius:8px;padding:8px 10px;white-space:pre-wrap;margin:0}
+.cc-flags{display:flex;gap:8px 16px;flex-wrap:wrap;font-size:14px}
+.cc-flags label{display:inline-flex;gap:6px;align-items:center;cursor:pointer}
+.cc-flags input{width:18px;height:18px;accent-color:var(--own)}
+.chg-tag{position:absolute;z-index:2;left:5px;top:5px;font-size:9px;font-weight:700;background:var(--paper);color:var(--ink);border:1px solid var(--gold);border-radius:4px;padding:1px 5px}
+.slot.ph .chg-tag{top:auto;bottom:5px}
+.slot.offered .chg-tag{display:none}
+.mods{margin-top:22px}
+.mods h3{margin:0 0 6px;font-size:15px}
 .btn[aria-pressed="true"].offer{background:var(--gold-soft);border-color:var(--gold);color:var(--ink)}
 .vrow input[type=checkbox]{accent-color:var(--gold)}
 .item.offered{background:color-mix(in srgb,var(--gold-soft) 45%,var(--paper))}
@@ -643,6 +663,21 @@ body.preview .preview-bar{display:flex}
     <button id="st1" data-v="1">Ordinata</button>
     <button id="st2" data-v="2">Nel binder</button>
   </div>
+  <div class="sh-chg owner-only" id="sh-chg" hidden></div>
+  <div class="sh-own-acts owner-only"><button class="btn" id="sh-change">Cambia carta</button></div>
+  <form class="cc-form owner-only" id="cc-form" novalidate hidden>
+   <p class="cc-was" id="cc-was"></p>
+   <p class="cc-ref" id="cc-ref" hidden></p>
+   <fieldset><legend>Cosa ci metti</legend><div class="sg-kinds"><label><input type="radio" name="cct" value="c"><span>Una carta</span></label><label><input type="radio" name="cct" value="p"><span>Una stampa</span></label></div></fieldset>
+   <label class="sg-field"><span class="sg-lbl">Nome</span><input id="cc-n" maxlength="80" autocomplete="off" required></label>
+   <label class="sg-field"><span class="sg-lbl" id="cc-s-l">Set e numero</span><input id="cc-s" list="cc-sets" maxlength="80" autocomplete="off" autocapitalize="off"><span class="sg-hint" id="cc-s-h"></span></label>
+   <datalist id="cc-sets"></datalist>
+   <label class="sg-field"><span class="sg-lbl">Nota <span class="sg-hint">(facoltativa)</span></span><textarea id="cc-note" maxlength="300"></textarea></label>
+   <div class="cc-flags" id="cc-flags"><label><input type="checkbox" id="cc-arita"> Illustrata da Arita</label><label><input type="checkbox" id="cc-pers"> Carta personaggio</label></div>
+   <fieldset><legend id="cc-st-l">Stato della nuova carta</legend><div class="seg" id="cc-st" role="group"><button type="button" data-v="0">Da trovare</button><button type="button" data-v="1">Ordinata</button><button type="button" data-v="2">Nel binder</button></div></fieldset>
+   <div class="sg-warn" id="cc-warn" aria-live="polite"></div>
+   <div class="sg-acts"><button class="btn primary" type="submit">Salva il cambio</button><button class="btn" type="button" id="cc-cancel">Annulla</button><span class="sg-hint" id="cc-err" role="alert"></span></div>
+  </form>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -900,7 +935,7 @@ const GLYPH={
  energia:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M13 5l-4 8h4l-2 6"/></svg>'};
 const FOIL=/holo|IR|SIR|Full Art|TG\d|GG\d|Prime|LEGEND|segreta|Prism/;
 function cardFace(x){const e=era(x),k=cat(x);const tags=x.f.filter(f=>TAGL[f]).map(f=>`<span class="tag ${f}">${TAGL[f]}</span>`).join("");
- return `<span class="ph-top"><span class="ph-era">${e.n}</span><span class="ph-cat">${CATL[k]}</span></span><span class="ph-glyph">${GLYPH[k]}</span><span class="nm">${x.n}</span><span class="st">${x.s}</span><span class="tags">${tags}</span><span class="go" aria-hidden="true">↗</span>`}
+ return `<span class="ph-top"><span class="ph-era">${e.n}</span><span class="ph-cat">${CATL[k]}</span></span><span class="ph-glyph">${GLYPH[k]}</span><span class="nm">${esc(x.n)}</span><span class="st">${esc(x.s)}</span><span class="tags">${tags}</span><span class="go" aria-hidden="true">↗</span>`}
 
 // ---- Chi guarda: Leo (proprietario) o un amico (vetrina, sola lettura) ----
 let ROLE="pending",PREVIEW=false,ROLE_OK=false;
@@ -921,7 +956,7 @@ function save(){if(ROLE!=="owner")return;try{localStorage.setItem(KEY,JSON.strin
 // ---- Sincronizzazione tra dispositivi (db) ----
 let remote=null,remoteReady=false;const pending={};let flushing=false;
 let WHEN={};try{WHEN=JSON.parse(localStorage.getItem(KEY+"-when")||"{}")||{}}catch(e){WHEN={}}const whenPending={};
-function setSlot(id,v){if(!isOwnerView())return;const t=v===2?Date.now():0;if(v===2&&getS(id)!==2||v!==2){WHEN[id]=t;whenPending[id]=t;try{localStorage.setItem(KEY+"-when",JSON.stringify(WHEN))}catch(e){}}state[id]=v;save();render();if(remote){pending[id]=v;flush()}}
+function setSlot(id,v,force){if(!isOwnerView())return;const t=v===2?Date.now():0;if(force||v===2&&getS(id)!==2||v!==2){WHEN[id]=t;whenPending[id]=t;try{localStorage.setItem(KEY+"-when",JSON.stringify(WHEN))}catch(e){}}state[id]=v;save();render();if(remote){pending[id]=v;flush()}}
 async function flush(){if(flushing||!remote||!ROLE_OK||ROLE!=="owner")return;flushing=true;
  try{while(Object.keys(pending).length){const batch={...pending};Object.keys(batch).forEach(k=>delete pending[k]);
    const wb={...whenPending};Object.keys(wb).forEach(k=>delete whenPending[k]);
@@ -954,6 +989,12 @@ function setSync(k){const el=document.getElementById("sync");if(!el)return;
 
 const all=[],byIdA={};
 SPREADS.forEach(sp=>sp.pages.forEach(pg=>pg.s.forEach((x,i)=>{x.id=pg.n+"-"+i;x.page=pg.n;x.pageTitle=pg.h;all.push(x);byIdA[x.id]=x})));
+// ---- Carte cambiate da Leo: collezione.js resta la base, i cambi stanno nel database (binder/modifiche) ----
+// Tutti li vedono, solo Leo li scrive. Ogni cambio ricorda cosa c'era prima («da»), per poterlo annullare.
+const BASE={};all.forEach(x=>BASE[x.id]={t:x.t,n:x.n,s:x.s,note:x.note,f:x.f.slice()});
+const MODKEY=KEY+"-modifiche";let MODS={};try{MODS=JSON.parse(localStorage.getItem(MODKEY)||"{}")||{}}catch(e){MODS={}}
+function applyMods(){all.forEach(x=>{const o=MODS[x.id]&&MODS[x.id].n?MODS[x.id]:null,b=o||BASE[x.id];x.t=b.t==="p"?"p":"c";x.n=b.n;x.s=b.s||"";x.note=b.note||"";x.f=(b.f||[]).slice();x.mod=o})}
+applyMods();
 
 let filter="tutto";
 const FILTERS=[["tutto","Tutto"],["c","Solo carte"],["p","Solo stampe"],["mancanti","Da trovare"],["arita","Arita"],["pers","Personaggi"]];
@@ -1048,6 +1089,7 @@ function render(){
     const offered=!isOwnerView()&&x.t==="c"&&OFF[x.id];
     if(x.t==="p"){b.classList.add("art");b.innerHTML=`<i class="dot"></i>`+art(x)}
     else{const e=era(x);b.classList.add("ph");if(FOIL.test(x.s))b.classList.add("foil");b.style.setProperty("--era",e.c);b.innerHTML=`<i class="dot"></i>`+cardFace(x)}
+    if(x.mod&&isOwnerView())b.insertAdjacentHTML("beforeend",'<span class="chg-tag">cambiata</span>');
     if(offered){b.classList.add("offered");b.insertAdjacentHTML("beforeend",'<span class="offer-tag">ce l\'hai</span>')}
     b.setAttribute("aria-label",`${x.n}, ${x.s}, ${getS(x.id)===2?"nel binder":getS(x.id)===1?"ordinata":"manca"}`);
     b.onclick=()=>open(x);g.appendChild(b)});
@@ -1061,7 +1103,7 @@ function arrivals(){const box=document.getElementById("arrivals");if(!box)return
  const list=Object.keys(WHEN).filter(id=>WHEN[id]&&getS(id)===2&&byIdA[id]).sort((a,b)=>WHEN[b]-WHEN[a]).slice(0,8);
  box.hidden=!list.length;if(!list.length)return;
  document.getElementById("arr-list").innerHTML=list.map(id=>{const x=byIdA[id],e=x.t==="c"?era(x).c:"#15301f";
-  return `<button class="arr" data-arr="${id}" style="--era:${e}"><span class="arr-sw"></span><span class="arr-t"><b>${x.n.replace(/ · (alto|basso)$/,"")}</b><small>p. ${x.page} · ${ago(WHEN[id])}</small></span></button>`}).join("")}
+  return `<button class="arr" data-arr="${id}" style="--era:${e}"><span class="arr-sw"></span><span class="arr-t"><b>${esc(x.n.replace(/ · (alto|basso)$/,""))}</b><small>p. ${x.page} · ${ago(WHEN[id])}</small></span></button>`}).join("")}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-arr]");if(b){const x=byIdA[b.dataset.arr];const s=document.getElementById("slot-"+x.id);if(s){s.scrollIntoView({block:"center",behavior:reduce()?"auto":"smooth"});open(x)}}});
 function summary(){arrivals();
  const tot=all.length,own=all.filter(x=>getS(x.id)===2).length,ord=all.filter(x=>getS(x.id)===1).length;
@@ -1077,7 +1119,7 @@ function summary(){arrivals();
   const s=document.createElement("span");s.className="badge"+(done?" done":"");s.innerHTML=`<i>${i+1}</i>${nm}`;bEl.appendChild(s)});
 }
 let cur=null;const sheet=document.getElementById("sheet"),scrim=document.getElementById("scrim");
-function open(x){cur=x;
+function open(x){endEdit();cur=x;
  document.getElementById("sh-k").textContent=(x.t==="p"?"Stampa":"Carta")+" · "+posLabel(x)+" · "+x.pageTitle;
  document.getElementById("sh-wl").textContent=x.t==="p"?"Vedi nella mancolista stampe":"Vedi nella mancolista carte";
  document.getElementById("sh-name").textContent=x.n;
@@ -1088,14 +1130,19 @@ function open(x){cur=x;
  if(x.t==="p"){shArt.innerHTML=art(x);shArt.hidden=false;shLink.hidden=true}else{shArt.hidden=true;shArt.innerHTML="";shLink.hidden=false;shLink.href=cardLink(x)}
  paintSheetViewer();
  setSeg();sheet.hidden=false;scrim.hidden=false;(isOwnerView()?document.getElementById("st"+getS(x.id)):document.getElementById("sh-close")).focus()}
-function paintSheetViewer(){if(!cur)return;const x=cur,s=getS(x.id),st=document.getElementById("sh-status");st.dataset.s=s;
+function paintSheetOwner(){if(!cur)return;const x=cur,box=document.getElementById("sh-chg");
+ document.getElementById("sh-change").textContent=x.t==="p"?"Cambia stampa":"Cambia carta";
+ if(!x.mod){box.hidden=true;box.innerHTML="";return}const d=x.mod.da||{};
+ box.hidden=false;box.innerHTML=`<span>Cambiata da te ${x.mod.ts?ago(x.mod.ts):""}. All'inizio qui c'era: <b>${esc(itName(d.n||""))}</b>${d.s?" · "+esc(d.s):""}.</span><button class="linkbtn" id="sh-undo">Rimetti quella di prima</button>`;
+ document.getElementById("sh-undo").onclick=()=>{undoMod(x.id);flashBtn(document.getElementById("sh-change"),"Ripristinata")}}
+function paintSheetViewer(){if(!cur)return;paintSheetOwner();const x=cur,s=getS(x.id),st=document.getElementById("sh-status");st.dataset.s=s;
  st.textContent=x.t==="p"?(s===2?"Leo l'ha già stampata e messa nel binder":"Stampa che Leo prepara da sé"):(s===2?"Leo ce l'ha già":s===1?"Leo l'ha già ordinata":"A Leo manca");
  const ob=document.getElementById("sh-offer"),on=!!OFF[x.id];ob.hidden=!(x.t==="c"&&s===0);ob.setAttribute("aria-pressed",on);ob.textContent=on?"Segnata: ce l'hai ✓":"Ce l'ho!";
  document.getElementById("sh-comment").hidden=!(COMMENTS&&x.t==="c"&&s===0);
  const pp=document.getElementById("sh-props"),np=propsFor(x.id);pp.hidden=!np;pp.innerHTML=np?`${np===1?"C'è una proposta":"Ci sono "+np+" proposte"} degli amici per questa tasca. <button class="linkbtn" id="sh-props-go">Vedi</button>`:"";
  const g=document.getElementById("sh-props-go");if(g)g.onclick=()=>{sheet.hidden=true;scrim.hidden=true;goView("proposte");window.scrollTo(0,0)}}
 function setSeg(){[...document.querySelectorAll("#sh-seg button")].forEach(b=>b.setAttribute("aria-pressed",+b.dataset.v===getS(cur.id)))}
-function close(){sheet.hidden=true;scrim.hidden=true;if(cur){const s=document.getElementById("slot-"+cur.id);s&&s.focus()}}
+function close(){endEdit();sheet.hidden=true;scrim.hidden=true;if(cur){const s=document.getElementById("slot-"+cur.id);s&&s.focus()}}
 document.querySelectorAll("#sh-seg button").forEach(b=>b.onclick=()=>{setSlot(cur.id,+b.dataset.v);setSeg()});
 document.getElementById("sh-offer").onclick=()=>{if(!cur)return;toggleOffer(cur.id);paintSheetViewer()};
 document.getElementById("sh-comment").onclick=()=>{const x=cur;if(!x)return;sheet.hidden=true;scrim.hidden=true;const el=document.getElementById("slot-"+x.id);commentOn(el,document.getElementById("sh-comment"))};
@@ -1462,7 +1509,7 @@ function sgWarnings(){const w=[],k=sgKind(),txt=$("sg-new").value.trim();
  return w}
 function sgWarn(){$("sg-warn").innerHTML=sgWarnings().map(([c,t])=>`<div class="sg-w ${c==="warn"?"":c}">${esc(t)}</div>`).join("")}
 let sgT=0;$("sg-new").addEventListener("input",()=>{clearTimeout(sgT);sgT=setTimeout(sgWarn,150)});
-const CARDS_ALL=all.filter(x=>x.t==="c");
+let CARDS_ALL=all.filter(x=>x.t==="c");
 function sgText(s){const x=s.slot?byId[s.slot]:null,k=SG_KINDS[s.kind];
  return ["Suggerimento per il binder Johto"+(s.nome?" — da "+s.nome:""),
   k.label+(x?": "+itName(x.n)+" ("+slotLine(x)+")":""),
@@ -1497,7 +1544,8 @@ const VP=document.getElementById("v-prop");
 VP.innerHTML=`<div class="wl-head"><div><h2>Proposte degli amici</h2><p id="sum-prop"></p></div></div>
  <div class="row" id="px-filter" role="group" aria-label="Stato" style="margin-top:14px"></div>
  <div class="sg-list" id="px-list"></div>
- <p class="sg-hint" style="margin-top:12px">I messaggi arrivano qui appena un amico li manda.</p>`;
+ <p class="sg-hint" style="margin-top:12px">I messaggi arrivano qui appena un amico li manda.</p>
+ <section class="mods" id="mods" hidden><h3>Carte che hai cambiato</h3><p class="sg-hint">Le tasche dove hai messo una carta diversa da quella del progetto. Gli amici vedono già la carta nuova.</p><div class="sg-list" id="mods-list"></div></section>`;
 let PROPS={};try{PROPS=JSON.parse(localStorage.getItem(KEY+"-proposte")||"{}")||{}}catch(e){PROPS={}}
 let pref=null,pReady=false,pFilter="nuova";const pPending={};let pFlushing=false;
 const saveProps=()=>{try{localStorage.setItem(KEY+"-proposte",JSON.stringify(PROPS))}catch(e){}};
@@ -1514,31 +1562,124 @@ async function pflush(){if(pFlushing||!pref)return;pFlushing=true;
 function parseProp(t){const m=t.match(/#johto\s+(\d{1,2}-\d|idea)/i);const slot=m&&m[1]!=="idea"&&byId[m[1]]?m[1]:null;
  const f=t.match(/— da (.+)/);return{slot,from:f?f[1].trim().slice(0,40):"",text:t.trim().slice(0,1500)}}
 const P_ST={nuova:"Da valutare",fatta:"Accettata",no:"Scartata"};
+const canApply=p=>p.kind!=="offerta"&&/\nCambiare una (carta|stampa)/.test("\n"+p.text)&&p.status!=="fatta";
+const propNew=p=>{const m=String(p.text).match(/^Proposta: (.+)$/m);return m?m[1].trim():""};
 function renderProps(){const items=Object.entries(PROPS).filter(([,p])=>p&&p.status!=="eliminata").sort((a,b)=>b[1].ts-a[1].ts);
  const n=items.filter(([,p])=>p.status==="nuova").length;["n-prop","n-prop-m"].forEach(k=>{const e=$(k);if(e)e.textContent=n||""});
  if(!$("px-list"))return;
  $("sum-prop").textContent=items.length?`${n} da valutare su ${items.length}. Quello che gli amici ti mandano dall'app arriva qui da solo, in tempo reale.`:"Quello che gli amici ti mandano dall'app (carte che hanno, suggerimenti, commenti sulle tasche) arriva qui da solo, in tempo reale.";
  $("px-filter").innerHTML=[["nuova","Da valutare"],["fatta","Accettate"],["no","Scartate"],["tutte","Tutte"]].map(([k,l])=>`<button class="chip" data-pf="${k}" aria-pressed="${pFilter===k}">${l} <span class="cnt">${k==="tutte"?items.length:items.filter(([,p])=>p.status===k).length}</span></button>`).join("");
  const list=items.filter(([,p])=>pFilter==="tutte"||p.status===pFilter);
+ if(typeof renderMods==="function")renderMods();
  $("px-list").innerHTML=list.length?list.map(([id,p])=>{const x=p.slot?byId[p.slot]:null;
   const many=(p.slots||[]).map(id=>byId[id]).filter(Boolean);
   const offerBox=many.length?`<div class="of-list">${many.map(y=>`<div class="sg-w ${getS(y.id)===2?"own":"info"}">${esc(itName(y.n))} ${esc(parseSet(y).num)} · ${posLabel(y)} — ${getS(y.id)===2?"ce l'hai già":getS(y.id)===1?"ordinata":"ti manca"}</div>`).join("")}</div>`:"";
   const live=x?(x.t==="c"&&getS(x.id)===2?'<div class="sg-w own">Questa carta ce l\'hai già nel binder.</div>':x.t==="c"&&getS(x.id)===1?'<div class="sg-w">Questa carta l\'hai già ordinata.</div>':""):"";
   return `<article class="sg-item st-${p.status}"><div class="sg-meta"><b>${esc(p.from||"Amico")}</b>${p.fonte==="commento"?'<span class="src">dai commenti</span>':""}<span>${new Date(p.ts).toLocaleDateString("it-IT",{day:"numeric",month:"short"})}</span>${p.kind==="offerta"?`<span class="src">ce l'ha: ${many.length} ${many.length===1?"carta":"carte"}</span>`:x?`<span>${esc(itName(x.n))} · ${posLabel(x)}</span>`:"<span>idea generale</span>"}
    <span class="sg-st" role="group" aria-label="Decisione">${Object.entries(P_ST).map(([k,l])=>`<button data-ps="${k}" data-v="${k}" data-id="${id}" aria-pressed="${p.status===k}">${l}</button>`).join("")}</span></div>
-   ${live}${offerBox}<pre>${esc(p.text)}</pre><div class="sg-acts">${x?`<button class="btn" data-pa="open" data-id="${id}">Vedi la tasca</button>`:""}<button class="linkbtn" data-pa="del" data-id="${id}">Elimina</button></div></article>`}).join("")
+   ${live}${offerBox}<pre>${esc(p.text)}</pre><div class="sg-acts">${x&&canApply(p)?`<button class="btn primary" data-pa="apply" data-id="${id}">${x.t==="p"?"Cambia la stampa":"Cambia la carta"}</button>`:""}${x?`<button class="btn" data-pa="open" data-id="${id}">Vedi la tasca</button>`:""}<button class="linkbtn" data-pa="del" data-id="${id}">Elimina</button></div></article>`}).join("")
   :`<div class="ce-empty">${pFilter==="nuova"?"Nessuna proposta da valutare.":"Nessuna proposta in questo elenco."}</div>`}
 $("px-filter").addEventListener("click",e=>{const b=e.target.closest("[data-pf]");if(b){pFilter=b.dataset.pf;renderProps()}});
 $("px-list").addEventListener("click",e=>{const b=e.target.closest("[data-ps],[data-pa]");if(!b)return;const id=b.dataset.id,p=PROPS[id];if(!p)return;
  if(b.dataset.ps)setProp(id,{...p,status:b.dataset.ps});
  else if(b.dataset.pa==="del")setProp(id,{...p,status:"eliminata"});
- else if(b.dataset.pa==="open")goBinder(byId[p.slot])});
+ else if(b.dataset.pa==="open")goBinder(byId[p.slot]);
+ else if(b.dataset.pa==="apply"){const x=byId[p.slot];goBinder(x);const nu=propNew(p);startEdit(x,{prop:id,ref:nu||p.text,guess:x.t==="c"?guessCard(nu):{n:nu,s:""}})}});
+document.getElementById("v-prop").addEventListener("click",e=>{const b=e.target.closest("[data-md]");if(!b)return;const x=byId[b.dataset.id];if(!x)return;
+ if(b.dataset.md==="open")goBinder(x);else{undoMod(x.id)}});
 function toastProps(ids){const t=document.getElementById("toast");const p=PROPS[ids[0]];
  t.innerHTML=`<span>${ids.length===1?"Nuova proposta"+(p&&p.from?" da "+esc(p.from):""):ids.length+" nuove proposte degli amici"}</span><button class="btn" id="toast-go">Vedi</button><button class="linkbtn" id="toast-x" aria-label="Chiudi">Chiudi</button>`;t.hidden=false;
  document.getElementById("toast-go").onclick=()=>{t.hidden=true;goView("proposte");window.scrollTo(0,0)};document.getElementById("toast-x").onclick=()=>{t.hidden=true};
  clearTimeout(toastProps.tm);toastProps.tm=setTimeout(()=>{t.hidden=true},12000)}
 const propsFor=id=>Object.values(PROPS).filter(p=>p&&(p.slot===id||(p.slots||[]).includes(id))&&p.status==="nuova").length;
 renderProps();
+
+
+// ---- Cambia carta (solo Leo) ----
+const SET_EN={};SET_ORDER.forEach(s=>{SET_EN[norm(s)]=s;if(SET_IT[s])SET_EN[norm(SET_IT[s])]=s});
+// "Trionfi 85/102" -> "Triumphant 85/102": il set si salva col nome inglese, come nel resto del binder
+function canonSet(s){s=s.replace(/\s+/g," ").trim();const [main,...rest]=s.split(" · ");const keys=Object.keys(SET_EN).sort((a,b)=>b.length-a.length);const nm=norm(main);
+ for(const k of keys)if(nm===k||nm.startsWith(k+" "))return [SET_EN[k]+main.slice(k.length),...rest].join(" · ");return s}
+// da una proposta tipo "Jasmine Team Up 145/181" ricava nome e set
+function guessCard(t){t=String(t||"").trim();const nt=norm(t);let best=null;
+ Object.keys(SET_EN).forEach(k=>{const i=nt.indexOf(k);if(i>0&&(!best||k.length>best.k.length))best={k,i}});
+ if(!best){const m=t.match(/^(.*?)\s+(\S*\d+\s*\/\s*\d+\S*)$/);return m?{n:m[1],s:m[2]}:{n:t,s:""}}
+ return{n:t.slice(0,best.i).trim().replace(/[,·-]+$/,"").trim(),s:canonSet(t.slice(best.i))}}
+const clean=v=>String(v||"").replace(/[<>]/g,"").replace(/\s+/g," ").trim();
+let ccSlot=null,ccSt=0,ccProp=null;
+const ccForm=document.getElementById("cc-form");
+document.getElementById("cc-sets").innerHTML=SET_ORDER.map(s=>`<option value="${esc(s)}">${SET_IT[s]&&SET_IT[s]!==s?esc(SET_IT[s]):""}</option>`).join("");
+const ccType=()=>(ccForm.querySelector('input[name="cct"]:checked')||{}).value||"c";
+function ccLabels(){const p=ccType()==="p";
+ document.getElementById("cc-s-l").textContent=p?"Descrizione":"Set e numero";
+ const s=document.getElementById("cc-s");s.placeholder=p?"Es. Stampa oro su verde":"Es. Triumphant 85/102";s.setAttribute("list",p?"":"cc-sets");
+ document.getElementById("cc-n").placeholder=p?"Es. Il Faro di Olivinopoli":"Es. Cinturanera";
+ document.getElementById("cc-s-h").textContent=p?"Facoltativa.":"Il set in inglese o in italiano, poi il numero. Per una variante aggiungi « · holo», « · Full Art»…";
+ document.getElementById("cc-flags").hidden=p;document.getElementById("cc-st-l").textContent=p?"Stato della nuova stampa":"Stato della nuova carta";
+ const L=p?["Da fare","Ordinata","Nel binder"]:["Da trovare","Ordinata","Nel binder"];[...document.querySelectorAll("#cc-st button")].forEach((b,i)=>b.textContent=L[i]);ccWarn()}
+function ccSeg(){[...document.querySelectorAll("#cc-st button")].forEach(b=>b.setAttribute("aria-pressed",+b.dataset.v===ccSt))}
+function startEdit(x,opt={}){if(!isOwnerView())return;ccSlot=x.id;ccProp=opt.prop||null;ccSt=0;
+ document.getElementById("cc-was").innerHTML=`Adesso in questa tasca c'è <b>${esc(itName(x.n))}</b> · ${esc(x.s)} (${x.t==="p"?(getS(x.id)===2?"stampata, nel binder":"stampa da fare"):(getS(x.id)===2?"nel binder":getS(x.id)===1?"ordinata":"da trovare")}).`;
+ const ref=document.getElementById("cc-ref");ref.hidden=!opt.ref;ref.textContent=opt.ref?"Proposta dell'amico: "+opt.ref:"";
+ const g=opt.guess||{};ccForm.querySelector(`input[name="cct"][value="${opt.t||x.t}"]`).checked=true;
+ document.getElementById("cc-n").value=g.n||"";document.getElementById("cc-s").value=g.s||"";document.getElementById("cc-note").value="";
+ document.getElementById("cc-arita").checked=false;document.getElementById("cc-pers").checked=false;document.getElementById("cc-err").textContent="";
+ ccLabels();ccSeg();sheet.classList.add("editing");ccForm.hidden=false;sheet.scrollTop=0;document.getElementById("cc-n").focus()}
+function endEdit(){const f=document.getElementById("cc-form");if(!f)return;sheet.classList.remove("editing");f.hidden=true;ccSlot=null;ccProp=null}
+function ccWarnings(){const w=[],x=byId[ccSlot];if(!x)return w;const t=ccType(),n=clean(document.getElementById("cc-n").value),s=canonSet(clean(document.getElementById("cc-s").value));
+ if(x.t==="c"&&getS(x.id)===2)w.push(["own","La carta di adesso è segnata nel binder: dopo il cambio la tasca prende lo stato che scegli qui sopra."]);
+ if(t==="c"&&n){const Q=ckParse(n+" "+s);
+  const sc=CARDS_ALL.filter(y=>y.id!==x.id).map(y=>[y,ckScore(y,Q)]).filter(r=>r[1]>0).sort((a,b)=>b[1]-a[1]);
+  const exact=sc.filter(r=>(Q.full||Q.tok)?r[1]>=13:r[1]>=10).map(r=>r[0]);
+  if(exact.length)exact.slice(0,2).forEach(y=>w.push(["warn",`«${itName(y.n)} ${parseSet(y).num}» è già nel binder: ${posLabel(y)}, ${getS(y.id)===2?"ce l'hai":getS(y.id)===1?"ordinata":"da trovare"}.`]));
+  else{const words=norm(n).split(/[\s'’]+/).filter(wd=>wd.length>2);const same=CARDS_ALL.filter(y=>y.id!==x.id&&words.some(wd=>[norm(itName(y.n)),norm(enName(y.n))].some(z=>z.split(/[\s'’]+/).includes(wd))));
+   if(same.length)w.push(["info",`Con questo nome nel binder ${same.length===1?"c'è già":"ci sono già"}: `+same.slice(0,3).map(y=>`${itName(y.n)} ${parseSet(y).num} (p. ${y.page})`).join(", ")+(same.length>3?" e altre":"")+"."])}
+  if(s&&!/\d/.test(s))w.push(["info","Senza il numero della carta la ricerca sui marketplace è meno precisa."]);
+  else if(s&&setRank(parseSet({s}).set)===99)w.push(["info",`«${parseSet({s}).set}» non è tra i set già nel binder: controlla che il nome sia giusto.`])}
+ return w}
+function ccWarn(){const el=document.getElementById("cc-warn");if(el)el.innerHTML=ccWarnings().map(([c,t])=>`<div class="sg-w ${c==="warn"?"":c}">${esc(t)}</div>`).join("")}
+let ccT=0;["cc-n","cc-s"].forEach(id=>document.getElementById(id).addEventListener("input",()=>{clearTimeout(ccT);ccT=setTimeout(ccWarn,150)}));
+ccForm.querySelectorAll('input[name="cct"]').forEach(r=>r.addEventListener("change",ccLabels));
+document.querySelectorAll("#cc-st button").forEach(b=>b.onclick=()=>{ccSt=+b.dataset.v;ccSeg()});
+document.getElementById("cc-cancel").onclick=()=>{const x=byId[ccSlot];endEdit();if(x)open(x)};
+document.getElementById("sh-change").onclick=()=>{if(cur)startEdit(cur)};
+ccForm.addEventListener("submit",e=>{e.preventDefault();const x=byId[ccSlot];if(!x)return;const t=ccType(),err=document.getElementById("cc-err");
+ const n=clean(document.getElementById("cc-n").value).slice(0,80);let s=clean(document.getElementById("cc-s").value).slice(0,80);
+ if(!n){err.textContent="Scrivi il nome.";document.getElementById("cc-n").focus();return}
+ if(t==="c"&&!s){err.textContent="Scrivi set e numero.";document.getElementById("cc-s").focus();return}
+ s=t==="c"?canonSet(s):(s||"Stampa");
+ const f=(BASE[x.id].f||[]).filter(k=>k==="anchor");if(t==="c"){if(document.getElementById("cc-arita").checked)f.push("arita");if(document.getElementById("cc-pers").checked)f.push("pers")}
+ const prop=ccProp;saveMod(x.id,{t,n,s,note:clean(document.getElementById("cc-note").value).slice(0,300),f},ccSt);
+ if(prop&&PROPS[prop])setProp(prop,{...PROPS[prop],status:"fatta"});
+ endEdit();open(byId[x.id]);flashBtn(document.getElementById("sh-change"),"Cambio salvato")});
+function saveMod(id,card,st){if(!isOwnerView())return;const prev=MODS[id]&&MODS[id].n?MODS[id]:null;
+ const da=prev?prev.da:{...BASE[id],stato:getS(id),when:WHEN[id]||0,meta:meta[id]||null};
+ MODS[id]={...card,da,ts:Date.now()};saveMods();pushMod(id);refreshMods();
+ setMeta(id,{p:0,max:null,note:""});setSlot(id,st,true)}
+function undoMod(id){if(!isOwnerView())return;const o=MODS[id];if(!o||!o.n)return;const d=o.da||{};
+ MODS[id]=null;saveMods();pushMod(id);refreshMods();
+ if(d.meta)setMeta(id,d.meta);setSlot(id,d.stato||0,true);if(d.stato===2&&d.when){WHEN[id]=d.when;whenPending[id]=d.when;try{localStorage.setItem(KEY+"-when",JSON.stringify(WHEN))}catch(e){}if(remote)flush();render()}if(cur&&cur.id===id&&!sheet.hidden)open(byId[id])}
+const saveMods=()=>{try{localStorage.setItem(MODKEY,JSON.stringify(MODS))}catch(e){}};
+function refreshMods(){applyMods();CARDS_ALL=all.filter(x=>x.t==="c");CARDS=CARDS_ALL;render();if(cur&&!sheet.hidden&&!sheet.classList.contains("editing")){paintSheetViewer();
+ document.getElementById("sh-k").textContent=(cur.t==="p"?"Stampa":"Carta")+" · "+posLabel(cur)+" · "+cur.pageTitle;document.getElementById("sh-name").textContent=cur.n;document.getElementById("sh-set").textContent=cur.s;document.getElementById("sh-note").textContent=cur.note||""}}
+let modRef=null,modReady=false;const modPending=new Set();let modFlushing=false;
+function pushMod(id){modPending.add(id);modFlush()}
+async function modFlush(){if(modFlushing||!modRef||!ROLE_OK||ROLE!=="owner")return;modFlushing=true;
+ try{while(modPending.size){const ids=[...modPending];modPending.clear();const b={};ids.forEach(k=>b[k]=MODS[k]||null);
+  try{if(modReady)await modRef.update({slots:b,updatedAt:Date.now()});else{await modRef.set({slots:{...MODS},updatedAt:Date.now()});modReady=true}}
+  catch(e){if(e&&e.code==="invalid_argument"&&modReady){modReady=false;ids.forEach(k=>modPending.add(k))}else{setSync("err");ids.forEach(k=>modPending.add(k));break}}}}
+ finally{modFlushing=false}}
+(async()=>{let db=null;try{db=await claude.use("db")}catch(e){}if(!db)return;const role=await rolePromise;const ref=db.doc("binder/modifiche");
+ ref.onSnapshot(snap=>{if(snap.metadata.fromCache&&!snap.exists)return;const d=snap.exists?snap.data():null;
+  if(!snap.metadata.fromCache&&role==="owner"&&!modRef){modRef=ref;modReady=!!d}
+  const rs={...((d&&d.slots)||{})};if(role==="owner")modPending.forEach(k=>rs[k]=MODS[k]||null);
+  if(JSON.stringify(rs)!==JSON.stringify(MODS)){MODS=rs;saveMods();refreshMods()}
+  if(modPending.size)modFlush()},()=>{})})();
+// elenco dei cambi, in fondo alle Proposte
+function renderMods(){const box=document.getElementById("mods");if(!box)return;const ids=Object.keys(MODS).filter(k=>MODS[k]&&MODS[k].n&&byId[k]).sort((a,b)=>(MODS[b].ts||0)-(MODS[a].ts||0));
+ box.hidden=!ids.length;document.getElementById("mods-list").innerHTML=ids.map(id=>{const x=byId[id],d=MODS[id].da||{};
+  return `<article class="sg-item"><div class="sg-meta"><b>${posLabel(x)}</b><span>${MODS[id].ts?ago(MODS[id].ts):""}</span></div><div><b>${esc(itName(x.n))}</b> · ${esc(x.s)}<br><span class="sg-hint">al posto di ${esc(itName(d.n||""))}${d.s?" · "+esc(d.s):""}</span></div>
+   <div class="sg-acts"><button class="btn" data-md="open" data-id="${id}">Vedi la tasca</button><button class="linkbtn" data-md="undo" data-id="${id}">Rimetti quella di prima</button></div></article>`}).join("")}
 
 // ---- Controlla una carta: è nel binder? dove va? ----
 const CK=document.getElementById("v-check");
@@ -1551,7 +1692,7 @@ CK.innerHTML=`<div class="wl-head"><div><h2>Controlla una carta</h2><p><span cla
  <div id="ck-out" aria-live="polite"></div>
  <section class="ck-log" id="ck-log" hidden><div class="ck-log-h"><h3>Controllate adesso</h3><button class="linkbtn" id="ck-log-clear">Svuota</button></div><ol id="ck-log-list"></ol></section>`;
 const ckQ=document.getElementById("ck-q"),ckOut=document.getElementById("ck-out"),ckStatus=document.getElementById("ck-status");
-const CARDS=all.filter(x=>x.t==="c");
+let CARDS=all.filter(x=>x.t==="c");
 const nnum=s=>String(s||"").toLowerCase().replace(/\s+/g,"").replace(/(^|\/|[a-z])0+(?=\d)/g,"$1");
 function ckParse(q){q=String(q||"").trim();let full=null,tok=null,rest=q;
  let m=q.match(/([a-z]{0,3}\d{1,3})\s*\/\s*([a-z]{0,3}\d{1,3})/i);
