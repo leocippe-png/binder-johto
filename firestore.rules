@@ -13,9 +13,16 @@ service cloud.firestore {
     match /privato/{doc} {
       allow read, write: if leo();
     }
-    // messaggi degli amici: chiunque li manda (accesso anonimo), solo Leo li legge e li gestisce
+    // immagini caricate da Leo per le tasche (una per documento): tutti le vedono, solo Leo le carica
+    match /stampe/{id} {
+      allow read: if true;
+      allow delete: if leo();
+      allow create, update: if leo() && request.resource.data.img is string && request.resource.data.img.size() < 1000000;
+    }
+    // messaggi degli amici: chiunque li manda (accesso anonimo); Leo li gestisce, ognuno rilegge i propri con la risposta di Leo
     match /messaggi/{id} {
-      allow read, update, delete: if leo();
+      allow read: if leo() || (request.auth != null && resource.data.uid == request.auth.uid);
+      allow update, delete: if leo();
       allow create: if request.auth != null
         && request.resource.data.keys().hasOnly(['kind','slot','slots','from','text','ts','status','fonte','uid'])
         && request.resource.data.kind in ['offerta','suggerimento','commento']

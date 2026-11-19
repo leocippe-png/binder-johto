@@ -32,7 +32,8 @@
       onSnapshot: function(cb, onErr){ return r.onSnapshot({ includeMetadataChanges: true }, function(s){ cb(snap(s)); }, function(e){ onErr && onErr(err(e)); }); },
       get: function(){ return r.get().then(snap); },
       set: function(d){ return r.set(d).catch(function(e){ throw err(e); }); },
-      update: function(d){ var a = fields(d); return r.update.apply(r, a).catch(function(e){ throw err(e); }); }
+      update: function(d){ var a = fields(d); return r.update.apply(r, a).catch(function(e){ throw err(e); }); },
+      delete: function(){ return r.delete().catch(function(e){ throw err(e); }); }
     };
   }
   // le «Proposte degli amici» sono i messaggi che gli amici mandano dall'app
@@ -52,6 +53,9 @@
     can: async function(){ return isLeo(await authReady); },
     id: async function(){ var u = await authReady; return u ? u.uid : null; }
   };
+  // i messaggi che questo amico ha mandato, con lo stato e la risposta di Leo
+  function mine(cb){ authReady.then(function(u){ u = auth.currentUser || u; if (!u || !u.isAnonymous) return;
+    fs.collection("messaggi").where("uid", "==", u.uid).onSnapshot(function(qs){ var it = {}; qs.forEach(function(d){ it[d.id] = d.data(); }); cb(it); }, function(){}); }); }
   window.claude = { use: async function(name){ if (name === "db") return db; if (name === "user") return user; return null; } };
 
   // messaggi degli amici: niente account, accesso anonimo solo al momento dell'invio
@@ -72,6 +76,7 @@
     send: send,
     login: function(email, pw){ return auth.signInWithEmailAndPassword(email, pw); },
     logout: function(){ return auth.signOut(); },
-    isLeo: async function(){ await authReady; return isLeo(auth.currentUser); }
+    isLeo: async function(){ await authReady; return isLeo(auth.currentUser); },
+    mine: mine
   };
 })();

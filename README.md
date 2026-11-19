@@ -21,4 +21,8 @@ Web app gratuita: sito su GitHub Pages, dati su Firebase (piano Spark, gratuito)
 - `binder/state` — stato delle tasche e date di arrivo (leggibile da tutti, scrive solo Leo)
 - `binder/modifiche` — carte cambiate da Leo, tasca per tasca, con la carta che c'era prima per poterla rimettere (leggibile da tutti, scrive solo Leo)
 - `privato/wants` — priorità, prezzo massimo e note (solo Leo)
-- `messaggi/*` — messaggi degli amici (li crea chiunque, li legge e gestisce solo Leo)
+- `binder/immagini` — indice delle immagini caricate da Leo (leggibile da tutti)
+- `stampe/<tasca>` — l'immagine caricata per quella tasca, JPG 744×1039 compresso (leggibile da tutti, scrive solo Leo)
+- `messaggi/*` — messaggi degli amici, con stato e risposta di Leo (li crea chiunque; li gestisce Leo; ogni amico rilegge i propri)
+
+Le immagini delle carte vengono da TCGdex (assets.tcgdex.net), in italiano quando esistono.

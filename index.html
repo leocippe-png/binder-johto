@@ -495,6 +495,52 @@ body.preview .preview-bar{display:flex}
 .sh-status[data-s="2"]::before{background:var(--own);border-color:var(--own)}
 .sh-status[data-s="1"]::before{background:var(--order);border-color:var(--order)}
 .sh-acts{display:flex;gap:6px;flex-wrap:wrap}
+/* Immagini vere e caricate */
+.slot .cimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;z-index:1;background:var(--bg)}
+.cimg:not([src]){display:none}
+.sh-img{width:min(240px,62%);aspect-ratio:63/88;object-fit:cover;border-radius:10px;box-shadow:var(--shadow);justify-self:start}
+.sh-cons{margin:0;font-size:13px;color:var(--gold);font-weight:700}
+/* Sfoglia: il binder com'è davvero */
+.bmode{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.bmode .sep{width:1px;height:20px;background:var(--line);margin:0 4px}
+.sf{margin-top:14px;display:grid;gap:10px}
+.sf-head{display:flex;gap:8px 14px;align-items:baseline;flex-wrap:wrap}
+.sf-head h2{font-family:var(--f-display);margin:0;font-size:24px}
+.sf-head .jp{color:var(--gold);font-family:var(--f-display)}
+.sf-head .sf-pos{font-family:var(--f-mono);font-size:12px;color:var(--muted);margin-left:auto}
+.sf-book{--zip:#c9a54a;position:relative;display:grid;grid-template-columns:1fr 1fr;gap:28px;padding:16px;border-radius:16px;
+ background:radial-gradient(120% 90% at 50% 0%,#24432f,#10221a 70%);box-shadow:inset 0 0 0 2px #0a150f,inset 0 0 40px rgba(0,0,0,.5),0 18px 40px rgba(10,20,14,.35);touch-action:pan-y}
+.sf-book::before{content:"";position:absolute;top:10px;bottom:10px;left:50%;width:10px;transform:translateX(-50%);border-radius:6px;
+ background:repeating-linear-gradient(0deg,var(--zip) 0 2px,#6d5a28 2px 4px);opacity:.75;box-shadow:0 0 0 3px #0b1711}
+.sf-page{min-width:0;background:linear-gradient(160deg,#16261d,#0c1711);border-radius:8px;padding:10px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+.sf-page.empty{visibility:hidden}
+.sf-pn{grid-column:1/-1;display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#a99a6e}
+.sf .slot{border-color:rgba(255,255,255,.1);box-shadow:none}
+.sf .slot::after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;border-radius:inherit;
+ background:linear-gradient(118deg,rgba(255,255,255,.22) 0%,rgba(255,255,255,0) 32%,rgba(255,255,255,0) 72%,rgba(255,255,255,.08) 100%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+.sf .slot .dot,.sf .slot .tags,.sf .slot .go,.sf .chg-tag{display:none}
+.sf .slot.ghost>*:not(.dot){opacity:.16;filter:grayscale(1)}
+.sf .slot.ghost{background:rgba(255,255,255,.03)}
+.sf-nav{display:flex;gap:8px;align-items:center;justify-content:center}
+.sf-nav .btn{min-width:110px}
+@media (max-width:760px){.sf-book{grid-template-columns:minmax(0,1fr);gap:16px;padding:10px}.sf-book::before{display:none}.sf-page.empty{display:none}}
+/* Carica immagine */
+.up-crop{display:grid;gap:10px;justify-items:start}
+.up-crop canvas{width:min(260px,70vw);aspect-ratio:63/88;border-radius:10px;touch-action:none;cursor:grab;box-shadow:var(--shadow);background:var(--bg)}
+.up-crop input[type=range]{width:min(260px,70vw)}
+.sheet.uploading>:not(.k):not(#sh-name):not(#sh-close):not(#up-crop){display:none!important}
+/* Diario e risposte */
+.dia{display:grid;gap:8px;margin-top:12px}
+.dia-day{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-top:10px}
+.dia-it{display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;align-items:center;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:8px 12px;cursor:pointer;font:inherit;color:inherit}
+.dia-th{width:44px;aspect-ratio:63/88;border-radius:4px;background:var(--era,var(--leather));object-fit:cover;display:block}
+.dia-it small{display:block;color:var(--muted);font-size:12px}
+.arr-more{margin-left:8px;font-size:12px;text-transform:none;letter-spacing:0;color:var(--ink)}
+.px-r{display:grid;gap:6px}
+.px-r textarea{font:inherit;font-size:15px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);min-height:2.6em;resize:vertical;width:100%}
+.leo-r{background:var(--own-soft);border-left:4px solid var(--own);border-radius:9px;padding:8px 12px;font-size:14px}
+.st-b{font-size:12px;font-weight:700;border-radius:99px;padding:2px 9px;background:var(--gold-soft)}
+.st-b.fatta{background:var(--own);color:#fff}.st-b.no{background:var(--ink);color:var(--bg)}
 /* Cambia carta (solo Leo) */
 .sheet{max-height:calc(100dvh - 12px);overflow-y:auto;overscroll-behavior:contain}
 .sheet.editing>:not(.k):not(#sh-name):not(#sh-close):not(#cc-form){display:none!important}
@@ -553,7 +599,7 @@ body.preview .preview-bar{display:flex}
   <div id="v-binder">
   <section class="welcome viewer-only" id="welcome" hidden><div><b>Benvenuto nel binder Johto di Leo.</b> Le tasche con la spunta verde sono già piene, le altre sono ancora da trovare. Se hai una carta che gli manca, toccala e premi <b>Ce l'ho!</b>: la ritrovi in «Le carte che hai», pronta da mandargli.</div><button class="linkbtn" id="welcome-x">Ho capito</button></section>
   <section class="summary" id="summary"></section>
-  <section class="arrivals" id="arrivals" hidden><h3>Ultimi arrivi nel binder</h3><div class="arr-list" id="arr-list"></div></section>
+  <section class="arrivals" id="arrivals" hidden><h3>Ultimi arrivi nel binder<a class="arr-more" href="#diario">Diario del binder →</a></h3><div class="arr-list" id="arr-list"></div></section>
   <details class="legend-d" id="legend-d"><summary>Legenda</summary>
   <div class="legend">
     <span><i class="sw"></i>Carta</span>
@@ -566,6 +612,7 @@ body.preview .preview-bar{display:flex}
   </details>
 
   <div class="controls">
+    <div class="bmode" id="bmode" role="group" aria-label="Vista"><button class="chip" data-bm="grid">Griglia</button><button class="chip" data-bm="sf">Sfoglia</button><span class="sep sf-only"></span><button class="chip sf-only" data-sfv="oggi">Com'è oggi</button><button class="chip sf-only" data-sfv="finito">Come sarà finito</button></div>
     <div class="row" id="filters" role="group" aria-label="Filtro"></div>
     <div class="jump" id="jump">
       <button class="jbtn" id="j-prev" aria-label="Tappa precedente" title="Tappa precedente">‹</button>
@@ -582,6 +629,7 @@ body.preview .preview-bar{display:flex}
   </div>
 
   <div id="binder"></div>
+  <section class="sf" id="sf" hidden></section>
 
   <section class="notes">
     <div class="note">
@@ -620,6 +668,7 @@ body.preview .preview-bar{display:flex}
   <section id="v-offer" class="wl" hidden></section>
   <section id="v-sugg" class="wl" hidden></section>
   <section id="v-prop" class="wl" hidden></section>
+  <section id="v-diario" class="wl" hidden></section>
   <textarea id="copy-area" aria-hidden="true" tabindex="-1"></textarea>
 </main>
 
@@ -652,6 +701,8 @@ body.preview .preview-bar{display:flex}
   <div class="set" id="sh-set"></div>
   <div class="tags" id="sh-tags"></div>
   <p id="sh-note"></p>
+  <p class="sh-cons" id="sh-cons" hidden></p>
+  <img id="sh-img" class="sh-img" alt="" hidden>
   <div id="sh-art" class="sh-art" hidden></div>
   <a id="sh-link" class="cta" target="_blank" rel="noopener">Vedi l'immagine della carta ↗</a>
   <p class="sh-status viewer-only" id="sh-status"></p>
@@ -664,7 +715,8 @@ body.preview .preview-bar{display:flex}
     <button id="st2" data-v="2">Nel binder</button>
   </div>
   <div class="sh-chg owner-only" id="sh-chg" hidden></div>
-  <div class="sh-own-acts owner-only"><button class="btn" id="sh-change">Cambia carta</button></div>
+  <div class="sh-own-acts owner-only"><button class="btn" id="sh-change">Cambia carta</button><label class="btn" id="sh-up-l">Carica immagine<input type="file" id="sh-up" accept="image/*" class="sr"></label><button class="linkbtn" id="sh-up-del" hidden>Togli l'immagine caricata</button></div>
+  <div class="up-crop owner-only" id="up-crop" hidden><p class="cc-was">Trascina per inquadrare, usa il cursore per lo zoom. Formato tasca 63×88 mm.</p><canvas id="up-cv" width="630" height="880"></canvas><input type="range" id="up-z" min="1" max="4" step="0.01" value="1" aria-label="Zoom"><div class="sg-acts"><button class="btn primary" id="up-save">Salva immagine</button><button class="btn" id="up-cancel">Annulla</button><span class="sg-hint" id="up-msg" role="alert"></span></div></div>
   <form class="cc-form owner-only" id="cc-form" novalidate hidden>
    <p class="cc-was" id="cc-was"></p>
    <p class="cc-ref" id="cc-ref" hidden></p>
@@ -987,6 +1039,7 @@ function setSync(k){const el=document.getElementById("sync");if(!el)return;
  },e=>{clearTimeout(timer);setSync(e&&e.code==="revoked"?"off":"err")});
 })();
 
+let MYMSG=null,SF={on:false,v:"oggi"};try{SF={...SF,...JSON.parse(localStorage.getItem("johto-binder-v2-sf")||"{}")}}catch(e){}
 const all=[],byIdA={};
 SPREADS.forEach(sp=>sp.pages.forEach(pg=>pg.s.forEach((x,i)=>{x.id=pg.n+"-"+i;x.page=pg.n;x.pageTitle=pg.h;all.push(x);byIdA[x.id]=x})));
 // ---- Carte cambiate da Leo: collezione.js resta la base, i cambi stanno nel database (binder/modifiche) ----
@@ -995,6 +1048,17 @@ const BASE={};all.forEach(x=>BASE[x.id]={t:x.t,n:x.n,s:x.s,note:x.note,f:x.f.sli
 const MODKEY=KEY+"-modifiche";let MODS={};try{MODS=JSON.parse(localStorage.getItem(MODKEY)||"{}")||{}}catch(e){MODS={}}
 function applyMods(){all.forEach(x=>{const o=MODS[x.id]&&MODS[x.id].n?MODS[x.id]:null,b=o||BASE[x.id];x.t=b.t==="p"?"p":"c";x.n=b.n;x.s=b.s||"";x.note=b.note||"";x.f=(b.f||[]).slice();x.mod=o})}
 applyMods();
+// ---- Immagini: caricate da Leo (Firestore) > carta vera da TCGdex (italiano se c'è) > illustrazione dell'app ----
+const TCG={"Fossil":"base/base3","Neo Genesis":"neo/neo1","Neo Discovery":"neo/neo2","Neo Revelation":"neo/neo3","Neo Destiny":"neo/neo4","Expedition":"ecard/ecard1","Aquapolis":"ecard/ecard2","Legends Awakened":"dp/dp6","HeartGold SoulSilver":"hgss/hgss1","Unleashed":"hgss/hgss2","Undaunted":"hgss/hgss3","Triumphant":"hgss/hgss4","Call of Legends":"col/col1","XY Promo":"xy/xyp","Lost Thunder":"sm/sm8","Team Up":"sm/sm9","Dragon Majesty":"sm/sm7.5","Unbroken Bonds":"sm/sm10","Cosmic Eclipse":"sm/sm12","Battle Styles":"swsh/swsh5","Brilliant Stars":"swsh/swsh9","Astral Radiance":"swsh/swsh10","Lost Origin":"swsh/swsh11","Silver Tempest":"swsh/swsh12","Crown Zenith":"swsh/swsh12.5","Paldea Evolved":"sv/sv02","Obsidian Flames":"sv/sv03","Paradox Rift":"sv/sv04","Temporal Forces":"sv/sv05","Shrouded Fable":"sv/sv06.5","Stellar Crown":"sv/sv07","Surging Sparks":"sv/sv08","Journey Together":"sv/sv09","Destined Rivals":"sv/sv10","Mega Evolution":"me/me01","Ascended Heroes":"me/me02.5","30th Celebration":"me/30th"};
+const NOIT=/^(base|neo|ecard)\//;let IMGEN={};try{IMGEN=JSON.parse(localStorage.getItem(KEY+"-imgen")||"{}")||{}}catch(e){}
+function tcgUrl(x,q){if(x.t!=="c")return "";const [main]=x.s.split(" · ");const m=main.match(/^(.*?)\s+(\S*\d\S*|ONE)$/);if(!m||!TCG[m[1]])return "";
+ const id=m[2].split("/")[0],p=TCG[m[1]],lang=NOIT.test(p)||IMGEN[p+"/"+id]?"en":"it";return `https://assets.tcgdex.net/${lang}/${p}/${encodeURIComponent(id)}/${q||"low"}.webp`}
+let UP={};const UPIMG={},upLoading={};
+function imgTag(x,q,cls){if(UP[x.id]){const k=x.id+"@"+UP[x.id];return `<img class="${cls}" data-up="${x.id}" alt=""${UPIMG[k]?` src="${UPIMG[k]}"`:""}>`}
+ const u=tcgUrl(x,q);return u?`<img class="${cls}" alt="" loading="lazy" decoding="async" src="${u}" onerror="imgFail(this)">`:""}
+function imgFail(i){const m=i.src.match(/assets\.tcgdex\.net\/it\/(.+)\/[^/]+\.webp$/);
+ if(m){const k=decodeURIComponent(m[1]);IMGEN[k]=1;try{localStorage.setItem(KEY+"-imgen",JSON.stringify(IMGEN))}catch(e){}i.src=i.src.replace("/it/","/en/");return}
+ i.removeAttribute("src");i.removeAttribute("onerror")}
 
 let filter="tutto";
 const FILTERS=[["tutto","Tutto"],["c","Solo carte"],["p","Solo stampe"],["mancanti","Da trovare"],["arita","Arita"],["pers","Personaggi"]];
@@ -1010,7 +1074,7 @@ const jEl={open:document.getElementById("j-open"),now:document.getElementById("j
  toc:document.getElementById("toc"),body:document.getElementById("toc-body"),q:document.getElementById("toc-q"),scrim:document.getElementById("toc-scrim"),close:document.getElementById("toc-close"),ctrl:document.querySelector(".controls")};
 let curSp=0;
 const reduce=()=>window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-function goSpread(i){i=Math.max(0,Math.min(SPREADS.length-1,i));const el=document.getElementById(SPREADS[i].id);if(!el)return;
+function goSpread(i){i=Math.max(0,Math.min(SPREADS.length-1,i));if(SF.on){curSp=i;paintJump();renderSf();const t=document.getElementById("sf").getBoundingClientRect().top+window.scrollY-jEl.ctrl.offsetHeight-10;if(Math.abs(window.scrollY-t)>40)window.scrollTo({top:Math.max(0,t)});return}const el=document.getElementById(SPREADS[i].id);if(!el)return;
  const top=el.getBoundingClientRect().top+window.scrollY-jEl.ctrl.offsetHeight-10;
  spyLock=true;clearTimeout(spyTimer);spyTimer=setTimeout(unlockSpy,1600);
  window.scrollTo({top:Math.max(0,top),behavior:reduce()?"auto":"smooth"});curSp=i;paintJump()}
@@ -1025,7 +1089,7 @@ function paintJump(){const sp=SPREADS[curSp];
  jEl.prev.title=curSp>0?"Indietro: "+SPREADS[curSp-1].title:"";jEl.next.title=curSp<SPREADS.length-1?"Avanti: "+SPREADS[curSp+1].title:""}
 // la tappa attuale è l'ultima il cui inizio è salito sotto la barra
 let spyQueued=false;
-function spy(){spyQueued=false;if(spyLock)return;const line=jEl.ctrl.getBoundingClientRect().bottom+40;let i=0;
+function spy(){spyQueued=false;if(spyLock||SF.on)return;const line=jEl.ctrl.getBoundingClientRect().bottom+40;let i=0;
  SPREADS.forEach((sp,k)=>{const el=document.getElementById(sp.id);if(el&&el.getBoundingClientRect().top<=line)i=k});
  if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-4){const last=SPREADS.length-1,el=document.getElementById(SPREADS[last].id);if(el&&el.getBoundingClientRect().top<window.innerHeight)i=last}
  if(i!==curSp){curSp=i;paintJump()}}
@@ -1082,9 +1146,15 @@ function render(){
    if(own===9)el.classList.add("complete");
    el.innerHTML=`<div class="page-top"><h3>${pg.h}</h3><span>${own===9?'<b class="done-mark">✦ completa</b> ':""}p. ${pg.n} · ${own}/9</span></div>`;
    const g=document.createElement("div");g.className="grid";
-   pg.s.forEach(x=>{
-    const b=document.createElement("button");b.className="slot"+(x.t==="p"?" print":"")+(x.f.includes("anchor")?" anchor":"")+(visible(x)?"":" dim");
-    b.dataset.s=getS(x.id);b.id="slot-"+x.id;b.setAttribute("data-comment-target","");
+   pg.s.forEach(x=>{g.appendChild(makeSlot(x,"slot-",visible(x)))});
+   el.appendChild(g);pages.appendChild(el)});
+  sec.appendChild(pages);root.appendChild(sec)});
+ summary();
+ renderLists();if(SF.on)renderSf();observeUps();
+}
+function makeSlot(x,pre,vis){
+    const b=document.createElement("button");b.className="slot"+(x.t==="p"?" print":"")+(x.f.includes("anchor")?" anchor":"")+(vis?"":" dim");
+    b.dataset.s=getS(x.id);b.id=pre+x.id;if(pre==="slot-")b.setAttribute("data-comment-target","");
     const tags=x.f.filter(f=>TAGL[f]).map(f=>`<span class="tag ${f}">${TAGL[f]}</span>`).join("");
     const offered=!isOwnerView()&&x.t==="c"&&OFF[x.id];
     if(x.t==="p"){b.classList.add("art");b.innerHTML=`<i class="dot"></i>`+art(x)}
@@ -1092,14 +1162,10 @@ function render(){
     if(x.mod&&isOwnerView())b.insertAdjacentHTML("beforeend",'<span class="chg-tag">cambiata</span>');
     if(offered){b.classList.add("offered");b.insertAdjacentHTML("beforeend",'<span class="offer-tag">ce l\'hai</span>')}
     b.setAttribute("aria-label",`${x.n}, ${x.s}, ${getS(x.id)===2?"nel binder":getS(x.id)===1?"ordinata":"manca"}`);
-    b.onclick=()=>open(x);g.appendChild(b)});
-   el.appendChild(g);pages.appendChild(el)});
-  sec.appendChild(pages);root.appendChild(sec)});
- summary();
- renderLists();
-}
+    const im=imgTag(x,"low","cimg");if(im)b.insertAdjacentHTML("beforeend",im);
+    b.onclick=()=>open(x);return b}
 const ago=t=>{const d=Math.floor((Date.now()-t)/864e5);return d<=0?"oggi":d===1?"ieri":d<7?d+" giorni fa":d<14?"una settimana fa":d<60?Math.floor(d/7)+" settimane fa":new Date(t).toLocaleDateString("it-IT",{day:"numeric",month:"short"})};
-function arrivals(){const box=document.getElementById("arrivals");if(!box)return;
+function arrivals(){const box=document.getElementById("arrivals");if(!box)return;if(typeof renderDiario==="function")renderDiario();
  const list=Object.keys(WHEN).filter(id=>WHEN[id]&&getS(id)===2&&byIdA[id]).sort((a,b)=>WHEN[b]-WHEN[a]).slice(0,8);
  box.hidden=!list.length;if(!list.length)return;
  document.getElementById("arr-list").innerHTML=list.map(id=>{const x=byIdA[id],e=x.t==="c"?era(x).c:"#15301f";
@@ -1119,7 +1185,7 @@ function summary(){arrivals();
   const s=document.createElement("span");s.className="badge"+(done?" done":"");s.innerHTML=`<i>${i+1}</i>${nm}`;bEl.appendChild(s)});
 }
 let cur=null;const sheet=document.getElementById("sheet"),scrim=document.getElementById("scrim");
-function open(x){endEdit();cur=x;
+function open(x){endEdit();endUp();cur=x;
  document.getElementById("sh-k").textContent=(x.t==="p"?"Stampa":"Carta")+" · "+posLabel(x)+" · "+x.pageTitle;
  document.getElementById("sh-wl").textContent=x.t==="p"?"Vedi nella mancolista stampe":"Vedi nella mancolista carte";
  document.getElementById("sh-name").textContent=x.n;
@@ -1135,14 +1201,18 @@ function paintSheetOwner(){if(!cur)return;const x=cur,box=document.getElementByI
  if(!x.mod){box.hidden=true;box.innerHTML="";return}const d=x.mod.da||{};
  box.hidden=false;box.innerHTML=`<span>Cambiata da te ${x.mod.ts?ago(x.mod.ts):""}. All'inizio qui c'era: <b>${esc(itName(d.n||""))}</b>${d.s?" · "+esc(d.s):""}.</span><button class="linkbtn" id="sh-undo">Rimetti quella di prima</button>`;
  document.getElementById("sh-undo").onclick=()=>{undoMod(x.id);flashBtn(document.getElementById("sh-change"),"Ripristinata")}}
-function paintSheetViewer(){if(!cur)return;paintSheetOwner();const x=cur,s=getS(x.id),st=document.getElementById("sh-status");st.dataset.s=s;
+function paintSheetImg(){const x=cur,i=document.getElementById("sh-img"),a=document.getElementById("sh-art");const t=imgTag(x,"high","sh-img");
+ if(t){const tmp=document.createElement("div");tmp.innerHTML=t;const n=tmp.firstChild;n.id="sh-img";i.replaceWith(n);n.hidden=false;if(x.t==="p")a.hidden=true}else{i.hidden=true;i.removeAttribute("src");if(x.t==="p")a.hidden=false}
+ const c=document.getElementById("sh-cons"),cs=x.mod&&x.mod.consiglio;c.hidden=!cs;c.textContent=cs?"✦ Consigliata da "+cs:"";
+ document.getElementById("sh-up-del").hidden=!UP[x.id];document.getElementById("sh-up-l").firstChild.textContent=UP[x.id]?"Cambia immagine":"Carica immagine";if(UP[x.id])loadUp(x.id)}
+function paintSheetViewer(){if(!cur)return;paintSheetOwner();paintSheetImg();const x=cur,s=getS(x.id),st=document.getElementById("sh-status");st.dataset.s=s;
  st.textContent=x.t==="p"?(s===2?"Leo l'ha già stampata e messa nel binder":"Stampa che Leo prepara da sé"):(s===2?"Leo ce l'ha già":s===1?"Leo l'ha già ordinata":"A Leo manca");
  const ob=document.getElementById("sh-offer"),on=!!OFF[x.id];ob.hidden=!(x.t==="c"&&s===0);ob.setAttribute("aria-pressed",on);ob.textContent=on?"Segnata: ce l'hai ✓":"Ce l'ho!";
  document.getElementById("sh-comment").hidden=!(COMMENTS&&x.t==="c"&&s===0);
  const pp=document.getElementById("sh-props"),np=propsFor(x.id);pp.hidden=!np;pp.innerHTML=np?`${np===1?"C'è una proposta":"Ci sono "+np+" proposte"} degli amici per questa tasca. <button class="linkbtn" id="sh-props-go">Vedi</button>`:"";
  const g=document.getElementById("sh-props-go");if(g)g.onclick=()=>{sheet.hidden=true;scrim.hidden=true;goView("proposte");window.scrollTo(0,0)}}
 function setSeg(){[...document.querySelectorAll("#sh-seg button")].forEach(b=>b.setAttribute("aria-pressed",+b.dataset.v===getS(cur.id)))}
-function close(){endEdit();sheet.hidden=true;scrim.hidden=true;if(cur){const s=document.getElementById("slot-"+cur.id);s&&s.focus()}}
+function close(){endEdit();endUp();sheet.hidden=true;scrim.hidden=true;if(cur){const s=document.getElementById("slot-"+cur.id);s&&s.focus()}}
 document.querySelectorAll("#sh-seg button").forEach(b=>b.onclick=()=>{setSlot(cur.id,+b.dataset.v);setSeg()});
 document.getElementById("sh-offer").onclick=()=>{if(!cur)return;toggleOffer(cur.id);paintSheetViewer()};
 document.getElementById("sh-comment").onclick=()=>{const x=cur;if(!x)return;sheet.hidden=true;scrim.hidden=true;const el=document.getElementById("slot-"+x.id);commentOn(el,document.getElementById("sh-comment"))};
@@ -1418,8 +1488,8 @@ function flashBtn(btn,t){const o=btn.textContent;btn.textContent=t;setTimeout(()
 function copyText(btn,txt){const o=btn.textContent;const done=()=>{btn.textContent="Copiato";setTimeout(()=>btn.textContent=o,1600)};
  const fallback=()=>{const ta=document.getElementById("copy-area");ta.value=txt;ta.select();try{document.execCommand("copy")?done():btn.textContent="Seleziona e copia"}catch(e){btn.textContent="Seleziona e copia"}};
  try{navigator.clipboard.writeText(txt).then(done,fallback)}catch(e){fallback()}}
-const VIEWS={"binder":"v-binder","controlla":"v-check","mancolista-carte":"v-carte","mancolista-stampe":"v-stampe","ce-lho":"v-offer","suggerisci":"v-sugg","proposte":"v-prop"};
-const ROLE_VIEWS={owner:["binder","controlla","mancolista-carte","mancolista-stampe","proposte"],viewer:["binder","controlla","mancolista-carte","ce-lho","suggerisci"]};
+const VIEWS={"diario":"v-diario","binder":"v-binder","controlla":"v-check","mancolista-carte":"v-carte","mancolista-stampe":"v-stampe","ce-lho":"v-offer","suggerisci":"v-sugg","proposte":"v-prop"};
+const ROLE_VIEWS={owner:["diario","binder","controlla","mancolista-carte","mancolista-stampe","proposte"],viewer:["diario","binder","controlla","mancolista-carte","ce-lho","suggerisci"]};
 function showView(){let v=VIEWS[location.hash.slice(1)]?location.hash.slice(1):"binder";if(ROLE!=="pending"&&!ROLE_VIEWS[isOwnerView()?"owner":"viewer"].includes(v))v="binder";
  Object.entries(VIEWS).forEach(([k,id])=>{document.getElementById(id).hidden=k!==v});
  document.querySelectorAll(".views button,.tabbar button").forEach(b=>b.setAttribute("aria-selected",b.dataset.view===v));
@@ -1526,7 +1596,9 @@ $("sg-form").addEventListener("submit",e=>{e.preventDefault();const k=sgKind(),K
 function sendSugg(s,btn){if(window.APP||!COMMENTS)return sendToLeo(window.APP?sgText(s):"",null,btn);let el=document.querySelector(".cover");if(s.slot){goView("binder");el=document.getElementById("slot-"+s.slot);el&&el.scrollIntoView({block:"center"})}sendToLeo(sgText(s),el,btn)}
 function sgReset(keepKind){sgSlot=null;$("sg-new").value="";$("sg-why").value="";$("sg-slot-q").value="";$("sg-err").textContent="";if(!keepKind){const r=VS.querySelector('input[name="sgk"][value="carta"]');r.checked=true}sgLabels()}
 $("sg-reset").onclick=()=>sgReset(false);
-function renderMine(){const box=$("sg-mine");$("sg-mine-h").textContent=MINE.length?"I suggerimenti che hai mandato a Leo.":"Qui ritrovi i suggerimenti che mandi a Leo.";
+function renderMine(){const box=$("sg-mine");
+ if(MYMSG&&Object.keys(MYMSG).length){const it=Object.values(MYMSG).sort((a,b)=>b.ts-a.ts);$("sg-mine-h").textContent="Tutto quello che hai mandato a Leo, con la sua risposta.";
+  box.innerHTML=it.map(m=>{const st=ST_AM[m.status]||ST_AM.nuova;return `<article class="sg-item"><div class="sg-meta"><span class="st-b ${st[1]}">${st[0]}</span><span>${new Date(m.ts).toLocaleDateString("it-IT",{day:"numeric",month:"short"})}</span></div><pre>${esc(String(m.text||"").replace(/\n?#johto.*$/gm,"").trim())}</pre>${m.risposta?`<div class="leo-r"><b>Leo:</b> ${esc(m.risposta)}</div>`:""}</article>`}).join("");return}$("sg-mine-h").textContent=MINE.length?"I suggerimenti che hai mandato a Leo.":"Qui ritrovi i suggerimenti che mandi a Leo.";
  box.innerHTML=MINE.map(s=>`<article class="sg-item${sgFlash===s.id?" fresh":""}" id="sg-${s.id}"><pre>${esc(sgText(s))}</pre><div class="sg-acts"><button class="btn" data-sg="send" data-id="${s.id}">Manda di nuovo</button>${s.slot?`<button class="btn" data-sg="open" data-id="${s.id}">Vedi la tasca</button>`:""}<button class="linkbtn" data-sg="del" data-id="${s.id}">Elimina</button></div></article>`).join("")}
 $("sg-mine").addEventListener("click",e=>{const b=e.target.closest("[data-sg]");if(!b)return;const s=MINE.find(m=>m.id===b.dataset.id);if(!s)return;
  if(b.dataset.sg==="send")sendSugg(s,b);
@@ -1577,12 +1649,13 @@ function renderProps(){const items=Object.entries(PROPS).filter(([,p])=>p&&p.sta
   const live=x?(x.t==="c"&&getS(x.id)===2?'<div class="sg-w own">Questa carta ce l\'hai già nel binder.</div>':x.t==="c"&&getS(x.id)===1?'<div class="sg-w">Questa carta l\'hai già ordinata.</div>':""):"";
   return `<article class="sg-item st-${p.status}"><div class="sg-meta"><b>${esc(p.from||"Amico")}</b>${p.fonte==="commento"?'<span class="src">dai commenti</span>':""}<span>${new Date(p.ts).toLocaleDateString("it-IT",{day:"numeric",month:"short"})}</span>${p.kind==="offerta"?`<span class="src">ce l'ha: ${many.length} ${many.length===1?"carta":"carte"}</span>`:x?`<span>${esc(itName(x.n))} · ${posLabel(x)}</span>`:"<span>idea generale</span>"}
    <span class="sg-st" role="group" aria-label="Decisione">${Object.entries(P_ST).map(([k,l])=>`<button data-ps="${k}" data-v="${k}" data-id="${id}" aria-pressed="${p.status===k}">${l}</button>`).join("")}</span></div>
-   ${live}${offerBox}<pre>${esc(p.text)}</pre><div class="sg-acts">${x&&canApply(p)?`<button class="btn primary" data-pa="apply" data-id="${id}">${x.t==="p"?"Cambia la stampa":"Cambia la carta"}</button>`:""}${x?`<button class="btn" data-pa="open" data-id="${id}">Vedi la tasca</button>`:""}<button class="linkbtn" data-pa="del" data-id="${id}">Elimina</button></div></article>`}).join("")
+   ${live}${offerBox}<pre>${esc(p.text)}</pre><div class="px-r"><textarea data-pr="${id}" maxlength="500" placeholder="Rispondi a ${esc(p.from||"chi l'ha mandata")}: lo legge nell'app">${esc(p.risposta||"")}</textarea></div><div class="sg-acts"><button class="btn" data-pa="reply" data-id="${id}">${p.risposta?"Aggiorna risposta":"Manda risposta"}</button>${x&&canApply(p)?`<button class="btn primary" data-pa="apply" data-id="${id}">${x.t==="p"?"Cambia la stampa":"Cambia la carta"}</button>`:""}${x?`<button class="btn" data-pa="open" data-id="${id}">Vedi la tasca</button>`:""}<button class="linkbtn" data-pa="del" data-id="${id}">Elimina</button></div></article>`}).join("")
   :`<div class="ce-empty">${pFilter==="nuova"?"Nessuna proposta da valutare.":"Nessuna proposta in questo elenco."}</div>`}
 $("px-filter").addEventListener("click",e=>{const b=e.target.closest("[data-pf]");if(b){pFilter=b.dataset.pf;renderProps()}});
 $("px-list").addEventListener("click",e=>{const b=e.target.closest("[data-ps],[data-pa]");if(!b)return;const id=b.dataset.id,p=PROPS[id];if(!p)return;
  if(b.dataset.ps)setProp(id,{...p,status:b.dataset.ps});
  else if(b.dataset.pa==="del")setProp(id,{...p,status:"eliminata"});
+ else if(b.dataset.pa==="reply"){const ta=document.querySelector(`[data-pr="${id}"]`);const r=clean(ta.value).slice(0,500);setProp(id,{...p,risposta:r,rts:Date.now()});flashBtn(b,r?"Risposta inviata":"Risposta tolta")}
  else if(b.dataset.pa==="open")goBinder(byId[p.slot]);
  else if(b.dataset.pa==="apply"){const x=byId[p.slot];goBinder(x);const nu=propNew(p);startEdit(x,{prop:id,ref:nu||p.text,guess:x.t==="c"?guessCard(nu):{n:nu,s:""}})}});
 document.getElementById("v-prop").addEventListener("click",e=>{const b=e.target.closest("[data-md]");if(!b)return;const x=byId[b.dataset.id];if(!x)return;
@@ -1649,7 +1722,8 @@ ccForm.addEventListener("submit",e=>{e.preventDefault();const x=byId[ccSlot];if(
  if(t==="c"&&!s){err.textContent="Scrivi set e numero.";document.getElementById("cc-s").focus();return}
  s=t==="c"?canonSet(s):(s||"Stampa");
  const f=(BASE[x.id].f||[]).filter(k=>k==="anchor");if(t==="c"){if(document.getElementById("cc-arita").checked)f.push("arita");if(document.getElementById("cc-pers").checked)f.push("pers")}
- const prop=ccProp;saveMod(x.id,{t,n,s,note:clean(document.getElementById("cc-note").value).slice(0,300),f},ccSt);
+ const prop=ccProp;const card={t,n,s,note:clean(document.getElementById("cc-note").value).slice(0,300),f};const keep=MODS[x.id]&&MODS[x.id].consiglio;
+ if(prop&&PROPS[prop]&&PROPS[prop].from)card.consiglio=PROPS[prop].from.slice(0,40);else if(keep&&!prop)card.consiglio=keep;saveMod(x.id,card,ccSt);
  if(prop&&PROPS[prop])setProp(prop,{...PROPS[prop],status:"fatta"});
  endEdit();open(byId[x.id]);flashBtn(document.getElementById("sh-change"),"Cambio salvato")});
 function saveMod(id,card,st){if(!isOwnerView())return;const prev=MODS[id]&&MODS[id].n?MODS[id]:null;
@@ -1680,6 +1754,78 @@ function renderMods(){const box=document.getElementById("mods");if(!box)return;c
  box.hidden=!ids.length;document.getElementById("mods-list").innerHTML=ids.map(id=>{const x=byId[id],d=MODS[id].da||{};
   return `<article class="sg-item"><div class="sg-meta"><b>${posLabel(x)}</b><span>${MODS[id].ts?ago(MODS[id].ts):""}</span></div><div><b>${esc(itName(x.n))}</b> · ${esc(x.s)}<br><span class="sg-hint">al posto di ${esc(itName(d.n||""))}${d.s?" · "+esc(d.s):""}</span></div>
    <div class="sg-acts"><button class="btn" data-md="open" data-id="${id}">Vedi la tasca</button><button class="linkbtn" data-md="undo" data-id="${id}">Rimetti quella di prima</button></div></article>`}).join("")}
+
+// ---- Sfoglia: una doppia pagina alla volta, com'è oggi o come sarà finito ----
+function saveSf(){try{localStorage.setItem("johto-binder-v2-sf",JSON.stringify(SF))}catch(e){}}
+function paintBm(){document.querySelectorAll("#bmode [data-bm]").forEach(b=>b.setAttribute("aria-pressed",(b.dataset.bm==="sf")===SF.on));
+ document.querySelectorAll("#bmode [data-sfv]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.sfv===SF.v));
+ document.querySelectorAll(".sf-only").forEach(e=>e.hidden=!SF.on);document.getElementById("binder").hidden=SF.on;document.getElementById("sf").hidden=!SF.on;document.getElementById("filters").hidden=SF.on}
+document.getElementById("bmode").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+ if(b.dataset.bm){const on=b.dataset.bm==="sf";if(on===SF.on)return;SF.on=on;saveSf();paintBm();if(on){renderSf()}else{render();goSpread(curSp)}}
+ else if(b.dataset.sfv){SF.v=b.dataset.sfv;saveSf();paintBm();renderSf()}});
+function renderSf(){const box=document.getElementById("sf");if(!SF.on||!box)return;const sp=SPREADS[curSp],n=SPREADS.length;
+ box.innerHTML=`<div class="sf-head"><h2>${sp.title}</h2><span class="jp">${sp.jp}</span><span class="sf-pos">tappa ${curSp+1} di ${n}</span></div><div class="sf-book" id="sf-book"></div>
+  <div class="sf-nav"><button class="btn" id="sf-prev"${curSp?"":" disabled"}>‹ Indietro</button><button class="btn" id="sf-next"${curSp<n-1?"":" disabled"}>Avanti ›</button></div>`;
+ const book=document.getElementById("sf-book");const pages=sp.pages.length===1?(curSp===0?[null,sp.pages[0]]:[sp.pages[0],null]):sp.pages;
+ pages.forEach(pg=>{const el=document.createElement("div");el.className="sf-page"+(pg?"":" empty");
+  if(pg){const own=pg.s.filter(x=>getS(x.id)===2).length;el.innerHTML=`<div class="sf-pn"><span>${esc(pg.h)}</span><span>p. ${pg.n} · ${own}/9</span></div>`;
+   pg.s.forEach(x=>{const b=makeSlot(x,"sf-",true);if(SF.v==="oggi"&&getS(x.id)<2)b.classList.add("ghost");el.appendChild(b)})}
+  book.appendChild(el)});
+ document.getElementById("sf-prev").onclick=()=>goSpread(curSp-1);document.getElementById("sf-next").onclick=()=>goSpread(curSp+1);
+ let sx=null;book.addEventListener("touchstart",e=>{sx=e.touches[0].clientX},{passive:true});
+ book.addEventListener("touchend",e=>{if(sx===null)return;const dx=e.changedTouches[0].clientX-sx;sx=null;if(Math.abs(dx)>60)goSpread(curSp+(dx<0?1:-1))});
+ observeUps()}
+document.addEventListener("keydown",e=>{if(!SF.on||e.altKey||e.ctrlKey||e.metaKey)return;const t=e.target;if(t&&/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))return;
+ const vb=document.getElementById("v-binder");if(vb.hidden||!sheet.hidden)return;if(e.key==="ArrowRight"){e.preventDefault();goSpread(curSp+1)}else if(e.key==="ArrowLeft"){e.preventDefault();goSpread(curSp-1)}},true);
+
+// ---- Immagini caricate da Leo: indice in binder/immagini, file in stampe/<tasca> (caricati quando servono) ----
+let DB=null,upRef=null,upReady=false;
+const io=("IntersectionObserver" in window)?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){io.unobserve(e.target);loadUp(e.target.dataset.up)}}),{rootMargin:"600px"}):null;
+function observeUps(){document.querySelectorAll("img[data-up]:not([src])").forEach(i=>{if(io)io.observe(i);else loadUp(i.dataset.up)})}
+async function loadUp(id){if(!UP[id]||!DB)return;const k=id+"@"+UP[id];if(UPIMG[k]){paintUp(id);return}if(upLoading[k])return;upLoading[k]=1;
+ try{const s=await DB.doc("stampe/"+id).get();const d=s.exists?s.data():null;if(d&&d.img){UPIMG[k]=d.img;paintUp(id)}}catch(e){}finally{delete upLoading[k]}}
+function paintUp(id){const k=id+"@"+UP[id];if(!UPIMG[k])return;document.querySelectorAll(`img[data-up="${id}"]`).forEach(i=>{if(i.getAttribute("src")!==UPIMG[k])i.src=UPIMG[k]})}
+(async()=>{let db=null;try{db=await claude.use("db")}catch(e){}if(!db)return;DB=db;const role=await rolePromise;const ref=db.doc("binder/immagini");
+ ref.onSnapshot(snap=>{if(snap.metadata.fromCache&&!snap.exists)return;const d=snap.exists?snap.data():null;if(!snap.metadata.fromCache&&role==="owner"&&!upRef){upRef=ref;upReady=!!d}
+  const ids={};Object.entries((d&&d.ids)||{}).forEach(([k,v])=>{if(v)ids[k]=v});if(JSON.stringify(ids)!==JSON.stringify(UP)){UP=ids;render();if(cur&&!sheet.hidden&&!sheet.classList.contains("uploading"))paintSheetViewer()}},()=>{})})();
+async function setUpIndex(id,ts){if(!upRef)throw{code:"wait"};if(upReady)await upRef.update({ids:{[id]:ts},updatedAt:Date.now()});else{await upRef.set({ids:{...UP,[id]:ts},updatedAt:Date.now()});upReady=true}}
+const UPC={img:null,z:1,ox:0,oy:0};const upCv=document.getElementById("up-cv");
+function drawUp(cv,W,H){const c=cv.getContext("2d"),im=UPC.img;if(!im)return;const s0=Math.max(W/im.width,H/im.height),s=s0*UPC.z,w=im.width*s,h2=im.height*s;
+ const k=W/upCv.width;UPC.ox=Math.min(0,Math.max(upCv.width-w/k,UPC.ox));UPC.oy=Math.min(0,Math.max(upCv.height-h2/k,UPC.oy));
+ c.fillStyle="#15301f";c.fillRect(0,0,W,H);c.drawImage(im,UPC.ox*k,UPC.oy*k,w,h2)}
+function endUp(){const p=document.getElementById("up-crop");if(!p)return;sheet.classList.remove("uploading");p.hidden=true;UPC.img=null;document.getElementById("sh-up").value=""}
+document.getElementById("sh-up").addEventListener("change",e=>{const f=e.target.files&&e.target.files[0];if(!f||!cur)return;const im=new Image();
+ im.onload=()=>{UPC.img=im;UPC.z=1;document.getElementById("up-z").value=1;const s0=Math.max(upCv.width/im.width,upCv.height/im.height);UPC.ox=(upCv.width-im.width*s0)/2;UPC.oy=(upCv.height-im.height*s0)/2;
+  document.getElementById("up-msg").textContent="";sheet.classList.add("uploading");document.getElementById("up-crop").hidden=false;sheet.scrollTop=0;drawUp(upCv,upCv.width,upCv.height)};
+ im.onerror=()=>flashBtn(document.getElementById("sh-change"),"Immagine non leggibile");im.src=URL.createObjectURL(f)});
+document.getElementById("up-z").addEventListener("input",e=>{const old=UPC.z,z=+e.target.value,cx=upCv.width/2,cy=upCv.height/2;UPC.ox=cx-(cx-UPC.ox)*z/old;UPC.oy=cy-(cy-UPC.oy)*z/old;UPC.z=z;drawUp(upCv,upCv.width,upCv.height)});
+let upDrag=null;upCv.addEventListener("pointerdown",e=>{upDrag={x:e.clientX,y:e.clientY,ox:UPC.ox,oy:UPC.oy};upCv.setPointerCapture(e.pointerId)});
+upCv.addEventListener("pointermove",e=>{if(!upDrag)return;const r=upCv.width/upCv.getBoundingClientRect().width;UPC.ox=upDrag.ox+(e.clientX-upDrag.x)*r;UPC.oy=upDrag.oy+(e.clientY-upDrag.y)*r;drawUp(upCv,upCv.width,upCv.height)});
+upCv.addEventListener("pointerup",()=>{upDrag=null});
+document.getElementById("up-cancel").onclick=()=>{const x=cur;endUp();if(x)open(x)};
+document.getElementById("up-save").onclick=async()=>{const x=cur,msg=document.getElementById("up-msg"),btn=document.getElementById("up-save");if(!x||!UPC.img||!DB||!isOwnerView())return;if(!upRef){msg.textContent="Sto ancora collegando il database: riprova tra un attimo.";return}
+ const out=document.createElement("canvas");out.width=744;out.height=1039;drawUp(out,744,1039);let q=.88,url=out.toDataURL("image/jpeg",q);while(url.length>900000&&q>.4){q-=.08;url=out.toDataURL("image/jpeg",q)}
+ btn.disabled=true;msg.textContent="Salvo…";const ts=Date.now();
+ try{await DB.doc("stampe/"+x.id).set({img:url,ts});await setUpIndex(x.id,ts);UPIMG[x.id+"@"+ts]=url;UP={...UP,[x.id]:ts};endUp();render();open(byId[x.id]);flashBtn(document.getElementById("sh-change"),"Immagine salvata")}
+ catch(e){msg.textContent=e&&e.code==="wait"?"Sto ancora collegando il database: riprova tra un attimo.":"Non sono riuscito a salvarla: riprova."}finally{btn.disabled=false}};
+document.getElementById("sh-up-del").onclick=async()=>{const x=cur;if(!x||!DB||!isOwnerView())return;try{await setUpIndex(x.id,null);DB.doc("stampe/"+x.id).delete().catch(()=>{});const u={...UP};delete u[x.id];UP=u;render();open(byId[x.id])}catch(e){flashBtn(document.getElementById("sh-up-del"),"Riprova tra un attimo")}};
+
+// ---- Diario del binder: arrivi, carte cambiate, immagini nuove (lo vedono tutti) ----
+function renderDiario(){const box=document.getElementById("v-diario");if(!box||box.hidden)return;const ev=[];
+ Object.keys(WHEN).forEach(id=>{if(WHEN[id]&&getS(id)===2&&byId[id])ev.push([WHEN[id],id,byId[id].t==="p"?"Stampa nel binder":"Arrivata nel binder"])});
+ Object.keys(MODS).forEach(id=>{const m=MODS[id];if(m&&m.n&&byId[id])ev.push([m.ts||0,id,`Nuova scelta per la tasca, al posto di ${itName((m.da||{}).n||"")}`+(m.consiglio?` · consigliata da ${m.consiglio}`:"")])});
+ Object.keys(UP).forEach(id=>{if(byId[id])ev.push([UP[id],id,byId[id].t==="p"?"Nuova immagine per la stampa":"Nuova immagine"])});
+ ev.sort((a,b)=>b[0]-a[0]);let day="";
+ box.innerHTML=`<div class="wl-head"><div><h2>Diario del binder</h2><p>Come cresce il binder di Leo: carte arrivate, nuove scelte e immagini delle stampe.</p></div></div><div class="dia" id="dia">${ev.length?ev.slice(0,80).map(([t,id,w])=>{const x=byId[id];
+  const d=new Date(t).toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long"});const head=d!==day?`<div class="dia-day">${d}</div>`:"";day=d;
+  const im=imgTag(x,"low","dia-th");return head+`<button class="dia-it" data-dia="${id}" style="--era:${x.t==="c"?era(x).c:"#15301f"}">${im||'<span class="dia-th"></span>'}<span><b>${esc(itName(x.n))}</b><small>${esc(w)} · ${posLabel(x)}</small></span></button>`}).join(""):'<div class="ce-empty">Ancora niente: appena arriva una carta la trovi qui.</div>'}</div>`;observeUps()}
+document.getElementById("v-diario").addEventListener("click",e=>{const b=e.target.closest("[data-dia]");if(b)goBinder(byId[b.dataset.dia])});
+window.addEventListener("hashchange",renderDiario);
+
+// ---- Gli amici vedono cosa ne pensa Leo dei loro messaggi ----
+if(window.APP&&APP.mine)rolePromise.then(r=>{if(r!=="owner")APP.mine(items=>{MYMSG=items;renderMine()})});
+paintBm();
+const ST_AM={nuova:["Leo deve ancora guardarla",""],fatta:["Leo l'ha accettata","fatta"],no:["Leo ha deciso di no","no"],eliminata:["Letta da Leo","no"]};
 
 // ---- Controlla una carta: è nel binder? dove va? ----
 const CK=document.getElementById("v-check");
