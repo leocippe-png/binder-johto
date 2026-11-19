@@ -425,9 +425,9 @@ const goto=document.getElementById("goto");new IntersectionObserver(es=>goto.cla
 
 // ---- Musica: una scaletta lo-fi di Johto dal lettore ufficiale di Spotify (album pubblicati su licenza) ----
 (()=>{const btn=document.getElementById("mu"),box=document.getElementById("mu-pl"),ls=document.getElementById("mu-ls");
- const TR=[["Borgo Foglianova","Besso0 & Save Point","2Phzbp1Xej3nFyxKHBnKcT"],["Percorso 30","Mikel · Poké & Chill","2Rp3lfMI1XgoBHYMFlKdpw"],["Azalina","Mikel · Poké & Chill","0uanFLRIXsi1PgBync64NJ"],
+ const TR=[["Percorso 30","Mikel · Poké & Chill","2Rp3lfMI1XgoBHYMFlKdpw"],["Borgo Foglianova","Besso0 & Save Point","2Phzbp1Xej3nFyxKHBnKcT"],["Azalina","Mikel · Poké & Chill","0uanFLRIXsi1PgBync64NJ"],
   ["Amarantopoli","Mikel · Poké & Chill","1PWaQlb10i9CEBNs1zKQou"],["Borgo Foglianova","Super Lofi 64 · Poké Lofi","2j5pyPFfcGgSyCOQOQGmep"],["Azalina","Besso0 & Save Point","4Hba7YJ05YKP8BB1tUXS5b"],["Amarantopoli","Super Lofi 64 · Poké Lofi","06ipmxCPwyoZ9KdliVQ5PQ"]];
- let ctrl=null,loading=false,playing=false,cur=0,pend=null,wasPlaying=false;
+ let ctrl=null,loading=false,playing=false,cur=0,pend=null,wasPlaying=false,started=false,manual=false;
  ls.innerHTML=TR.map(([p,a],i)=>`<li data-i="${i}"><button type="button"><i>${i+1}</i><span>${esc(p)}<small>${esc(a)}</small></span></button></li>`).join("");
  function paint(){btn.classList.toggle("on",playing);btn.classList.toggle("off",!playing);btn.setAttribute("aria-label",box.classList.contains("min")?"Apri la musica":"Riduci la musica");
   ls.querySelectorAll("li").forEach(li=>li.classList.toggle("cur",+li.dataset.i===cur))}
@@ -435,17 +435,24 @@ const goto=document.getElementById("goto");new IntersectionObserver(es=>goto.cla
  function load(){if(ctrl||loading)return;loading=true;
   window.onSpotifyIframeApiReady=API=>{API.createController(document.getElementById("mu-embed"),{uri:pend||"spotify:track:"+TR[0][2],width:"100%",height:80,theme:"dark"},c=>{ctrl=c;
    c.addListener("ready",()=>{if(pend){pend=null;c.play()}});
-   c.addListener("playback_update",e=>{const d=e&&e.data||{};playing=!d.isPaused;
+   c.addListener("playback_update",e=>{const d=e&&e.data||{};playing=!d.isPaused;if(playing){started=true;disarm()}
     // a fine brano passa al successivo
     if(d.isPaused&&wasPlaying&&d.duration&&d.position>=d.duration-1500){wasPlaying=false;playTrack(cur+1);return}wasPlaying=!d.isPaused;paint()})})};
   const sc=document.createElement("script");sc.src="https://open.spotify.com/embed/iframe-api/v1";sc.async=true;
   sc.onerror=()=>{loading=false;document.getElementById("mu-embed").innerHTML='<a href="https://open.spotify.com/track/'+TR[cur][2]+'" target="_blank" rel="noopener">Ascolta su Spotify</a>'};document.head.appendChild(sc)}
  const show=on=>{box.classList.toggle("min",!on);paint()};
- btn.addEventListener("click",()=>{const opening=box.classList.contains("min");show(opening);if(opening&&!ctrl&&!loading)playTrack(cur)});
- ls.addEventListener("click",e=>{const li=e.target.closest("li");if(li)playTrack(+li.dataset.i)});
+ btn.addEventListener("click",()=>{const opening=box.classList.contains("min");show(opening);if(opening&&!started&&!playing){manual=true;disarm();playTrack(cur)}});
+ ls.addEventListener("click",e=>{const li=e.target.closest("li");if(li){manual=true;disarm();playTrack(+li.dataset.i)}});
  document.getElementById("mu-min").addEventListener("click",()=>show(false));
- document.getElementById("mu-x").addEventListener("click",()=>{if(ctrl&&playing)ctrl.pause();show(false)});
+ document.getElementById("mu-x").addEventListener("click",()=>{manual=true;disarm();if(ctrl&&playing)ctrl.pause();show(false)});
  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!box.classList.contains("min"))show(false)});
+ // Avvio di default su "Percorso 30". I browser vietano l'audio prima di un gesto del visitatore:
+ // si prova subito e, se viene bloccato, parte al primo tocco/clic/tasto in qualsiasi punto della pagina.
+ const EV=["click","touchend","keydown"];
+ function kick(e){if(manual||playing||(e&&e.target&&e.target.closest&&e.target.closest("#mu,#mu-pl")))return;if(ctrl)ctrl.play();else playTrack(0)}
+ function disarm(){EV.forEach(t=>document.removeEventListener(t,kick,true))}
+ EV.forEach(t=>document.addEventListener(t,kick,true));
+ playTrack(0);
  paint()})();
 
 // scintille sulla copertina
