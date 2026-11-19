@@ -2,7 +2,7 @@
 // Unico file da modificare per cambiare carte e stampe: l'app lo legge all'avvio.
 // Ogni tasca: t = "c" carta / "p" stampa, n = nome, s = set e numero, note, f = anchor · arita · pers · ita
 window.COLLEZIONE={
- versione:"2026-11-19",
+ versione:"2026-11-19b",
  medaglie:[["Zefiro",9],["Alveare",13],["Piana",17],["Nebbia",21],["Tempesta",29],["Minerale",27],["Gelo",35],["Levante",37]],
  capitoli:[["Il viaggio inizia",["frontespizio","foglianova","partenza","percorsi-29-32"]],["Le palestre di Johto",["violapoli","alfa","azalina","lecci","fiordoropoli","percorsi-35-36","amarantopoli","torre-bruciata","olivinopoli","faro","fiorlisopoli","vorticose","lago","mogania","ebanopoli"]],["Verso la Lega",["ho-oh","vittoria","superquattro-1","superquattro-2","campione"]],["Dopo la Lega",["luce-ombra","kanto","monte-argento","hgss","vetta"]]],
  set:{
@@ -27,7 +27,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"foglianova",title:"Borgo Foglianova",jp:"ワカバタウン",
-   desc:"Il vento che soffia sul borgo, la mamma che ti regola l'orologio, tre Poké Ball sul tavolo. A sinistra la scelta di sempre, una linea per riga; a destra il compagno di questo binder, Feraligatr, in tre epoche.",
+   desc:"Il vento che soffia sul borgo, la mamma che ti chiede che giorno è, tre Poké Ball sul tavolo. A sinistra la scelta di sempre, una linea per riga; a destra il compagno di questo binder, Feraligatr, in tre epoche.",
    pages:[
     {n:2,h:"Expedition, una linea per riga",s:[
      {"t":"c","n":"Chikorita","s":"Expedition 99/165"},
@@ -47,13 +47,13 @@ window.COLLEZIONE={
      {"t":"c","n":"Totodile","s":"HeartGold SoulSilver 86/123","note":"La seconda riga è la stessa linea nel remake HGSS."},
      {"t":"c","n":"Croconaw","s":"HeartGold SoulSilver 38/123"},
      {"t":"c","n":"Feraligatr Prime","s":"HeartGold SoulSilver 108/123","note":"Le Prime sono le carte simbolo del remake di Johto."},
-     {"t":"p","n":"Il rivale Silver","s":"Stampa","note":"Silver ruba proprio Totodile dal laboratorio di Elm."},
+     {"t":"p","n":"Il rivale Silver","s":"Stampa","note":"Silver ruba dal laboratorio lo starter che ha il vantaggio sul tuo: a chi sceglie Chikorita porta via Totodile."},
      {"t":"c","n":"Mega Feraligatr ex","s":"Ascended Heroes 274/217 · SIR","note":"La prima Mega Evoluzione di Feraligatr, nella versione Special Illustration Rare: il pezzo moderno della pagina.","f":["anchor"]},
      {"t":"c","n":"Feraligatr","s":"Expedition 47/165","note":"Il gemello non holo della 12, sempre di Arita: a binder aperto si guardano dalle due pagine.","f":["arita"]}
     ]}
    ]},
   {id:"partenza",title:"La partenza",jp:"はじまりのひ",
-   desc:"Il laboratorio, la finestra lasciata aperta da un ragazzo dai capelli rossi, l'uovo che ti affida Mr. Pokémon. Di fronte Ethan, che anni dopo ha rifatto la stessa strada.",
+   desc:"Il laboratorio, il ragazzo dai capelli rossi che spia dalla finestra, l'uovo che ti affida Mr. Pokémon. Di fronte Ethan, che anni dopo ha rifatto la stessa strada.",
    pages:[
     {n:4,h:"Il laboratorio di Elm",s:[
      {"t":"c","n":"Professor Elm","s":"Neo Genesis 96/111","note":"La prima carta del professore, uscita insieme a Oro e Argento.","f":["pers"]},
@@ -62,8 +62,8 @@ window.COLLEZIONE={
      {"t":"p","n":"Tre Poké Ball sul tavolo","s":"Stampa","note":"Il momento della scelta dello starter."},
      {"t":"p","n":"Le note di ricerca di Elm","s":"Stampa"},
      {"t":"p","n":"L'assistente di Elm","s":"Stampa"},
-     {"t":"c","n":"Togepi","s":"Neo Genesis 51/111","note":"L'uovo che ti affida l'assistente di Elm: sta a Borgo Foglianova, accanto agli starter."},
-     {"t":"p","n":"Uovo misterioso","s":"Stampa","note":"L'uovo che Elm ti affida dopo la visita a Mr. Pokémon."},
+     {"t":"c","n":"Togepi","s":"Neo Genesis 51/111","note":"Dall'uovo di Mr. Pokémon nasce Togepi: l'assistente di Elm te lo riconsegna al Centro Pokémon di Violapoli."},
+     {"t":"p","n":"Uovo misterioso","s":"Stampa","note":"L'uovo che Mr. Pokémon ti consegna da portare al professor Elm."},
      {"t":"c","n":"PokéGear 3.0","s":"HeartGold SoulSilver 96/123","note":"Il Pokégear che la mamma ti consegna prima di partire."}
     ]},
     {n:5,h:"La squadra di Ethan",s:[
@@ -85,7 +85,7 @@ window.COLLEZIONE={
      {"t":"c","n":"Sentret","s":"Neo Genesis 71/111","note":"Neo Genesis è il set uscito insieme a Oro e Argento: le prime illustrazioni di Johto in assoluto."},
      {"t":"c","n":"Furret","s":"Neo Genesis 35/111"},
      {"t":"p","n":"Percorso 29","s":"Stampa"},
-     {"t":"c","n":"Rattata","s":"Undaunted 64/90","note":"I Pokémon di Kanto sono ovunque a Johto: Rattata è il primo che incontri."},
+     {"t":"c","n":"Rattata","s":"Undaunted 64/90","note":"Rattata spunta già sul Percorso 29: i Pokémon di Kanto sono ovunque a Johto."},
      {"t":"c","n":"Raticate","s":"Undaunted 34/90"},
      {"t":"p","n":"Fiorpescopoli","s":"Stampa","note":"La città sul mare, prima tappa dopo Borgo Foglianova."},
      {"t":"p","n":"Hoothoot nella notte","s":"Stampa"},
@@ -93,12 +93,12 @@ window.COLLEZIONE={
      {"t":"p","n":"Notte sul Percorso 30","s":"Stampa"}
     ]},
     {n:7,h:"Percorsi 30–32",s:[
-     {"t":"c","n":"Spinarak","s":"Neo Genesis 75/111","note":"Spinarak e Ariados escono di notte sui Percorsi 30 e 31."},
-     {"t":"c","n":"Ariados","s":"Neo Genesis 27/111","note":"Spinarak e Ariados escono di notte sui Percorsi 30 e 31."},
+     {"t":"c","n":"Spinarak","s":"Neo Genesis 75/111","note":"Spinarak esce solo di notte, tra l'erba dei Percorsi 30 e 31."},
+     {"t":"c","n":"Ariados","s":"Neo Genesis 27/111","note":"Il ragno in cui si evolvono gli Spinarak notturni dei Percorsi 30 e 31."},
      {"t":"p","n":"Casa di Mr. Pokémon","s":"Stampa","note":"Dove ritiri l'uovo misterioso."},
      {"t":"c","n":"Ledyba","s":"Neo Genesis 63/111"},
      {"t":"p","n":"Percorso 31","s":"Stampa"},
-     {"t":"c","n":"Ledian","s":"Stellar Crown 144/142 · IR","note":"Illustration Rare in notturna, come i Ledyba che escono solo di mattina e di sera nei percorsi."},
+     {"t":"c","n":"Ledian","s":"Stellar Crown 144/142 · IR","note":"Illustration Rare in notturna: Ledian vola nelle notti stellate, mentre i Ledyba dei Percorsi 30 e 31 si vedono solo di mattina."},
      {"t":"c","n":"Mareep","s":"Neo Genesis 65/111"},
      {"t":"c","n":"Flaaffy","s":"Expedition 77/165","note":"Illustrata da Mitsuhiro Arita.","f":["arita"]},
      {"t":"c","n":"Ampharos","s":"Expedition 2/165 · holo"}
@@ -142,7 +142,7 @@ window.COLLEZIONE={
      {"t":"c","n":"Quagsire","s":"Neo Genesis 45/111"},
      {"t":"c","n":"Kabutops","s":"Neo Discovery 6/75 · holo","note":"Neo Discovery è il set giapponese dedicato alle Rovine d'Alfa."},
      {"t":"c","n":"Omastar","s":"Neo Discovery 43/75"},
-     {"t":"c","n":"Aerodactyl","s":"Neo Revelation 15/64 · holo","note":"I tre fossili dei puzzle delle Rovine."}
+     {"t":"c","n":"Aerodactyl","s":"Neo Revelation 15/64 · holo","note":"Kabuto, Omanyte e Aerodactyl: tre dei quattro mosaici da ricomporre nelle Rovine (il quarto è Ho-Oh)."}
     ]},
     {n:11,h:"Il linguaggio degli Unown",s:[
      {"t":"c","n":"Unown T","s":"Neo Destiny 88/105"},
@@ -152,7 +152,7 @@ window.COLLEZIONE={
      {"t":"c","n":"Muro delle Rovine","s":"Neo Discovery 74/75 · Allenatore","note":"Ruin Wall: la parete incisa delle Rovine."},
      {"t":"c","n":"Litografia di Alfa","s":"HeartGold SoulSilver ONE · segreta","note":"Alph Lithograph: la carta segreta di HGSS dedicata alle Rovine.","f":["ita"]},
      {"t":"c","n":"Smeargle","s":"Lost Thunder 157/214","note":"In Oro e Argento Smeargle vive proprio alle Rovine."},
-     {"t":"c","n":"Natu","s":"Unleashed 55/95","note":"Natu e Xatu popolano le Rovine d'Alfa."},
+     {"t":"c","n":"Natu","s":"Unleashed 55/95","note":"Natu saltella nell'erba davanti alle Rovine d'Alfa."},
      {"t":"c","n":"Xatu","s":"Unleashed 11/95 · holo"}
     ]}
    ]},
@@ -175,7 +175,7 @@ window.COLLEZIONE={
      {"t":"c","n":"Orbeetle V","s":"Lost Origin TG12/TG30","note":"Trainer Gallery con Raffaello: fa da carta del capopalestra, al posto del ritratto stampato.","f":["pers"]},
      {"t":"c","n":"Scyther","s":"Undaunted 36/90","note":"L'asso di Raffaello, nella versione del remake."},
      {"t":"c","n":"Scizor","s":"Undaunted 7/90 · holo","note":"Lo Scyther di Raffaello evoluto, dallo stesso set Undaunted."},
-     {"t":"c","n":"Heracross","s":"Paldea Evolved 194/193 · IR","note":"Heracross aggrappato al tronco: l'Headbutt sugli alberi di Johto."},
+     {"t":"c","n":"Heracross","s":"Paldea Evolved 194/193 · IR","note":"Heracross aggrappato al tronco: lo fai cadere colpendo gli alberi di Johto con Bottintesta."},
      {"t":"c","n":"Forretress","s":"Neo Discovery 2/75 · holo"},
      {"t":"c","n":"Metapod","s":"HeartGold SoulSilver 46/123","note":"Metapod e Kakuna aprono la squadra di Raffaello."},
      {"t":"c","n":"Kakuna","s":"Neo Discovery 41/75"},
@@ -188,7 +188,7 @@ window.COLLEZIONE={
     {n:14,h:"Il santuario del bosco",s:[
      {"t":"c","n":"Celebi","s":"Neo Revelation 3/64 · holo","note":"Il Celebi dell'era Oro e Argento, per il santuario del Bosco di Lecci."},
      {"t":"c","n":"Noctowl","s":"HeartGold SoulSilver 8/123 · holo","note":"Il Bosco di Lecci di notte, accanto alla Guardia Forestale."},
-     {"t":"c","n":"Guardia Forestale","s":"e-Card · Supporter","note":"Già tua: è quella sullo scaffale. Noctowl e il vecchio del bosco stanno bene qui.","f":["pers"]},
+     {"t":"c","n":"Guardia Forestale","s":"e-Card · Supporter","note":"Una Supporter dell'era e-Card, per chi veglia sul Bosco di Lecci accanto al Noctowl notturno.","f":["pers"]},
      {"t":"c","n":"Farfetch'd","s":"HeartGold SoulSilver 19/123","note":"Il Farfetch'd scappato nel Bosco di Lecci."},
      {"t":"c","n":"Aipom","s":"Paradox Rift 211/182 · IR","note":"Aipom cade dagli alberi da colpire con Bottintesta, dai Percorsi 33 e 34 al Bosco di Lecci."},
      {"t":"c","n":"Oddish","s":"Undaunted 60/90"},
@@ -201,7 +201,7 @@ window.COLLEZIONE={
      {"t":"c","n":"Pichu","s":"HeartGold SoulSilver 28/123","note":"La riga dei Pokémon baby, nati con la seconda generazione insieme alle uova."},
      {"t":"c","n":"Igglybuff","s":"HeartGold SoulSilver 44/123"},
      {"t":"c","n":"Elekid","s":"Neo Genesis 22/111 · holo"},
-     {"t":"c","n":"Magby","s":"Expedition 17/165 · holo","note":"Riga di fuoco con Houndour e Houndoom; nella Torre Bruciata vivono i Magmar. Illustrata da Mitsuhiro Arita.","f":["arita"]},
+     {"t":"c","n":"Magby","s":"Expedition 17/165 · holo","note":"Il baby di Magmar, che vive tra le rovine della Torre Bruciata. Illustrata da Mitsuhiro Arita.","f":["arita"]},
      {"t":"c","n":"Tyrogue","s":"HeartGold SoulSilver 33/123","note":"Il Re del Karate te lo regala nel Monte Scodella, vicino a Mogania."},
      {"t":"c","n":"Ditto","s":"Triumphant 17/102","note":"Il compagno di ogni allevamento alla Pensione."},
      {"t":"p","n":"L'allevatore","s":"Stampa"},
@@ -217,7 +217,7 @@ window.COLLEZIONE={
      {"t":"c","n":"Sala Giochi","s":"Neo Genesis 83/111","note":"Arcade Game: la Sala Giochi di Fiordoropoli."},
      {"t":"c","n":"Eevee","s":"Brilliant Stars TG11/TG30","note":"Trainer Gallery: Eevee che occupa la scrivania di Bill. Bill ti regala Eevee proprio a Fiordoropoli.","f":["anchor","pers"]},
      {"t":"c","n":"Bill","s":"HeartGold SoulSilver 89/123","note":"Bill ti regala Eevee a Fiordoropoli.","f":["pers"]},
-     {"t":"c","n":"Porygon2","s":"Neo Revelation 12/64 · holo","note":"Il Treno Magnetico porta alla Silph S.p.A., da cui viene il Dispositivo che lo fa evolvere."},
+     {"t":"c","n":"Porygon2","s":"Neo Revelation 12/64 · holo","note":"Il Treno Magnetico porta a Zafferanopoli: lì un ricercatore della Silph S.p.A. ti regala l'Upgrade che fa evolvere Porygon."},
      {"t":"p","n":"Treno Magnetico","s":"Stampa"},
      {"t":"c","n":"Teletrasporto di Bill","s":"Neo Genesis 91/111"},
      {"t":"p","n":"Grande Magazzino","s":"Stampa"}
@@ -225,13 +225,13 @@ window.COLLEZIONE={
     {n:17,h:"Palestra di Chiara",s:[
      {"t":"p","n":"Medaglia Piana","s":"Stampa medaglia"},
      {"t":"c","n":"Chiara (Whitney)","s":"Lost Thunder 214/214 · Full Art","f":["pers"]},
-     {"t":"c","n":"Miltank","s":"Crown Zenith GG24/GG70","note":"Galarian Gallery: Miltank tra latte e formaggi, come alla Fattoria Mumù."},
+     {"t":"c","n":"Miltank","s":"Crown Zenith GG24/GG70","note":"Galarian Gallery: Miltank tra latte e formaggi, come alla Fattoria Mumu."},
      {"t":"c","n":"Cleffa","s":"Obsidian Flames 202/197 · IR","note":"La pre-evoluzione del Clefairy di Chiara."},
      {"t":"c","n":"Clefairy","s":"Neo Genesis 30/111","note":"La squadra di Chiara: Clefairy e Miltank."},
      {"t":"c","n":"Clefable","s":"HeartGold SoulSilver 3/123 · holo"},
      {"t":"p","n":"Palestra di Fiordoropoli","s":"Stampa"},
-     {"t":"c","n":"Snubbull","s":"HeartGold SoulSilver 82/123","note":"Snubbull vive sui percorsi intorno a Fiordoropoli."},
-     {"t":"c","n":"Granbull","s":"HeartGold SoulSilver 22/123","note":"Snubbull e Granbull vivono sul Percorso 38, tra Amarantopoli e Olivinopoli."}
+     {"t":"c","n":"Snubbull","s":"HeartGold SoulSilver 82/123","note":"In Oro e Argento Snubbull è di tipo Normale: diventerà Folletto solo con la sesta generazione."},
+     {"t":"c","n":"Granbull","s":"HeartGold SoulSilver 22/123","note":"La sua evoluzione: il bulldog che chiude la pagina di Chiara."}
     ]}
    ]},
   {id:"percorsi-35-36",title:"Percorsi 35–36",jp:"しぜんこうえん",
@@ -239,11 +239,11 @@ window.COLLEZIONE={
    pages:[
     {n:18,h:"Parco Nazionale",s:[
      {"t":"p","n":"Parco Nazionale","s":"Stampa"},
-     {"t":"c","n":"Sunkern","s":"Neo Genesis 78/111","note":"Il Parco Nazionale; si evolve nel Sunflora della stessa riga."},
+     {"t":"c","n":"Sunkern","s":"Neo Genesis 78/111","note":"Con una Pietrasolare diventa il Sunflora della stessa riga."},
      {"t":"c","n":"Sunflora","s":"Neo Genesis 50/111"},
      {"t":"c","n":"Yanma","s":"Destined Rivals 183/182 · IR"},
-     {"t":"c","n":"Pinsir","s":"Undaunted 32/90","note":"Un premio della gara Pigliamosche."},
-     {"t":"c","n":"Butterfree","s":"HeartGold SoulSilver 16/123","note":"Caterpie, Weedle e i loro evoluti girano per il Parco Nazionale."},
+     {"t":"c","n":"Pinsir","s":"Undaunted 32/90","note":"Con Scyther, la cattura più ambita della Gara Pigliamosche."},
+     {"t":"c","n":"Butterfree","s":"HeartGold SoulSilver 16/123","note":"Caterpie, Weedle e le loro evoluzioni sono i protagonisti della Gara Pigliamosche."},
      {"t":"c","n":"Caterpie","s":"Neo Discovery 53/75"},
      {"t":"c","n":"Weedle","s":"Neo Discovery 70/75"},
      {"t":"p","n":"Gara Pigliamosche","s":"Stampa"}
@@ -261,10 +261,10 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"amarantopoli",title:"Amarantopoli",jp:"エンジュシティ",
-   desc:"La città più antica di Johto: il teatro delle danze, le cinque sorelle in kimono con le loro Eevee evolute, due torri che si guardano da lontano. Di fronte Angelo, che si allena da sempre per vedere un Pokémon leggendario.",
+   desc:"La città più antica di Johto: il teatro delle danze, le cinque ragazze kimono con le loro Eevee evolute, due torri che si guardano da lontano. Di fronte Angelo, che si allena da sempre per vedere un Pokémon leggendario.",
    pages:[
     {n:20,h:"Le ragazze kimono",s:[
-     {"t":"c","n":"Espeon","s":"Undaunted 2/90 · holo","note":"Tutta la pagina viene da Undaunted: le cinque ragazze kimono e i loro Eevee evoluti sono una scena del remake."},
+     {"t":"c","n":"Espeon","s":"Undaunted 2/90 · holo","note":"Tutta la pagina viene da Undaunted: le cinque ragazze kimono e i loro Eevee evoluti, che nel remake danzano per Ho-Oh sulla Torre Campana."},
      {"t":"c","n":"Bellossom","s":"Undaunted 1/90 · holo","note":"Il Pokémon che danza, nel Teatro delle Danze; dallo stesso set Undaunted delle evoluzioni di Eevee."},
      {"t":"c","n":"Umbreon","s":"Undaunted 10/90 · holo"},
      {"t":"c","n":"Vaporeon","s":"Undaunted 41/90"},
@@ -279,7 +279,7 @@ window.COLLEZIONE={
      {"t":"c","n":"Angelo (Morty)","s":"Lost Thunder 212/214 · Full Art","note":"Illustrata da Sanosuke Sakuma.","f":["pers"]},
      {"t":"c","n":"Determinazione di Angelo","s":"Temporal Forces 211/162 · SIR","note":"Morty's Conviction, la carta allenatore di Angelo in Cronoforze, nella versione Special Illustration Rare. Affianca il suo Full Art di Lost Thunder.","f":["pers"]},
      {"t":"c","n":"Gastly","s":"Triumphant 63/102"},
-     {"t":"c","n":"Haunter","s":"Triumphant 35/102","note":"La palestra di Angelo è piena di Gastly e Haunter."},
+     {"t":"c","n":"Haunter","s":"Triumphant 35/102","note":"La squadra di Angelo: Gastly, due Haunter e Gengar."},
      {"t":"c","n":"Misdreavus","s":"Ascended Heroes 233/217 · IR"},
      {"t":"c","n":"Dusknoir","s":"Brilliant Stars TG06/TG30","note":"Trainer Gallery con Angelo.","f":["pers"]},
      {"t":"c","n":"Houndour","s":"Expedition 113/165","note":"Illustrata da Mitsuhiro Arita.","f":["arita"]},
@@ -287,7 +287,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"torre-bruciata",title:"Torre Bruciata",jp:"やけたとう",
-   desc:"Una torre arsa in una notte di temporale, tre Pokémon caduti tra le fiamme e riportati in vita da un uccello arcobaleno. Scendi nel sotterraneo: si alzano e corrono via. Uno lo inseguirai per tutta Johto.",
+   desc:"Una torre colpita da un fulmine e bruciata per tre giorni: tre Pokémon caduti tra le fiamme e riportati in vita da un uccello arcobaleno. Scendi nel sotterraneo: si alzano e corrono via. Uno lo inseguirai per tutta Johto.",
    pages:[
     {n:22,h:"Torre Bruciata",s:[
      {"t":"p","n":"Il risveglio","s":"Stampa","note":"Le tre Bestie che fuggono dalla Torre Bruciata."},
@@ -300,7 +300,7 @@ window.COLLEZIONE={
      {"t":"c","n":"Koffing","s":"HeartGold SoulSilver 70/123"},
      {"t":"c","n":"Zubat","s":"Neo Revelation 59/64"}
     ]},
-    {n:23,h:"Le tre Bestie",s:[
+    {n:23,h:"Percorso 37",s:[
      {"t":"c","n":"Growlithe","s":"HeartGold SoulSilver 65/123","note":"Growlithe e Vulpix vivono sul Percorso 37, alle porte di Amarantopoli."},
      {"t":"c","n":"Arcanine","s":"HeartGold SoulSilver 1/123 · holo"},
      {"t":"p","n":"Percorso 37","s":"Stampa"},
@@ -313,13 +313,13 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"olivinopoli",title:"Percorsi 38–39 e Olivinopoli",jp:"アサギシティ",
-   desc:"La Fattoria MuMu, il latte che rimette in piedi la squadra, il Miltank malato che guarisce con le bacche. Poi l'odore del porto e la nave che porta a Kanto.",
+   desc:"La Fattoria Mumu, il latte che rimette in piedi la squadra, la Miltank malata che guarisce con sette bacche. Poi l'odore del porto e la nave per Kanto, che salpa il lunedì e il venerdì ma solo per chi è già Campione.",
    pages:[
     {n:24,h:"Fattoria MuMu",s:[
      {"t":"p","n":"Fattoria MuMu","s":"Stampa"},
      {"t":"c","n":"Tauros","s":"Unleashed 41/95","note":"Tauros e Miltank pascolano sui Percorsi 38 e 39."},
      {"t":"c","n":"Ponyta","s":"Triumphant 72/102"},
-     {"t":"c","n":"Latte Mumù","s":"HeartGold SoulSilver 94/123","note":"Moomoo Milk: il latte della Fattoria Mumù."},
+     {"t":"c","n":"Latte Mumù","s":"HeartGold SoulSilver 94/123","note":"Moomoo Milk: il latte della Fattoria Mumu."},
      {"t":"c","n":"Latte Mumù","s":"Neo Genesis 101/111"},
      {"t":"p","n":"Percorso 38","s":"Stampa"},
      {"t":"c","n":"Rapidash","s":"Expedition 26/165 · holo"},
@@ -333,7 +333,7 @@ window.COLLEZIONE={
      {"t":"p","n":"Caffè del porto","s":"Stampa"},
      {"t":"c","n":"Pescatore","s":"HeartGold SoulSilver 92/123","f":["pers"]},
      {"t":"c","n":"Octillery","s":"Brilliant Stars TG03/TG30","note":"Trainer Gallery con un Pescatore: i pescatori dei percorsi marini di Johto.","f":["pers"]},
-     {"t":"c","n":"Qwilfish","s":"HeartGold SoulSilver 50/123","note":"Qwilfish si pesca intorno alle Isole Vorticose."},
+     {"t":"c","n":"Qwilfish","s":"HeartGold SoulSilver 50/123","note":"Qwilfish abbocca all'amo lungo il Percorso 32."},
      {"t":"c","n":"Tentacool","s":"Triumphant 80/102","note":"Tentacool e Tentacruel affollano il mare di Olivinopoli."},
      {"t":"c","n":"Tentacruel","s":"Triumphant 50/102"}
     ]}
@@ -356,8 +356,8 @@ window.COLLEZIONE={
      {"t":"p","n":"Medaglia Minerale","s":"Stampa medaglia"},
      {"t":"c","n":"Sguardo di Jasmine","s":"Surging Sparks 245/191 · SIR","note":"Jasmine's Gaze di Scintille Folgoranti, nella versione Special Illustration Rare.","f":["pers"]},
      {"t":"c","n":"Steelix","s":"Neo Genesis 15/111 · holo","note":"Lo Steelix di Jasmine nella versione dell'epoca."},
-     {"t":"c","n":"Magnemite","s":"Triumphant 68/102"},
-     {"t":"c","n":"Magneton","s":"Triumphant 43/102","note":"La coppia della squadra di Jasmine."},
+     {"t":"c","n":"Magnemite","s":"Triumphant 68/102","note":"La squadra di Jasmine: due Magnemite e Steelix."},
+     {"t":"c","n":"Magneton","s":"Triumphant 43/102","note":"L'evoluzione dei due Magnemite di Jasmine."},
      {"t":"c","n":"Jasmine","s":"Team Up 145/181","f":["pers"]},
      {"t":"p","n":"Il pavimento d'acciaio","s":"Stampa"},
      {"t":"p","n":"Gli ingranaggi della palestra","s":"Stampa"},
@@ -368,7 +368,7 @@ window.COLLEZIONE={
    desc:"Dall'altra parte del mare, a nuoto o in Surf: la farmacia con la medicina per Amphy e Furio che si allena sotto la cascata con il suo Poliwrath.",
    pages:[
     {n:28,h:"Percorsi 40–41 e Fiorlisopoli",s:[
-     {"t":"p","n":"Farmacia di Fiorlisopoli","s":"Stampa","note":"Dove si compra la Medicina Segreta per Amphy."},
+     {"t":"p","n":"Farmacia di Fiorlisopoli","s":"Stampa","note":"Il farmacista ti regala la Pozione Segreta per Amphy."},
      {"t":"c","n":"Shuckle","s":"Mega Evolution 136/132 · IR","note":"Lo Shuckle che a Fiorlisopoli un abitante ti affida: apre la riga di Furio."},
      {"t":"p","n":"Kirk e lo Shuckle","s":"Stampa","note":"Lo Shuckle che un abitante di Fiorlisopoli ti affida."},
      {"t":"p","n":"Le cascate di Fiorlisopoli","s":"Stampa","note":"Dove Furio si allena."},
@@ -380,7 +380,7 @@ window.COLLEZIONE={
     ]},
     {n:29,h:"Palestra di Furio",s:[
      {"t":"p","n":"Medaglia Tempesta","s":"Stampa medaglia"},
-     {"t":"p","n":"Furio (Chuck)","s":"Stampa ritratto","note":"Furio non ha una carta allenatore."},
+     {"t":"p","n":"Furio (Chuck)","s":"Stampa ritratto","note":"Il capopalestra di Fiorlisopoli, in un ritratto in oro su verde."},
      {"t":"c","n":"Poliwrath","s":"Unleashed 21/95","note":"L'asso di Furio."},
      {"t":"c","n":"Poliwhirl","s":"Unleashed 37/95"},
      {"t":"c","n":"Primeape","s":"Unleashed 22/95","note":"La squadra di Furio: Primeape e Poliwrath."},
@@ -425,7 +425,7 @@ window.COLLEZIONE={
      {"t":"c","n":"Magikarp","s":"HeartGold SoulSilver 72/123","note":"Stesso set del Gyarados rosso."},
      {"t":"c","n":"Girafarig","s":"HeartGold SoulSilver 64/123","note":"Girafarig vive sul Percorso 43, la strada che porta al Lago d'Ira."},
      {"t":"c","n":"Lance","s":"Dragon Majesty 61/70","note":"Lance compare al Lago d'Ira, a caccia del Team Rocket.","f":["pers"]},
-     {"t":"c","n":"Seaking","s":"Neo Revelation 37/64","note":"Goldeen e Seaking si pescano nel Lago d'Ira."},
+     {"t":"c","n":"Seaking","s":"Neo Revelation 37/64","note":"Goldeen e Seaking, i pesci d'acqua dolce accanto ai Magikarp del lago."},
      {"t":"c","n":"Goldeen","s":"Neo Revelation 45/64"},
      {"t":"p","n":"Percorso 43","s":"Stampa"},
      {"t":"c","n":"Venonat","s":"Neo Destiny 90/105","note":"Venonat vive sul Percorso 43, verso il lago."}
@@ -443,12 +443,12 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"mogania",title:"Via Gelata e palestra di Alfredo",jp:"チョウジタウン",
-   desc:"La Via Gelata e il ghiaccio che scivola sotto i piedi. Poi Alfredo, il capopalestra più anziano, in fondo a una palestra di lastre su cui scivolare fino a lui.",
+   desc:"Alfredo, il capopalestra più anziano, ti aspetta in fondo a una palestra di ghiaccio su cui scivolare fino a lui. Poi, oltre il Percorso 44, la Via Gelata: massi da spingere e lastre che ti trascinano fino a Ebanopoli.",
    pages:[
     {n:34,h:"Via Gelata",s:[
      {"t":"c","n":"Swinub","s":"Journey Together 165/159 · IR"},
      {"t":"c","n":"Sneasel","s":"Neo Genesis 25/111 · holo"},
-     {"t":"c","n":"Delibird","s":"Mega Evolution 152/132 · IR","note":"Delibird vive nella Grotta Gelata."},
+     {"t":"c","n":"Delibird","s":"Mega Evolution 152/132 · IR","note":"Delibird vive nella Via Gelata."},
      {"t":"c","n":"Smoochum","s":"HeartGold SoulSilver 30/123"},
      {"t":"c","n":"Jynx","s":"Neo Revelation 31/64"},
      {"t":"c","n":"Lickitung","s":"Triumphant 66/102","note":"Lickitung vive sul Percorso 44, alle porte della Via Gelata."},
@@ -477,14 +477,14 @@ window.COLLEZIONE={
      {"t":"c","n":"Dragonair","s":"Triumphant 32/102"},
      {"t":"c","n":"Dragonite","s":"Triumphant 18/102","note":"La linea drago tutta dello stesso set HGSS."},
      {"t":"c","n":"Horsea","s":"Unleashed 49/95"},
-     {"t":"c","n":"Seadra","s":"Aquapolis 58","note":"Illustrata da Mitsuhiro Arita: tiene il filo di Arita fino all'ultima medaglia.","f":["arita"]},
+     {"t":"c","n":"Seadra","s":"Aquapolis 58","note":"Illustrata da Mitsuhiro Arita. Horsea e Seadra portano al Kingdra di Sandra.","f":["arita"]},
      {"t":"p","n":"Il santuario del Drago","s":"Stampa"},
      {"t":"p","n":"La prova degli anziani","s":"Stampa"},
      {"t":"p","n":"Le acque della tana","s":"Stampa"}
     ]},
     {n:37,h:"Palestra di Sandra",s:[
      {"t":"p","n":"Medaglia Levante","s":"Stampa medaglia"},
-     {"t":"c","n":"Kingdra","s":"Astral Radiance TG03/TG30","note":"Trainer Gallery con Sandra in persona: è l'unica carta in cui compare.","f":["anchor","pers"]},
+     {"t":"c","n":"Kingdra","s":"Astral Radiance TG03/TG30","note":"Trainer Gallery con Sandra in persona, accanto all'asso della sua squadra.","f":["anchor","pers"]},
      {"t":"c","n":"Politoed","s":"Unleashed 7/95 · holo","note":"Sandra usava Politoed nel set giapponese Pokémon VS."},
      {"t":"p","n":"Il Clan del Drago","s":"Stampa"},
      {"t":"p","n":"La statua di Ebanopoli","s":"Stampa"},
@@ -509,9 +509,9 @@ window.COLLEZIONE={
      {"t":"p","n":"Il Saggio della torre","s":"Stampa"}
     ]},
     {n:39,h:"Ho-Oh",s:[
-     {"t":"c","n":"Ho-Oh LEGEND · alto","s":"HeartGold SoulSilver 111/123","note":"Due metà da affiancare, come il Lugia LEGEND a pagina 15."},
+     {"t":"c","n":"Ho-Oh LEGEND · alto","s":"HeartGold SoulSilver 111/123","note":"Due metà da affiancare, come il Lugia LEGEND a pagina 31."},
      {"t":"c","n":"Ho-Oh LEGEND · basso","s":"HeartGold SoulSilver 112/123"},
-     {"t":"c","n":"Ho-Oh ex di Ethan","s":"Destined Rivals 230/182 · SIR","note":"Il pezzo di punta moderno: Ethan e Ho-Oh, cioè Oro e la mascotte di Pokémon Oro.","f":["anchor","pers"]},
+     {"t":"c","n":"Ho-Oh ex di Ethan","s":"Destined Rivals 230/182 · SIR","note":"Il pezzo di punta moderno: Ethan e Ho-Oh: il protagonista del remake e il Pokémon sulla copertina di Oro e di HeartGold.","f":["anchor","pers"]},
      {"t":"c","n":"Ho-Oh ex di Ethan","s":"Destined Rivals 209/182 · Full Art","f":["pers"]},
      {"t":"p","n":"Il volo sopra Amarantopoli","s":"Stampa"},
      {"t":"p","n":"Le piume dorate","s":"Stampa"},
@@ -521,13 +521,13 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"vittoria",title:"Percorsi 45–46 e Via Vittoria",jp:"チャンピオンロード",
-   desc:"La lunga strada verso la Lega: i Percorsi 45 e 46 in discesa ripida, la Grotta Scura e il Dunsparce che nessuno trova al primo colpo, e infine la Via Vittoria, dove il rivale ti aspetta un'ultima volta.",
+   desc:"La lunga strada verso la Lega: giù per i Percorsi 45 e 46 e la Grotta Scura, con il Dunsparce che nessuno trova al primo colpo; poi da Borgo Foglianova in Surf verso est, le Cascate Tohjo e la Via Vittoria, dove il rivale ti sbarra la strada un'ultima volta prima della Lega.",
    pages:[
     {n:40,h:"Percorso 45 e Grotta Scura",s:[
      {"t":"c","n":"Spearow","s":"Unleashed 62/95","note":"Spearow e Fearow vivono sui Percorsi 45 e 46."},
      {"t":"c","n":"Fearow","s":"Unleashed 15/95"},
      {"t":"c","n":"Gligar","s":"Neo Genesis 59/111","note":"Gligar plana sulle rocce del Percorso 45; in Oro e Argento è un esclusivo di Oro."},
-     {"t":"c","n":"Jigglypuff","s":"HeartGold SoulSilver 68/123","note":"Jigglypuff e Wigglytuff vivono sul Percorso 46."},
+     {"t":"c","n":"Jigglypuff","s":"HeartGold SoulSilver 68/123","note":"Jigglypuff vive sul Percorso 46; Wigglytuff è la sua evoluzione."},
      {"t":"c","n":"Wigglytuff","s":"HeartGold SoulSilver 56/123"},
      {"t":"c","n":"Phanpy","s":"Surging Sparks 205/191 · IR","note":"Phanpy vive sui Percorsi 45 e 46; in Oro e Argento è un esclusivo di Argento."},
      {"t":"c","n":"Sandslash","s":"HeartGold SoulSilver 29/123"},
@@ -588,7 +588,7 @@ window.COLLEZIONE={
     ]},
     {n:45,h:"Karen",s:[
      {"t":"p","n":"Stanza di Karen","s":"Stampa","note":"La sala del buio."},
-     {"t":"c","n":"Karen","s":"XY Promo XY177","note":"Colonna 4: Karen, l'ultima dei Superquattro. Unica carta di Karen: è una promo, controlla che esista in italiano.","f":["pers","ita"]},
+     {"t":"c","n":"Karen","s":"XY Promo XY177","note":"Colonna 4: Karen, l'ultima dei Superquattro, in una promo dell'era XY.","f":["pers","ita"]},
      {"t":"c","n":"Vileplume","s":"Expedition 69/165","note":"Della squadra di Karen."},
      {"t":"c","n":"Gloom","s":"Neo Genesis 36/111","note":"La linea del Vileplume di Karen."},
      {"t":"p","n":"La stanza buia","s":"Stampa"},
@@ -628,8 +628,8 @@ window.COLLEZIONE={
    desc:"Il ragazzo dai capelli rossi del laboratorio, che a ogni incontro cambia un po'. Di fronte le energie, con Johto sullo sfondo.",
    pages:[
     {n:48,h:"Il rivale Silver",s:[
-     {"t":"p","n":"Silver","s":"Stampa","note":"Silver non ha una carta allenatore."},
-     {"t":"c","n":"Feraligatr Oscuro","s":"Neo Destiny 5/105 · holo","note":"Il Totodile rubato a pagina 3, ormai evoluto."},
+     {"t":"p","n":"Silver","s":"Stampa","note":"Il rivale dai capelli rossi, in un ritratto in oro su verde."},
+     {"t":"c","n":"Feraligatr Oscuro","s":"Neo Destiny 5/105 · holo","note":"A chi sceglie Chikorita, Silver ruba Totodile: eccolo evoluto, e più cupo."},
      {"t":"c","n":"Abra","s":"Expedition 93/165","note":"Silver usa la linea di Abra."},
      {"t":"c","n":"Crobat Oscuro","s":"Neo Destiny 2/105 · holo"},
      {"t":"c","n":"Gengar Oscuro","s":"Neo Destiny 6/105 · holo"},
@@ -651,11 +651,11 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"kanto",title:"Kanto",jp:"カントー",
-   desc:"Il Treno Magnetico ti riporta dove tutto era cominciato: Misty a Celestopoli, Erika tra i fiori di Azzurropoli, uno Snorlax che si sveglia solo con la musica giusta alla radio, e tre leggende che tornano dal primo viaggio.",
+   desc:"La Motonave Acqua ti riporta dove tutto era cominciato: Misty a Celestopoli, Erika tra i fiori di Azzurropoli, uno Snorlax che si sveglia solo con la musica giusta alla radio, e tre leggende che tornano dal primo viaggio.",
    pages:[
     {n:50,h:"Le capopalestra di Kanto",s:[
      {"t":"p","n":"Medaglia Cascata","s":"Stampa","note":"Stampa medaglia"},
-     {"t":"c","n":"Psyduck di Misty","s":"Destined Rivals 193/182 · IR","note":"Misty, capopalestra di Celestopoli: a Johto la incontri sul ponte del Percorso 24.","f":["pers"]},
+     {"t":"c","n":"Psyduck di Misty","s":"Destined Rivals 193/182 · IR","note":"Misty, capopalestra di Celestopoli: prima della sfida la trovi a un appuntamento, in fondo al Percorso 25.","f":["pers"]},
      {"t":"c","n":"Lapras di Misty","s":"Destined Rivals 194/182 · IR","f":["pers"]},
      {"t":"p","n":"Medaglia Arcobaleno","s":"Stampa","note":"Stampa medaglia"},
      {"t":"c","n":"Tangela di Erika","s":"Ascended Heroes 218/217 · IR","f":["pers"]},
