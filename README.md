@@ -25,4 +25,4 @@ Web app gratuita: sito su GitHub Pages, dati su Firebase (piano Spark, gratuito)
 - `stampe/<tasca>` — l'immagine caricata per quella tasca, JPG 744×1039 compresso (leggibile da tutti, scrive solo Leo)
 - `messaggi/*` — messaggi degli amici, con stato e risposta di Leo (li crea chiunque; li gestisce Leo; ogni amico rilegge i propri)
 
-Le immagini delle carte vengono da TCGdex (assets.tcgdex.net), in italiano quando esistono.
+Le immagini delle carte vengono da TCGdex (assets.tcgdex.net), in italiano quando esistono; la ricerca usa l'API pubblica di TCGdex (api.tcgdex.net). In `binder/immagini` ogni tasca può avere: `doc:<id>` (immagine caricata, in `stampe/<id>`), `url:<indirizzo TCGdex>` (immagine scelta) o un numero (formato precedente, `stampe/<tasca>`).

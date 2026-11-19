@@ -542,6 +542,22 @@ body.preview .preview-bar{display:flex}
 .leo-r{background:var(--own-soft);border-left:4px solid var(--own);border-radius:9px;padding:8px 12px;font-size:14px}
 .st-b{font-size:12px;font-weight:700;border-radius:99px;padding:2px 9px;background:var(--gold-soft)}
 .st-b.fatta{background:var(--own);color:#fff}.st-b.no{background:var(--ink);color:var(--bg)}
+/* Ricerca su TCGdex, scambio tasche, stato rete */
+.tq{display:grid;gap:8px}
+.tq-row{display:flex;gap:8px}
+.tq-row input{flex:1;min-width:0;font:inherit;font-size:16px;padding:9px 12px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink)}
+.tq-res{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px;max-height:340px;overflow:auto;padding:2px}
+.tq-it{display:grid;gap:4px;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:5px;cursor:pointer;font:inherit;color:inherit;text-align:left}
+.tq-it[aria-pressed="true"]{outline:2px solid var(--gold);outline-offset:1px}
+.tq-it img{width:100%;aspect-ratio:63/88;object-fit:cover;border-radius:5px;background:var(--paper)}
+.tq-it small{font-size:10.5px;line-height:1.25;color:var(--muted);overflow-wrap:anywhere}
+.tq-it b{font-size:11.5px;line-height:1.2}
+.cc-prev{display:flex;gap:12px;align-items:center}
+.cc-prev img{width:72px;aspect-ratio:63/88;object-fit:cover;border-radius:6px;background:var(--bg);box-shadow:var(--shadow)}
+.sheet.swapping>:not(.k):not(#sh-name):not(#sh-close):not(#sw-panel){display:none!important}
+.sheet.picking>:not(.k):not(#sh-name):not(#sh-close):not(#pk-panel){display:none!important}
+.sw-panel,.pk-panel{display:grid;gap:10px}
+.sync[data-state="offline"]::before{background:var(--order)}
 /* Cambia carta (solo Leo) */
 .sheet{max-height:calc(100dvh - 12px);overflow-y:auto;overscroll-behavior:contain}
 .sheet.editing>:not(.k):not(#sh-name):not(#sh-close):not(#cc-form){display:none!important}
@@ -716,15 +732,25 @@ body.preview .preview-bar{display:flex}
     <button id="st2" data-v="2">Nel binder</button>
   </div>
   <div class="sh-chg owner-only" id="sh-chg" hidden></div>
-  <div class="sh-own-acts owner-only"><button class="btn" id="sh-change">Cambia carta</button><label class="btn" id="sh-up-l">Carica immagine<input type="file" id="sh-up" accept="image/*" class="sr"></label><button class="linkbtn" id="sh-up-del" hidden>Togli l'immagine caricata</button></div>
+  <div class="sh-own-acts owner-only"><button class="btn" id="sh-change">Cambia carta</button><label class="btn" id="sh-up-l">Carica immagine<input type="file" id="sh-up" accept="image/*" class="sr"></label><button class="btn" id="sh-pick">Cerca un'altra immagine</button><button class="btn" id="sh-swap">Scambia con un'altra tasca</button><button class="linkbtn" id="sh-up-del" hidden>Togli l'immagine scelta</button></div>
+  <div class="pk-panel owner-only" id="pk-panel" hidden><p class="cc-was">Scegli l'immagine da mostrare per questa tasca. La carta resta la stessa.</p>
+   <div class="tq"><div class="tq-row"><input id="pk-q" type="search" autocomplete="off" enterkeyhint="search"><button type="button" class="btn" id="pk-qb">Cerca</button></div><span class="sg-hint" id="pk-qh"></span><div class="tq-res" id="pk-res"></div></div>
+   <div class="sg-acts"><button class="btn" id="pk-cancel">Annulla</button></div></div>
+  <div class="sw-panel owner-only" id="sw-panel" hidden><p class="cc-was" id="sw-was"></p>
+   <input type="search" id="sw-q" class="sw-q" placeholder="Cerca la tasca: nome, numero o pagina (es. 27)" autocomplete="off" style="font:inherit;font-size:16px;padding:9px 12px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink)">
+   <div class="sg-res" id="sw-res"></div><div class="sg-warn" id="sw-warn"></div>
+   <div class="sg-acts"><button class="btn primary" id="sw-ok" disabled>Scambia</button><button class="btn" id="sw-cancel">Annulla</button></div></div>
   <div class="up-crop owner-only" id="up-crop" hidden><p class="cc-was">Trascina per inquadrare, usa il cursore per lo zoom. Formato tasca 63×88 mm.</p><canvas id="up-cv" width="630" height="880"></canvas><input type="range" id="up-z" min="1" max="4" step="0.01" value="1" aria-label="Zoom"><div class="sg-acts"><button class="btn primary" id="up-save">Salva immagine</button><button class="btn" id="up-cancel">Annulla</button><span class="sg-hint" id="up-msg" role="alert"></span></div></div>
   <form class="cc-form owner-only" id="cc-form" novalidate hidden>
    <p class="cc-was" id="cc-was"></p>
    <p class="cc-ref" id="cc-ref" hidden></p>
+   <div class="tq"><span class="sg-lbl">Cerca la carta</span><div class="tq-row"><input id="cc-q" type="search" placeholder="Nome, anche con il numero: es. Jasmine 145" autocomplete="off" enterkeyhint="search"><button type="button" class="btn" id="cc-qb">Cerca</button></div>
+    <span class="sg-hint" id="cc-qh">Cerco su TCGdex, prima le carte italiane: toccane una e compilo io nome, set, numero e immagine.</span><div class="tq-res" id="cc-res"></div></div>
    <fieldset><legend>Cosa ci metti</legend><div class="sg-kinds"><label><input type="radio" name="cct" value="c"><span>Una carta</span></label><label><input type="radio" name="cct" value="p"><span>Una stampa</span></label></div></fieldset>
    <label class="sg-field"><span class="sg-lbl">Nome</span><input id="cc-n" maxlength="80" autocomplete="off" required></label>
    <label class="sg-field"><span class="sg-lbl" id="cc-s-l">Set e numero</span><input id="cc-s" list="cc-sets" maxlength="80" autocomplete="off" autocapitalize="off"><span class="sg-hint" id="cc-s-h"></span></label>
    <datalist id="cc-sets"></datalist>
+   <div class="cc-prev" id="cc-prev" hidden><img id="cc-prev-img" alt=""><span class="sg-hint" id="cc-prev-t"></span></div>
    <label class="sg-field"><span class="sg-lbl">Nota <span class="sg-hint">(facoltativa)</span></span><textarea id="cc-note" maxlength="300"></textarea></label>
    <div class="cc-flags" id="cc-flags"><label><input type="checkbox" id="cc-arita"> Illustrata da Arita</label><label><input type="checkbox" id="cc-pers"> Carta personaggio</label></div>
    <fieldset><legend id="cc-st-l">Stato della nuova carta</legend><div class="seg" id="cc-st" role="group"><button type="button" data-v="0">Da trovare</button><button type="button" data-v="1">Ordinata</button><button type="button" data-v="2">Nel binder</button></div></fieldset>
@@ -1007,18 +1033,19 @@ const DEFAULT_OWN={"14-2":2};
 const getS=id=> (id in state)? state[id] : (DEFAULT_OWN[id]||0);
 function save(){if(ROLE!=="owner")return;try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
 // ---- Sincronizzazione tra dispositivi (db) ----
-let remote=null,remoteReady=false;const pending={};let flushing=false;
+let remote=null,remoteReady=false;const pending={},inflightS={};let flushing=false;
 let WHEN={};try{WHEN=JSON.parse(localStorage.getItem(KEY+"-when")||"{}")||{}}catch(e){WHEN={}}const whenPending={};
 function setSlot(id,v,force){if(!isOwnerView())return;const t=v===2?Date.now():0;if(force||v===2&&getS(id)!==2||v!==2){WHEN[id]=t;whenPending[id]=t;try{localStorage.setItem(KEY+"-when",JSON.stringify(WHEN))}catch(e){}}state[id]=v;save();render();if(remote){pending[id]=v;flush()}}
 async function flush(){if(flushing||!remote||!ROLE_OK||ROLE!=="owner")return;flushing=true;
  try{while(Object.keys(pending).length){const batch={...pending};Object.keys(batch).forEach(k=>delete pending[k]);
-   const wb={...whenPending};Object.keys(wb).forEach(k=>delete whenPending[k]);
+   const wb={...whenPending};Object.keys(wb).forEach(k=>delete whenPending[k]);Object.assign(inflightS,batch);
    try{if(remoteReady)await remote.update({slots:batch,when:wb,updatedAt:Date.now()});else{await remote.set({slots:{...state},when:{...WHEN},updatedAt:Date.now()});remoteReady=true}}
-   catch(e){if(e&&e.code==="invalid_argument"&&remoteReady){remoteReady=false;Object.assign(pending,batch)}else{setSync("err");Object.assign(pending,batch);break}}}
+   catch(e){if(e&&e.code==="invalid_argument"&&remoteReady){remoteReady=false;Object.assign(pending,batch)}else{setSync("err");Object.assign(pending,batch);break}}
+   finally{Object.keys(batch).forEach(k=>{if(inflightS[k]===batch[k])delete inflightS[k]})}}
  }finally{flushing=false}}
 function setSync(k){const el=document.getElementById("sync");if(!el)return;
- const T={wait:["Collegamento…","Sto collegando la sincronizzazione"],on:["Sincronizzato","Le modifiche si vedono su tutti i tuoi dispositivi"],view:["Progressi di Leo aggiornati","Vedi in tempo reale quali carte Leo ha già nel binder"],guest:["Progressi non disponibili","Non riesco a raggiungere i dati: controlla la connessione"],stale:["Sincronizzazione in attesa","Non riesco a raggiungere i dati salvati: le modifiche restano su questo dispositivo finché la connessione torna"],off:["Solo su questo dispositivo","La sincronizzazione non è disponibile qui: le modifiche restano in questo browser"],err:["Non sincronizzato","Un salvataggio non è riuscito: riapri la pagina per riprovare"]}[k];
- el.dataset.state=k;el.textContent=T[0];el.title=T[1]}
+ const T={wait:["Collegamento…","Sto collegando la sincronizzazione"],on:["Sincronizzato","Le modifiche si vedono su tutti i tuoi dispositivi"],view:["Progressi di Leo aggiornati","Vedi in tempo reale quali carte Leo ha già nel binder"],guest:["Progressi non disponibili","Non riesco a raggiungere i dati: controlla la connessione"],stale:["Sincronizzazione in attesa","Non riesco a raggiungere i dati salvati: le modifiche restano su questo dispositivo finché la connessione torna"],off:["Solo su questo dispositivo","La sincronizzazione non è disponibile qui: le modifiche restano in questo browser"],err:["Non sincronizzato","Un salvataggio non è riuscito: riapri la pagina per riprovare"],offline:["Senza rete","Le modifiche restano sul telefono e partono da sole appena torni online"]}[k];
+ if(k!=="offline"&&k!=="err"&&!navigator.onLine)k="offline";const TT=k==="offline"?["Senza rete","Le modifiche restano sul telefono e partono da sole appena torni online"]:T;el.dataset.state=k;el.textContent=TT[0];el.title=TT[1]}
 (async()=>{setSync("wait");const was=ROLE;ROLE=await rolePromise;ROLE_OK=true;if(ROLE!=="owner"){state={};for(const k in pending)delete pending[k]}applyRole();if(was!==ROLE){showView();render()}
  let db=null;try{db=await claude.use("db")}catch(e){}
  if(!db){setSync(ROLE==="owner"?"off":"guest");return}
@@ -1036,7 +1063,7 @@ function setSync(k){const el=document.getElementById("sync");if(!el)return;
      if(!data&&window.STATO_INIZIALE){Object.entries(STATO_INIZIALE.slots).forEach(([k,v])=>{if(!(k in state)){state[k]=v}})}
      if(!merged||!data){Object.keys(state).forEach(k=>{if(!(k in rs))pending[k]=state[k]});try{localStorage.setItem(KEY+"-merged","1")}catch(e){}}
      WHEN={...WHEN,...((data&&data.when)||{})};state={...state,...rs};save();render();if(Object.keys(pending).length)flush();return}
-   if(data&&data.slots){remoteReady=true;WHEN={...WHEN,...(data.when||{}),...whenPending};state={...state,...data.slots,...pending};save();render()}
+   if(data&&data.slots){remoteReady=true;WHEN={...WHEN,...(data.when||{}),...whenPending};state={...state,...data.slots,...inflightS,...pending};save();render()}
  },e=>{clearTimeout(timer);setSync(e&&e.code==="revoked"?"off":"err")});
 })();
 
@@ -1047,7 +1074,7 @@ SPREADS.forEach(sp=>sp.pages.forEach(pg=>pg.s.forEach((x,i)=>{x.id=pg.n+"-"+i;x.
 // Tutti li vedono, solo Leo li scrive. Ogni cambio ricorda cosa c'era prima («da»), per poterlo annullare.
 const BASE={};all.forEach(x=>BASE[x.id]={t:x.t,n:x.n,s:x.s,note:x.note,f:x.f.slice()});
 const MODKEY=KEY+"-modifiche";let MODS={};try{MODS=JSON.parse(localStorage.getItem(MODKEY)||"{}")||{}}catch(e){MODS={}}
-function applyMods(){all.forEach(x=>{const o=MODS[x.id]&&MODS[x.id].n?MODS[x.id]:null,b=o||BASE[x.id];x.t=b.t==="p"?"p":"c";x.n=b.n;x.s=b.s||"";x.note=b.note||"";x.f=(b.f||[]).slice();x.mod=o})}
+function applyMods(){all.forEach(x=>{const o=MODS[x.id]&&MODS[x.id].n?MODS[x.id]:null,b=o||BASE[x.id];x.t=b.t==="p"?"p":"c";x.n=b.n;x.s=b.s||"";x.note=b.note||"";x.f=(b.f||[]).slice();x.img=o&&o.img||"";x.en=o&&o.en||"";x.mod=o})}
 applyMods();
 // ---- Immagini: caricate da Leo (Firestore) > carta vera da TCGdex (italiano se c'è) > illustrazione dell'app ----
 const TCG={"Fossil":"base/base3","Neo Genesis":"neo/neo1","Neo Discovery":"neo/neo2","Neo Revelation":"neo/neo3","Neo Destiny":"neo/neo4","Expedition":"ecard/ecard1","Aquapolis":"ecard/ecard2","Legends Awakened":"dp/dp6","HeartGold SoulSilver":"hgss/hgss1","Unleashed":"hgss/hgss2","Undaunted":"hgss/hgss3","Triumphant":"hgss/hgss4","Call of Legends":"col/col1","XY Promo":"xy/xyp","Lost Thunder":"sm/sm8","Team Up":"sm/sm9","Dragon Majesty":"sm/sm7.5","Unbroken Bonds":"sm/sm10","Cosmic Eclipse":"sm/sm12","Battle Styles":"swsh/swsh5","Brilliant Stars":"swsh/swsh9","Astral Radiance":"swsh/swsh10","Lost Origin":"swsh/swsh11","Silver Tempest":"swsh/swsh12","Crown Zenith":"swsh/swsh12.5","Paldea Evolved":"sv/sv02","Obsidian Flames":"sv/sv03","Paradox Rift":"sv/sv04","Temporal Forces":"sv/sv05","Shrouded Fable":"sv/sv06.5","Stellar Crown":"sv/sv07","Surging Sparks":"sv/sv08","Journey Together":"sv/sv09","Destined Rivals":"sv/sv10","Mega Evolution":"me/me01","Ascended Heroes":"me/me02.5","30th Celebration":"me/30th"};
@@ -1055,8 +1082,10 @@ const NOIT=/^(base|neo|ecard)\//;let IMGEN={};try{IMGEN=JSON.parse(localStorage.
 function tcgUrl(x,q){if(x.t!=="c")return "";const [main]=x.s.split(" · ");const m=main.match(/^(.*?)\s+(\S*\d\S*|ONE)$/);if(!m||!TCG[m[1]])return "";
  const id=m[2].split("/")[0],p=TCG[m[1]],lang=NOIT.test(p)||IMGEN[p+"/"+id]?"en":"it";return `https://assets.tcgdex.net/${lang}/${p}/${encodeURIComponent(id)}/${q||"low"}.webp`}
 let UP={};const UPIMG={},upLoading={};
-function imgTag(x,q,cls){if(UP[x.id]){const k=x.id+"@"+UP[x.id];return `<img class="${cls}" data-up="${x.id}" alt=""${UPIMG[k]?` src="${UPIMG[k]}"`:""}>`}
- const u=tcgUrl(x,q);return u?`<img class="${cls}" alt="" loading="lazy" decoding="async" src="${u}" onerror="imgFail(this)">`:""}
+const upUrl=v=>typeof v==="string"&&v.startsWith("url:")?v.slice(4):"";
+function imgTag(x,q,cls){const v=UP[x.id];const ov=upUrl(v);
+ if(v&&!ov){const k=x.id+"@"+v;return `<img class="${cls}" data-up="${x.id}" alt=""${UPIMG[k]?` src="${UPIMG[k]}"`:""}>`}
+ const base=ov||x.img;const u=base?`${base}/${q||"low"}.webp`:tcgUrl(x,q);return u?`<img class="${cls}" alt="" loading="lazy" decoding="async" crossorigin="anonymous" src="${u}" onerror="imgFail(this)">`:""}
 function imgFail(i){const m=i.src.match(/assets\.tcgdex\.net\/it\/(.+)\/[^/]+\.webp$/);
  if(m){const k=decodeURIComponent(m[1]);IMGEN[k]=1;try{localStorage.setItem(KEY+"-imgen",JSON.stringify(IMGEN))}catch(e){}i.src=i.src.replace("/it/","/en/");return}
  i.removeAttribute("src");i.removeAttribute("onerror")}
@@ -1186,7 +1215,7 @@ function summary(){arrivals();
   const s=document.createElement("span");s.className="badge"+(done?" done":"");s.innerHTML=`<i>${i+1}</i>${nm}`;bEl.appendChild(s)});
 }
 let cur=null;const sheet=document.getElementById("sheet"),scrim=document.getElementById("scrim");
-function open(x){endEdit();endUp();cur=x;
+function open(x){endEdit();endUp();endSwap();endPick();cur=x;
  document.getElementById("sh-k").textContent=(x.t==="p"?"Stampa":"Carta")+" · "+posLabel(x)+" · "+x.pageTitle;
  document.getElementById("sh-wl").textContent=x.t==="p"?"Vedi nella mancolista stampe":"Vedi nella mancolista carte";
  document.getElementById("sh-name").textContent=x.n;
@@ -1205,7 +1234,8 @@ function paintSheetOwner(){if(!cur)return;const x=cur,box=document.getElementByI
 function paintSheetImg(){const x=cur,i=document.getElementById("sh-img"),a=document.getElementById("sh-art");const t=imgTag(x,"high","sh-img");
  if(t){const tmp=document.createElement("div");tmp.innerHTML=t;const n=tmp.firstChild;n.id="sh-img";i.replaceWith(n);n.hidden=false;if(x.t==="p")a.hidden=true}else{i.hidden=true;i.removeAttribute("src");if(x.t==="p")a.hidden=false}
  const c=document.getElementById("sh-cons"),cs=x.mod&&x.mod.consiglio;c.hidden=!cs;c.textContent=cs?"✦ Consigliata da "+cs:"";
- document.getElementById("sh-up-del").hidden=!UP[x.id];document.getElementById("sh-up-l").firstChild.textContent=UP[x.id]?"Cambia immagine":"Carica immagine";if(UP[x.id])loadUp(x.id)}
+ document.getElementById("sh-up-del").hidden=!UP[x.id];document.getElementById("sh-up-l").firstChild.textContent=UP[x.id]&&!upUrl(UP[x.id])?"Carica un'altra immagine":"Carica immagine";
+ const pk=document.getElementById("sh-pick");pk.hidden=x.t!=="c";pk.textContent=imgTag(x,"low","t")?"Cerca un'altra immagine":"Cerca l'immagine";if(UP[x.id])loadUp(x.id)}
 function paintSheetViewer(){if(!cur)return;paintSheetOwner();paintSheetImg();const x=cur,s=getS(x.id),st=document.getElementById("sh-status");st.dataset.s=s;
  st.textContent=x.t==="p"?(s===2?"Leo l'ha già stampata e messa nel binder":"Stampa che Leo prepara da sé"):(s===2?"Leo ce l'ha già":s===1?"Leo l'ha già ordinata":"A Leo manca");
  const ob=document.getElementById("sh-offer"),on=!!OFF[x.id];ob.hidden=!(x.t==="c"&&s===0);ob.setAttribute("aria-pressed",on);ob.textContent=on?"Segnata: ce l'hai ✓":"Ce l'ho!";
@@ -1213,7 +1243,7 @@ function paintSheetViewer(){if(!cur)return;paintSheetOwner();paintSheetImg();con
  const pp=document.getElementById("sh-props"),np=propsFor(x.id);pp.hidden=!np;pp.innerHTML=np?`${np===1?"C'è una proposta":"Ci sono "+np+" proposte"} degli amici per questa tasca. <button class="linkbtn" id="sh-props-go">Vedi</button>`:"";
  const g=document.getElementById("sh-props-go");if(g)g.onclick=()=>{sheet.hidden=true;scrim.hidden=true;goView("proposte");window.scrollTo(0,0)}}
 function setSeg(){[...document.querySelectorAll("#sh-seg button")].forEach(b=>b.setAttribute("aria-pressed",+b.dataset.v===getS(cur.id)))}
-function close(){endEdit();endUp();sheet.hidden=true;scrim.hidden=true;if(cur){const s=document.getElementById("slot-"+cur.id);s&&s.focus()}}
+function close(){endEdit();endUp();endSwap();endPick();sheet.hidden=true;scrim.hidden=true;if(cur){const s=document.getElementById("slot-"+cur.id);s&&s.focus()}}
 document.querySelectorAll("#sh-seg button").forEach(b=>b.onclick=()=>{setSlot(cur.id,+b.dataset.v);setSeg()});
 document.getElementById("sh-offer").onclick=()=>{if(!cur)return;toggleOffer(cur.id);paintSheetViewer()};
 document.getElementById("sh-comment").onclick=()=>{const x=cur;if(!x)return;sheet.hidden=true;scrim.hidden=true;const el=document.getElementById("slot-"+x.id);commentOn(el,document.getElementById("sh-comment"))};
@@ -1254,7 +1284,7 @@ const ERAS=[["wotc","Wizards","1999",/^Fossil/],["neo","Neo","2000–02",/^Neo /
 const eraOf=x=>{for(const e of ERAS)if(e[3].test(x.s))return e;return["altro","Altro","",/./]};
 // nomi inglesi, per cercare sui marketplace internazionali
 const EN=DATA.nomiInglesi;
-function enName(n){if(EN[n])return EN[n];let m;
+function enName(n){if(EN[n])return EN[n];const mx=all.find(y=>y.en&&y.n===n);if(mx)return mx.en;let m;
  if(m=n.match(/^(.*) di (Misty|Erika)$/))return m[2]+"'s "+m[1];
  if(m=n.match(/^(.*) Shining$/))return "Shining "+m[1];
  if(m=n.match(/^(.*) Oscuro$/))return "Dark "+m[1];
@@ -1680,7 +1710,7 @@ function guessCard(t){t=String(t||"").trim();const nt=norm(t);let best=null;
  if(!best){const m=t.match(/^(.*?)\s+(\S*\d+\s*\/\s*\d+\S*)$/);return m?{n:m[1],s:m[2]}:{n:t,s:""}}
  return{n:t.slice(0,best.i).trim().replace(/[,·-]+$/,"").trim(),s:canonSet(t.slice(best.i))}}
 const clean=v=>String(v||"").replace(/[<>]/g,"").replace(/\s+/g," ").trim();
-let ccSlot=null,ccSt=0,ccProp=null;
+let ccSlot=null,ccSt=0,ccProp=null,ccPick=null;
 const ccForm=document.getElementById("cc-form");
 document.getElementById("cc-sets").innerHTML=SET_ORDER.map(s=>`<option value="${esc(s)}">${SET_IT[s]&&SET_IT[s]!==s?esc(SET_IT[s]):""}</option>`).join("");
 const ccType=()=>(ccForm.querySelector('input[name="cct"]:checked')||{}).value||"c";
@@ -1698,7 +1728,15 @@ function startEdit(x,opt={}){if(!isOwnerView())return;ccSlot=x.id;ccProp=opt.pro
  const g=opt.guess||{};ccForm.querySelector(`input[name="cct"][value="${opt.t||x.t}"]`).checked=true;
  document.getElementById("cc-n").value=g.n||"";document.getElementById("cc-s").value=g.s||"";document.getElementById("cc-note").value="";
  document.getElementById("cc-arita").checked=false;document.getElementById("cc-pers").checked=false;document.getElementById("cc-err").textContent="";
- ccLabels();ccSeg();sheet.classList.add("editing");ccForm.hidden=false;sheet.scrollTop=0;document.getElementById("cc-n").focus()}
+ ccPick=null;document.getElementById("cc-q").value=opt.guess&&opt.guess.n?(opt.guess.n+" "+(opt.guess.s||"").replace(/^.*?\s(?=\S*\d)/,"")).trim():"";document.getElementById("cc-res").innerHTML="";
+ ccLabels();ccSeg();ccPrev();sheet.classList.add("editing");ccForm.hidden=false;sheet.scrollTop=0;
+ if(document.getElementById("cc-q").value&&x.t==="c"){tqRun("cc")}else document.getElementById(ccType()==="c"?"cc-q":"cc-n").focus()}
+function ccCard(){const t=ccType();return{id:"tmp",t,n:clean(document.getElementById("cc-n").value),s:t==="c"?canonSet(clean(document.getElementById("cc-s").value)):"",f:[],img:ccPick?ccPick.img:""}}
+let ccPT=0;function ccPrev(){clearTimeout(ccPT);ccPT=setTimeout(()=>{const c=ccCard(),box=document.getElementById("cc-prev");if(c.t!=="c"){box.hidden=true;return}
+ const u=c.img?c.img+"/low.webp":tcgUrl(c,"low");const im=document.getElementById("cc-prev-img"),t=document.getElementById("cc-prev-t");box.hidden=!c.n&&!c.s;
+ if(!u){im.removeAttribute("src");t.textContent=c.s?"Nessuna immagine per questo set: cercala qui sopra, o carica la tua foto dopo il salvataggio.":"";return}
+ t.textContent="Anteprima dell'immagine che vedrai nel binder.";im.onerror=()=>{if(im.src.includes("/it/"))im.src=im.src.replace("/it/","/en/");else{im.removeAttribute("src");t.textContent="Immagine non trovata con questo set e numero: prova a cercarla qui sopra."}};im.src=u},250)}
+document.getElementById("cc-s").addEventListener("input",()=>{ccPick=null;markPick("cc",null);ccPrev()});document.getElementById("cc-n").addEventListener("input",ccPrev);
 function endEdit(){const f=document.getElementById("cc-form");if(!f)return;sheet.classList.remove("editing");f.hidden=true;ccSlot=null;ccProp=null}
 function ccWarnings(){const w=[],x=byId[ccSlot];if(!x)return w;const t=ccType(),n=clean(document.getElementById("cc-n").value),s=canonSet(clean(document.getElementById("cc-s").value));
  if(x.t==="c"&&getS(x.id)===2)w.push(["own","La carta di adesso è segnata nel binder: dopo il cambio la tasca prende lo stato che scegli qui sopra."]);
@@ -1723,31 +1761,33 @@ ccForm.addEventListener("submit",e=>{e.preventDefault();const x=byId[ccSlot];if(
  if(t==="c"&&!s){err.textContent="Scrivi set e numero.";document.getElementById("cc-s").focus();return}
  s=t==="c"?canonSet(s):(s||"Stampa");
  const f=(BASE[x.id].f||[]).filter(k=>k==="anchor");if(t==="c"){if(document.getElementById("cc-arita").checked)f.push("arita");if(document.getElementById("cc-pers").checked)f.push("pers")}
- const prop=ccProp;const card={t,n,s,note:clean(document.getElementById("cc-note").value).slice(0,300),f};const keep=MODS[x.id]&&MODS[x.id].consiglio;
+ const prop=ccProp;const card={t,n,s,note:clean(document.getElementById("cc-note").value).slice(0,300),f};if(t==="c"&&ccPick){card.img=ccPick.img;if(ccPick.en)card.en=ccPick.en}
+ const B=BASE[x.id];if(B.t===t&&B.n===n&&B.s===s&&!card.img){const had=MODS[x.id]&&MODS[x.id].n;endEdit();if(had)undoMod(x.id);open(byId[x.id]);flashBtn(document.getElementById("sh-change"),"È la carta originale");return}const keep=MODS[x.id]&&MODS[x.id].consiglio;
  if(prop&&PROPS[prop]&&PROPS[prop].from)card.consiglio=PROPS[prop].from.slice(0,40);else if(keep&&!prop)card.consiglio=keep;saveMod(x.id,card,ccSt);
  if(prop&&PROPS[prop])setProp(prop,{...PROPS[prop],status:"fatta"});
  endEdit();open(byId[x.id]);flashBtn(document.getElementById("sh-change"),"Cambio salvato")});
 function saveMod(id,card,st){if(!isOwnerView())return;const prev=MODS[id]&&MODS[id].n?MODS[id]:null;
- const da=prev?prev.da:{...BASE[id],stato:getS(id),when:WHEN[id]||0,meta:meta[id]||null};
+ const da=prev?prev.da:{...BASE[id],stato:getS(id),when:WHEN[id]||0,meta:meta[id]||null,up:UP[id]||null};
+ if(UP[id]&&upRef){setUps({[id]:null}).catch(()=>{});const u={...UP};delete u[id];UP=u}
  MODS[id]={...card,da,ts:Date.now()};saveMods();pushMod(id);refreshMods();
  setMeta(id,{p:0,max:null,note:""});setSlot(id,st,true)}
 function undoMod(id){if(!isOwnerView())return;const o=MODS[id];if(!o||!o.n)return;const d=o.da||{};
- MODS[id]=null;saveMods();pushMod(id);refreshMods();
+ MODS[id]=null;saveMods();pushMod(id);if(d.up&&upRef&&!UP[id]){setUps({[id]:d.up}).catch(()=>{});UP={...UP,[id]:d.up}}refreshMods();
  if(d.meta)setMeta(id,d.meta);setSlot(id,d.stato||0,true);if(d.stato===2&&d.when){WHEN[id]=d.when;whenPending[id]=d.when;try{localStorage.setItem(KEY+"-when",JSON.stringify(WHEN))}catch(e){}if(remote)flush();render()}if(cur&&cur.id===id&&!sheet.hidden)open(byId[id])}
 const saveMods=()=>{try{localStorage.setItem(MODKEY,JSON.stringify(MODS))}catch(e){}};
 function refreshMods(){applyMods();CARDS_ALL=all.filter(x=>x.t==="c");CARDS=CARDS_ALL;render();if(cur&&!sheet.hidden&&!sheet.classList.contains("editing")){paintSheetViewer();
  document.getElementById("sh-k").textContent=(cur.t==="p"?"Stampa":"Carta")+" · "+posLabel(cur)+" · "+cur.pageTitle;document.getElementById("sh-name").textContent=cur.n;document.getElementById("sh-set").textContent=cur.s;document.getElementById("sh-note").textContent=cur.note||""}}
-let modRef=null,modReady=false;const modPending=new Set();let modFlushing=false;
-function pushMod(id){modPending.add(id);modFlush()}
+let modRef=null,modReady=false;const modPending=new Set(),modInflight=new Set();let modFlushing=false;
+function pushMod(id){modPending.add(id);Promise.resolve().then(modFlush)}
 async function modFlush(){if(modFlushing||!modRef||!ROLE_OK||ROLE!=="owner")return;modFlushing=true;
- try{while(modPending.size){const ids=[...modPending];modPending.clear();const b={};ids.forEach(k=>b[k]=MODS[k]||null);
+ try{while(modPending.size){const ids=[...modPending];modPending.clear();ids.forEach(k=>modInflight.add(k));const b={};ids.forEach(k=>b[k]=MODS[k]||null);
   try{if(modReady)await modRef.update({slots:b,updatedAt:Date.now()});else{await modRef.set({slots:{...MODS},updatedAt:Date.now()});modReady=true}}
-  catch(e){if(e&&e.code==="invalid_argument"&&modReady){modReady=false;ids.forEach(k=>modPending.add(k))}else{setSync("err");ids.forEach(k=>modPending.add(k));break}}}}
+  catch(e){if(e&&e.code==="invalid_argument"&&modReady){modReady=false;ids.forEach(k=>modPending.add(k))}else{setSync("err");ids.forEach(k=>modPending.add(k));break}}finally{ids.forEach(k=>modInflight.delete(k))}}}
  finally{modFlushing=false}}
 (async()=>{let db=null;try{db=await claude.use("db")}catch(e){}if(!db)return;const role=await rolePromise;const ref=db.doc("binder/modifiche");
  ref.onSnapshot(snap=>{if(snap.metadata.fromCache&&!snap.exists)return;const d=snap.exists?snap.data():null;
   if(!snap.metadata.fromCache&&role==="owner"&&!modRef){modRef=ref;modReady=!!d}
-  const rs={...((d&&d.slots)||{})};if(role==="owner")modPending.forEach(k=>rs[k]=MODS[k]||null);
+  const rs={...((d&&d.slots)||{})};if(role==="owner")[...modPending,...modInflight].forEach(k=>rs[k]=MODS[k]||null);
   if(JSON.stringify(rs)!==JSON.stringify(MODS)){MODS=rs;saveMods();refreshMods()}
   if(modPending.size)modFlush()},()=>{})})();
 // elenco dei cambi, in fondo alle Proposte
@@ -1783,13 +1823,13 @@ document.addEventListener("keydown",e=>{if(!SF.on||e.altKey||e.ctrlKey||e.metaKe
 let DB=null,upRef=null,upReady=false;
 const io=("IntersectionObserver" in window)?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){io.unobserve(e.target);loadUp(e.target.dataset.up)}}),{rootMargin:"600px"}):null;
 function observeUps(){document.querySelectorAll("img[data-up]:not([src])").forEach(i=>{if(io)io.observe(i);else loadUp(i.dataset.up)})}
-async function loadUp(id){if(!UP[id]||!DB)return;const k=id+"@"+UP[id];if(UPIMG[k]){paintUp(id);return}if(upLoading[k])return;upLoading[k]=1;
- try{const s=await DB.doc("stampe/"+id).get();const d=s.exists?s.data():null;if(d&&d.img){UPIMG[k]=d.img;paintUp(id)}}catch(e){}finally{delete upLoading[k]}}
+async function loadUp(id){if(!UP[id]||upUrl(UP[id])||!DB)return;const k=id+"@"+UP[id];if(UPIMG[k]){paintUp(id);return}if(upLoading[k])return;upLoading[k]=1;
+ try{const v=UP[id];const s=await DB.doc("stampe/"+(typeof v==="string"&&v.startsWith("doc:")?v.slice(4):id)).get();const d=s.exists?s.data():null;if(d&&d.img){UPIMG[k]=d.img;paintUp(id)}}catch(e){}finally{delete upLoading[k]}}
 function paintUp(id){const k=id+"@"+UP[id];if(!UPIMG[k])return;document.querySelectorAll(`img[data-up="${id}"]`).forEach(i=>{if(i.getAttribute("src")!==UPIMG[k])i.src=UPIMG[k]})}
 (async()=>{let db=null;try{db=await claude.use("db")}catch(e){}if(!db)return;DB=db;const role=await rolePromise;const ref=db.doc("binder/immagini");
  ref.onSnapshot(snap=>{if(snap.metadata.fromCache&&!snap.exists)return;const d=snap.exists?snap.data():null;if(!snap.metadata.fromCache&&role==="owner"&&!upRef){upRef=ref;upReady=!!d}
   const ids={};Object.entries((d&&d.ids)||{}).forEach(([k,v])=>{if(v)ids[k]=v});if(JSON.stringify(ids)!==JSON.stringify(UP)){UP=ids;render();if(cur&&!sheet.hidden&&!sheet.classList.contains("uploading"))paintSheetViewer()}},()=>{})})();
-async function setUpIndex(id,ts){if(!upRef)throw{code:"wait"};if(upReady)await upRef.update({ids:{[id]:ts},updatedAt:Date.now()});else{await upRef.set({ids:{...UP,[id]:ts},updatedAt:Date.now()});upReady=true}}
+async function setUpIndex(id,ts){return setUps({[id]:ts});if(!upRef)throw{code:"wait"};if(upReady)await upRef.update({ids:{[id]:ts},updatedAt:Date.now()});else{await upRef.set({ids:{...UP,[id]:ts},updatedAt:Date.now()});upReady=true}}
 const UPC={img:null,z:1,ox:0,oy:0};const upCv=document.getElementById("up-cv");
 function drawUp(cv,W,H){const c=cv.getContext("2d"),im=UPC.img;if(!im)return;const s0=Math.max(W/im.width,H/im.height),s=s0*UPC.z,w=im.width*s,h2=im.height*s;
  const k=W/upCv.width;UPC.ox=Math.min(0,Math.max(upCv.width-w/k,UPC.ox));UPC.oy=Math.min(0,Math.max(upCv.height-h2/k,UPC.oy));
@@ -1807,15 +1847,21 @@ document.getElementById("up-cancel").onclick=()=>{const x=cur;endUp();if(x)open(
 document.getElementById("up-save").onclick=async()=>{const x=cur,msg=document.getElementById("up-msg"),btn=document.getElementById("up-save");if(!x||!UPC.img||!DB||!isOwnerView())return;if(!upRef){msg.textContent="Sto ancora collegando il database: riprova tra un attimo.";return}
  const out=document.createElement("canvas");out.width=744;out.height=1039;drawUp(out,744,1039);let q=.88,url=out.toDataURL("image/jpeg",q);while(url.length>900000&&q>.4){q-=.08;url=out.toDataURL("image/jpeg",q)}
  btn.disabled=true;msg.textContent="Salvo…";const ts=Date.now();
- try{await DB.doc("stampe/"+x.id).set({img:url,ts});await setUpIndex(x.id,ts);UPIMG[x.id+"@"+ts]=url;UP={...UP,[x.id]:ts};endUp();render();open(byId[x.id]);flashBtn(document.getElementById("sh-change"),"Immagine salvata")}
- catch(e){msg.textContent=e&&e.code==="wait"?"Sto ancora collegando il database: riprova tra un attimo.":"Non sono riuscito a salvarla: riprova."}finally{btn.disabled=false}};
-document.getElementById("sh-up-del").onclick=async()=>{const x=cur;if(!x||!DB||!isOwnerView())return;try{await setUpIndex(x.id,null);DB.doc("stampe/"+x.id).delete().catch(()=>{});const u={...UP};delete u[x.id];UP=u;render();open(byId[x.id])}catch(e){flashBtn(document.getElementById("sh-up-del"),"Riprova tra un attimo")}};
+ const old=UP[x.id],did=x.id+"-"+ts,val="doc:"+did;UPIMG[x.id+"@"+val]=url;
+ const fail=()=>{vtoast("<span>Non sono riuscito a salvare l'immagine: riprova.</span>")};
+ DB.doc("stampe/"+did).set({img:url,ts,tasca:x.id}).catch(fail);setUpIndex(x.id,val).catch(fail);dropUpDoc(old);
+ UP={...UP,[x.id]:val};btn.disabled=false;endUp();render();open(byId[x.id]);flashBtn(document.getElementById("sh-change"),navigator.onLine?"Immagine salvata":"Salvata: parte appena torni online")};
+function dropUpDoc(v){if(!v||upUrl(v)||!DB)return;if(Object.values(UP).includes(v))return;DB.doc("stampe/"+(typeof v==="string"&&v.startsWith("doc:")?v.slice(4):"")).delete?.().catch(()=>{})}
+document.getElementById("sh-up-del").onclick=()=>{const x=cur;if(!x||!DB||!isOwnerView())return;if(!upRef){flashBtn(document.getElementById("sh-up-del"),"Riprova tra un attimo");return}
+ const old=UP[x.id];setUpIndex(x.id,null).catch(()=>vtoast("<span>Non sono riuscito a togliere l'immagine: riprova.</span>"));const u={...UP};delete u[x.id];UP=u;
+ if(typeof old==="number")DB.doc("stampe/"+x.id).delete().catch(()=>{});else dropUpDoc(old);render();open(byId[x.id])};
+async function setUps(patch){if(!upRef)throw{code:"wait"};if(upReady)await upRef.update({ids:patch,updatedAt:Date.now()});else{const ids={...UP};Object.entries(patch).forEach(([k,v])=>{if(v)ids[k]=v;else delete ids[k]});await upRef.set({ids,updatedAt:Date.now()});upReady=true}}
 
 // ---- Diario del binder: arrivi, carte cambiate, immagini nuove (lo vedono tutti) ----
 function renderDiario(){const box=document.getElementById("v-diario");if(!box||box.hidden)return;const ev=[];
  Object.keys(WHEN).forEach(id=>{if(WHEN[id]&&getS(id)===2&&byId[id])ev.push([WHEN[id],id,byId[id].t==="p"?"Stampa nel binder":"Arrivata nel binder"])});
  Object.keys(MODS).forEach(id=>{const m=MODS[id];if(m&&m.n&&byId[id])ev.push([m.ts||0,id,`Nuova scelta per la tasca, al posto di ${itName((m.da||{}).n||"")}`+(m.consiglio?` · consigliata da ${m.consiglio}`:"")])});
- Object.keys(UP).forEach(id=>{if(byId[id])ev.push([UP[id],id,byId[id].t==="p"?"Nuova immagine per la stampa":"Nuova immagine"])});
+ Object.keys(UP).forEach(id=>{const v=UP[id],t=typeof v==="number"?v:+(String(v).match(/-(\d{12,})$/)||[])[1]||0;if(byId[id]&&t)ev.push([t,id,byId[id].t==="p"?"Nuova immagine per la stampa":"Nuova immagine"])});
  ev.sort((a,b)=>b[0]-a[0]);let day="";
  box.innerHTML=`<div class="wl-head"><div><h2>Diario del binder</h2><p>Come cresce il binder di Leo: carte arrivate, nuove scelte e immagini delle stampe.</p></div></div><div class="dia" id="dia">${ev.length?ev.slice(0,80).map(([t,id,w])=>{const x=byId[id];
   const d=new Date(t).toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long"});const head=d!==day?`<div class="dia-day">${d}</div>`:"";day=d;
@@ -1827,6 +1873,70 @@ window.addEventListener("hashchange",renderDiario);
 if(window.APP&&APP.mine)rolePromise.then(r=>{if(r!=="owner")APP.mine(items=>{MYMSG=items;renderMine()})});
 paintBm();
 const ST_AM={nuova:["Leo deve ancora guardarla",""],fatta:["Leo l'ha accettata","fatta"],no:["Leo ha deciso di no","no"],eliminata:["Letta da Leo","no"]};
+
+// ---- Ricerca su TCGdex (gratuita, senza chiave): italiano prima, poi inglese ----
+const TCGAPI="https://api.tcgdex.net/v2/";const TCG_REV={};Object.entries(TCG).forEach(([k,v])=>TCG_REV[v.split("/")[1]]=k);const SETINFO={};
+async function tcgSearch(q){q=String(q||"").trim();const m=q.match(/(?:^|\s)#?([a-z]{0,3}\d{1,3})(?:\s*\/\s*\S+)?\s*$/i);const num=m?m[1].toLowerCase().replace(/^([a-z]*)0+(?=\d)/,"$1"):"";const name=(m?q.slice(0,m.index):q).trim();if(name.length<2)return[];
+ const get=l=>fetch(`${TCGAPI}${l}/cards?name=${encodeURIComponent(name)}&pagination:itemsPerPage=60`).then(r=>r.ok?r.json():[]).catch(()=>[]);
+ const [it,en]=await Promise.all([get("it"),get("en")]);const out=new Map();
+ [...it.map(c=>({...c,lang:"it"})),...en.map(c=>({...c,lang:"en"}))].forEach(c=>{if(!c.image||/\/tcgp\//.test(c.image))return;
+  const o=out.get(c.id);if(o){if(c.lang==="en")o.en=c.name;return}out.set(c.id,{id:c.id,set:c.id.slice(0,c.id.lastIndexOf("-")),localId:c.localId,name:c.name,img:c.image,lang:c.lang,en:c.lang==="en"?c.name:""})});
+ let r=[...out.values()];if(num)r=r.filter(c=>c.localId.toLowerCase().replace(/^([a-z]*)0+(?=\d)/,"$1")===num);
+ return r.sort((a,b)=>(TCG_REV[b.set]?1:0)-(TCG_REV[a.set]?1:0)||(a.lang==="it"?-1:1)-(b.lang==="it"?-1:1)).slice(0,40)}
+async function setInfo(id){if(SETINFO[id])return SETINFO[id];try{const d=await (await fetch(`${TCGAPI}en/sets/${encodeURIComponent(id)}`)).json();SETINFO[id]={name:TCG_REV[id]||d.name,tot:d.cardCount&&d.cardCount.official||""}}catch(e){SETINFO[id]={name:TCG_REV[id]||id,tot:""}}return SETINFO[id]}
+const TQ={cc:[],pk:[]};
+function markPick(k,id){document.querySelectorAll(`#${k}-res .tq-it`).forEach(b=>b.setAttribute("aria-pressed",b.dataset.tq===id))}
+async function tqRun(k){const q=document.getElementById(k+"-q").value,hint=document.getElementById(k+"-qh"),res=document.getElementById(k+"-res");
+ if(q.trim().length<2){res.innerHTML="";return}if(!navigator.onLine){hint.textContent="Sei senza rete: la ricerca riparte quando torni online.";return}
+ hint.textContent="Cerco…";const r=await tcgSearch(q);TQ[k]=r;
+ hint.textContent=r.length?`${r.length} ${r.length===1?"carta trovata":"carte trovate"}${r.length===40?" (le prime 40: aggiungi il numero per restringere)":""}. Tocca quella giusta.`:"Nessuna carta trovata: prova il nome inglese, o togli il numero.";
+ res.innerHTML=r.map(c=>`<button type="button" class="tq-it" data-tq="${esc(c.id)}"><img loading="lazy" alt="" src="${esc(c.img)}/low.webp" onerror="imgFail(this)"><b>${esc(c.name)}</b><small>${esc(TCG_REV[c.set]?setIt(TCG_REV[c.set]):c.set)} · ${esc(c.localId)}${c.lang==="en"?" · EN":""}</small></button>`).join("")}
+let tqT={};["cc","pk"].forEach(k=>{const i=document.getElementById(k+"-q");i.addEventListener("input",()=>{clearTimeout(tqT[k]);tqT[k]=setTimeout(()=>tqRun(k),450)});
+ i.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();clearTimeout(tqT[k]);tqRun(k)}});document.getElementById(k+"-qb").onclick=()=>tqRun(k)});
+document.getElementById("cc-res").addEventListener("click",async e=>{const b=e.target.closest("[data-tq]");if(!b)return;const c=TQ.cc.find(z=>z.id===b.dataset.tq);if(!c)return;markPick("cc",c.id);
+ const si=await setInfo(c.set);ccForm.querySelector('input[name="cct"][value="c"]').checked=true;ccLabels();
+ document.getElementById("cc-n").value=c.name;document.getElementById("cc-s").value=`${si.name} ${c.localId}${si.tot?"/"+si.tot:""}`;
+ ccPick={img:c.img,en:c.en||(c.lang==="en"?c.name:"")};if(!ccPick.en)fetch(`${TCGAPI}en/cards/${encodeURIComponent(c.id)}`).then(r=>r.json()).then(d=>{if(ccPick&&ccPick.img===c.img&&d&&d.name)ccPick.en=d.name}).catch(()=>{});
+ ccWarn();ccPrev()});
+// scegli solo l'immagine (la carta resta quella)
+function startPick(x){if(!isOwnerView())return;const q=document.getElementById("pk-q");q.value=x.t==="c"?`${enName(x.n)===x.n?itName(x.n):itName(x.n)} ${parseSet(x).num.split("/")[0]}`.trim():itName(x.n);
+ document.getElementById("pk-qh").textContent="";document.getElementById("pk-res").innerHTML="";sheet.classList.add("picking");document.getElementById("pk-panel").hidden=false;sheet.scrollTop=0;tqRun("pk").then(()=>{if(!TQ.pk.length&&x.t==="c"&&enName(x.n)!==itName(x.n)){q.value=enName(x.n);tqRun("pk")}})}
+function endPick(){const p=document.getElementById("pk-panel");if(!p)return;sheet.classList.remove("picking");p.hidden=true}
+document.getElementById("sh-pick").onclick=()=>{if(cur)startPick(cur)};
+document.getElementById("pk-cancel").onclick=()=>{const x=cur;endPick();if(x)open(x)};
+document.getElementById("pk-res").addEventListener("click",e=>{const b=e.target.closest("[data-tq]");if(!b||!cur)return;const c=TQ.pk.find(z=>z.id===b.dataset.tq);if(!c)return;const x=cur;
+ if(!upRef){flashBtn(document.getElementById("pk-cancel"),"Riprova tra un attimo");return}const old=UP[x.id];const v="url:"+c.img;
+ setUps({[x.id]:v}).catch(()=>vtoast("<span>Non sono riuscito a salvare l'immagine: riprova.</span>"));UP={...UP,[x.id]:v};if(typeof old==="number")DB.doc("stampe/"+x.id).delete().catch(()=>{});else dropUpDoc(old);
+ endPick();render();open(byId[x.id]);flashBtn(document.getElementById("sh-change"),"Immagine aggiornata")});
+
+// ---- Scambia due tasche: carta, stato, data di arrivo, note della mancolista e immagine viaggiano insieme ----
+let swA=null,swB=null;
+function contentOf(x){return{t:x.t,n:x.n,s:x.s,note:x.note,f:x.f.filter(k=>k!=="anchor"),img:x.img||"",en:x.en||"",consiglio:x.mod&&x.mod.consiglio||""}}
+function startSwap(x){if(!isOwnerView())return;swA=x.id;swB=null;document.getElementById("sw-was").innerHTML=`Sposta <b>${esc(itName(x.n))}</b> (${posLabel(x)}) in un'altra tasca: la carta che c'è lì prende il suo posto.`;
+ document.getElementById("sw-q").value="";document.getElementById("sw-res").innerHTML="";document.getElementById("sw-warn").innerHTML="";document.getElementById("sw-ok").disabled=true;
+ sheet.classList.add("swapping");document.getElementById("sw-panel").hidden=false;sheet.scrollTop=0;document.getElementById("sw-q").focus()}
+function endSwap(){const p=document.getElementById("sw-panel");if(!p)return;sheet.classList.remove("swapping");p.hidden=true;swA=swB=null}
+document.getElementById("sh-swap").onclick=()=>{if(cur)startSwap(cur)};
+document.getElementById("sw-cancel").onclick=()=>{const x=cur;endSwap();if(x)open(x)};
+document.getElementById("sw-q").addEventListener("input",()=>{const q=document.getElementById("sw-q").value.trim(),out=document.getElementById("sw-res");swB=null;document.getElementById("sw-ok").disabled=true;document.getElementById("sw-warn").innerHTML="";
+ if(!q){out.innerHTML="";return}const pg=/^\d{1,2}$/.test(q)?+q:null;let list=pg?all.filter(y=>y.page===pg):all.map(y=>[y,y.t==="c"?ckScore(y,ckParse(q)):(norm(y.n+" "+y.pageTitle).includes(norm(q))?5:0)]).filter(r=>r[1]>0).sort((a,b)=>b[1]-a[1]).map(r=>r[0]);
+ list=list.filter(y=>y.id!==swA);out.innerHTML=list.slice(0,12).map(y=>`<button type="button" class="ck-row" data-sw="${y.id}"><span class="ck-dot s${getS(y.id)}"></span><span class="ck-rt"><b>${esc(itName(y.n))}</b> <span>${esc(slotLine(y))}</span></span></button>`).join("")||'<p class="sg-hint">Nessuna tasca trovata.</p>'});
+document.getElementById("sw-res").addEventListener("click",e=>{const b=e.target.closest("[data-sw]");if(!b)return;swB=b.dataset.sw;const y=byId[swB],x=byId[swA];
+ document.querySelectorAll("#sw-res .ck-row").forEach(r=>r.style.outline=r===b?"2px solid var(--gold)":"");
+ const w=[];if(x.t!==y.t)w.push(`Attenzione: scambi una ${x.t==="c"?"carta":"stampa"} con una ${y.t==="c"?"carta":"stampa"}.`);if(x.f.includes("anchor")||y.f.includes("anchor"))w.push("Una delle due è un pezzo chiave della pagina: la cornice dorata resta alla tasca, non segue la carta.");
+ document.getElementById("sw-warn").innerHTML=`<div class="sg-w info">${esc(itName(x.n))} → ${posLabel(y)}<br>${esc(itName(y.n))} → ${posLabel(x)}</div>`+w.map(t=>`<div class="sg-w">${esc(t)}</div>`).join("");document.getElementById("sw-ok").disabled=false});
+document.getElementById("sw-ok").onclick=()=>{if(!swA||!swB||!isOwnerView())return;const a=byId[swA],b=byId[swB];swapSlots(a,b);endSwap();render();open(byId[b.id]);flashBtn(document.getElementById("sh-change"),"Scambiate")};
+function placeMod(id,c){const B=BASE[id];const same=B.t===c.t&&B.n===c.n&&B.s===c.s&&!c.img;const prev=MODS[id]&&MODS[id].n?MODS[id]:null;
+ if(same){MODS[id]=null}else{const da=prev?prev.da:{...B,stato:getS(id),when:WHEN[id]||0,meta:meta[id]||null,up:null};const m={...c,f:[...(B.f||[]).filter(k=>k==="anchor"),...c.f],da,ts:Date.now()};if(!m.img)delete m.img;if(!m.en)delete m.en;if(!m.consiglio)delete m.consiglio;MODS[id]=m}}
+function swapSlots(a,b){const ca=contentOf(a),cb=contentOf(b),sa=getS(a.id),sb=getS(b.id),wa=WHEN[a.id]||0,wb=WHEN[b.id]||0,ma=meta[a.id]||null,mb=meta[b.id]||null,ua=UP[a.id]||null,ub=UP[b.id]||null;
+ placeMod(a.id,cb);placeMod(b.id,ca);saveMods();pushMod(a.id);pushMod(b.id);refreshMods();
+ [[a.id,sb,wb],[b.id,sa,wa]].forEach(([id,s,w])=>{state[id]=s;WHEN[id]=w;pending[id]=s;whenPending[id]=w});save();try{localStorage.setItem(KEY+"-when",JSON.stringify(WHEN))}catch(e){}if(remote)flush();
+ setMeta(a.id,mb||{p:0,max:null,note:""});setMeta(b.id,ma||{p:0,max:null,note:""});
+ if((ua||ub)&&upRef){setUps({[a.id]:ub,[b.id]:ua}).catch(()=>{});const u={...UP};if(ub)u[a.id]=ub;else delete u[a.id];if(ua)u[b.id]=ua;else delete u[b.id];UP=u}}
+
+// ---- Rete: in fiera si lavora anche offline, e lo diciamo ----
+function netState(){if(!navigator.onLine){setSync("offline")}else if(document.getElementById("sync").dataset.state==="offline")setSync(isOwnerView()?"on":"view")}
+window.addEventListener("online",netState);window.addEventListener("offline",netState);
 
 // ---- Controlla una carta: è nel binder? dove va? ----
 const CK=document.getElementById("v-check");
