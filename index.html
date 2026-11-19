@@ -1734,7 +1734,8 @@ async function tcgRun(P){const out=new Map();
  if(P.name.length>=2){const get=l=>fetch(`${TCGAPI}${l}/cards?name=${encodeURIComponent(P.name)}&pagination:itemsPerPage=250`).then(r=>r.ok?r.json():[]).catch(()=>[]);
   const [it,en]=await Promise.all([get("it"),get("en")]);it.forEach(c=>add(c,"it"));en.forEach(c=>add(c,"en"))}
  else if(P.set&&!P.num){for(const l of["it","en"]){try{const d=await (await fetch(`${TCGAPI}${l}/sets/${encodeURIComponent(P.set)}`)).json();(d.cards||[]).forEach(c=>add({...c,set:{id:P.set}},l));if(out.size)break}catch(e){}}}
- let r=[...out.values()];if(P.set)r=r.filter(c=>c.set===P.set);if(P.num)r=r.filter(c=>{const a=nNum(c.localId),b=nNum(P.num);return a===b||a.replace(/^[a-z]+/,"")===b.replace(/^[a-z]+/,"")});
+ let r=[...out.values()];if(P.set)r=r.filter(c=>c.set===P.set);
+ if(P.name){const ws=norm(P.name).split(" ").filter(w=>w.length>2);const f=r.filter(c=>ws.some(w=>norm(c.name).includes(w)||norm(c.en).includes(w)));if(f.length)r=f}if(P.num)r=r.filter(c=>{const a=nNum(c.localId),b=nNum(P.num);return a===b||a.replace(/^[a-z]+/,"")===b.replace(/^[a-z]+/,"")});
  // le immagini che l'API non indica spesso esistono: le ricostruisco dalla serie del set
  const miss=[...new Set(r.filter(c=>!c.img).map(c=>c.set))].slice(0,12);await Promise.all(miss.map(setInfo));
  r.forEach(c=>{if(!c.img){const si=SETINFO[c.set];if(si&&si.serie)c.img=`https://assets.tcgdex.net/${c.lang}/${si.serie}/${c.set}/${c.localId}`}});
