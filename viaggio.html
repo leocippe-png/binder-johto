@@ -308,10 +308,10 @@ const goto=document.getElementById("goto");new IntersectionObserver(es=>goto.cla
 // ---- avvio: subito con il contenuto del progetto, poi i cambi e le immagini di Leo ----
 try{MODS=JSON.parse(localStorage.getItem("johto-viaggio-mods")||"{}")||{};UPS=JSON.parse(localStorage.getItem("johto-viaggio-ups")||"{}")||{}}catch(e){}
 apply();buildStatic();buildJourney();
-if(location.hash&&location.hash.length>1){const el=document.getElementById(location.hash.slice(1));el&&setTimeout(()=>el.scrollIntoView(),60)}
+if(location.hash&&location.hash.length>1){const el=document.getElementById(location.hash.slice(1));el&&el.scrollIntoView({behavior:"instant"})}
 (function(){const cfg=window.FIREBASE_CONFIG;if(!cfg||!window.firebase)return;try{firebase.initializeApp(cfg);DB=firebase.firestore()}catch(e){return}
  let m=null,u=null,ready=0;const done=()=>{if(++ready<2)return;const nm=JSON.stringify(m),nu=JSON.stringify(u);if(nm===JSON.stringify(MODS)&&nu===JSON.stringify(UPS)){observe();return}
-  MODS=m;UPS=u;try{localStorage.setItem("johto-viaggio-mods",nm);localStorage.setItem("johto-viaggio-ups",nu)}catch(e){}const y=window.scrollY;apply();buildJourney();window.scrollTo(0,y)};
+  MODS=m;UPS=u;try{localStorage.setItem("johto-viaggio-mods",nm);localStorage.setItem("johto-viaggio-ups",nu)}catch(e){}const a=[...document.querySelectorAll(".stop")].find(z=>z.getBoundingClientRect().bottom>0),off=a?a.getBoundingClientRect().top:0,aid=a&&window.scrollY>200?a.id:null;apply();buildJourney();if(aid){const n=document.getElementById(aid);window.scrollTo({top:n.getBoundingClientRect().top+window.scrollY-off,behavior:"instant"})}};
  DB.doc("binder/modifiche").get().then(s=>{m=(s.exists&&s.data().slots)||{};Object.keys(m).forEach(k=>{if(!m[k])delete m[k]})}).catch(()=>{m=MODS}).finally(done);
  DB.doc("binder/immagini").get().then(s=>{u=(s.exists&&s.data().ids)||{};Object.keys(u).forEach(k=>{if(!u[k])delete u[k]})}).catch(()=>{u=UPS}).finally(done)})();
 </script>
