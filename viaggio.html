@@ -64,30 +64,35 @@ h1,h2,h3{font-family:var(--f-display);font-weight:800;margin:0;text-wrap:balance
 
 /* Mappa dei capitoli */
 .map{margin-top:64px;display:grid;gap:18px}
-/* Pokégear: la mappa di Johto come sul Game Boy Color */
-.pg2{max-width:620px;width:100%;margin:0 auto;background:linear-gradient(180deg,#2b2f38,#16181d);border-radius:22px;padding:14px 14px 18px;box-shadow:0 0 0 2px #0b0c0f,0 24px 50px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08)}
-.pg2-tabs{display:flex;gap:6px;margin-bottom:10px}
-.pg2-tabs span{flex:1;display:grid;place-items:center;height:30px;border-radius:6px;background:#3a3f4b;color:#9aa3b5;font-family:var(--f-mono);font-size:10px;letter-spacing:.12em}
-.pg2-tabs span.on{background:#f8f8f0;color:#1a1c22}
-.pg2-scr{background:#f8f8f0;border-radius:8px;padding:8px;box-shadow:inset 0 0 0 3px #0e0f12}
-.pg2-bar{display:flex;justify-content:space-between;align-items:center;gap:8px;background:#0e0f12;color:#f8f8f0;font-family:var(--f-mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;padding:6px 10px;border-radius:4px;min-height:32px}
-.pg2-bar small{color:#9aa3b5;letter-spacing:.08em;font-size:10.5px;white-space:nowrap}
-.pg2 svg{display:block;width:100%;height:auto;margin-top:8px;shape-rendering:crispEdges;border-radius:3px}
-.pg2 .nd{cursor:pointer;outline:none}
-.pg2 .nd:focus-visible .hit{stroke:#e83030;stroke-width:1.2}
-.pg2 .cur{fill:none;stroke:#e83030;stroke-width:1.6;animation:blink 1s steps(1) infinite}
-@keyframes blink{50%{opacity:0}}
-.pg2-list{display:grid;gap:6px;margin-top:8px}
-.pg2-list a{display:flex;justify-content:space-between;gap:10px;background:#0e0f12;color:#f8f8f0;text-decoration:none;font-family:var(--f-mono);font-size:12.5px;letter-spacing:.06em;padding:9px 12px;border-radius:4px}
-.pg2-list a::before{content:"▶";color:#e83030;margin-right:4px}
-.pg2-list a span{flex:1}
-.pg2-list a small{color:#9aa3b5}
-.pg2-hint{margin-top:10px;text-align:center;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;color:#9aa3b5;text-transform:uppercase}
+/* La carta del viaggio: Johto disegnata in oro, come le stampe del binder */
+.jm{max-width:760px;width:100%;margin:0 auto;display:grid;gap:14px}
+.jm svg{display:block;width:100%;height:auto;border-radius:16px;background:#0b1811;box-shadow:inset 0 0 0 1px var(--line),0 24px 50px rgba(0,0,0,.45)}
+.jm .st{cursor:pointer;outline:none}
+.jm .st circle.b{fill:var(--gold);transition:r .2s ease}
+.jm .st text{font-family:var(--f-mono);font-size:7.5px;font-weight:500;fill:#1a1408;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.jm .st .ring{fill:none;stroke:var(--gold);stroke-width:.8}
+.jm .st:hover circle.b,.jm .st:focus-visible circle.b{fill:var(--gold-2)}
+.jm .st.on circle.b{fill:var(--gold-2);r:9.5}
+.jm .halo{fill:none;stroke:var(--gold-2);stroke-width:1;opacity:0;transform-box:fill-box;transform-origin:center}
+.jm .st.on .halo{animation:halo 1.8s ease-out infinite}
+@keyframes halo{0%{transform:scale(1);opacity:.9}100%{transform:scale(2.2);opacity:0}}
+.jm .lbl{font-family:var(--f-display);font-size:8.5px;fill:var(--gold);letter-spacing:.04em;pointer-events:none}
+.jm .lbl.k{font-family:var(--f-mono);font-size:8px;letter-spacing:.4em;fill:var(--dim)}
+.jm-card{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;align-items:start;background:var(--leather-2);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.jm-card .n{grid-row:span 3;width:44px;height:44px;border-radius:50%;background:var(--gold);color:var(--leather);display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:17px}
+.jm-card h3{font-size:22px}
+.jm-card p{margin:0;color:var(--ink);font-size:14.5px}
+.jm-card .mono{font-size:11px}
+.jm-acts{grid-column:1/-1;display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.jm-acts .btn{min-height:42px;padding:9px 16px;font-size:14px}
+.jm-acts .sp{flex:1}
+.jm-hint{text-align:center;color:var(--dim);font-size:12.5px;margin:0}
+@media (prefers-reduced-motion:reduce){.jm .halo{animation:none}}
 .map details{max-width:620px;margin:0 auto;width:100%}
 .map summary{cursor:pointer;color:var(--muted);font-size:14px;text-align:center;list-style:none}
 .map summary::-webkit-details-marker{display:none}
 .map details[open] summary{margin-bottom:14px}
-@media (prefers-reduced-motion:reduce){.pg2 .cur{animation:none}}
+
 .map-ch{display:grid;gap:10px}
 .map-ch h3{font-size:15px;font-family:var(--f-body);font-weight:700;color:var(--gold);letter-spacing:.06em}
 .map-list{display:flex;flex-wrap:wrap;gap:8px}
@@ -271,7 +276,7 @@ function pagesLabel(t){const ns=t.pages.map(p=>p.n);return ns.length>1?`pp. ${ns
 function buildStatic(){const cards=POCKETS.filter(x=>x.t==="c").length,prints=POCKETS.length-cards;
  document.getElementById("facts").innerHTML=[[D.tappe.length,"tappe"],[56,"pagine"],[POCKETS.length,"tasche"],[cards,"carte"],[prints,"stampe originali"],[(D.medaglie||[]).length,"medaglie"]].map(([n,l])=>`<div class="fact"><b>${n}</b><span>${l}</span></div>`).join("");
  const ix={};D.tappe.forEach((t,i)=>ix[t.id]=i);
- document.getElementById("mappa").innerHTML=`<span class="mono" style="text-align:center">La mappa del Pokégear</span>${pokegear()}<details><summary>Tutte le tappe in elenco ▾</summary><div class="map" style="margin-top:0">`+D.capitoli.map(([title,ids],ci)=>`<div class="map-ch"><h3>${ROMAN[ci]} · ${esc(CH_V[ci]||title)}</h3><div class="map-list">${ids.filter(id=>id in ix).map(id=>{const t=D.tappe[ix[id]];return `<a href="#t-${t.id}"><small>${pagesLabel(t)}</small>${esc(t.title)}</a>`}).join("")}</div></div>`).join("")+`</div></details>`}
+ document.getElementById("mappa").innerHTML=`<span class="mono" style="text-align:center">La carta del viaggio</span>${mappa()}<details><summary>Tutte le tappe in elenco ▾</summary><div class="map" style="margin-top:0">`+D.capitoli.map(([title,ids],ci)=>`<div class="map-ch"><h3>${ROMAN[ci]} · ${esc(CH_V[ci]||title)}</h3><div class="map-list">${ids.filter(id=>id in ix).map(id=>{const t=D.tappe[ix[id]];return `<a href="#t-${t.id}"><small>${pagesLabel(t)}</small>${esc(t.title)}</a>`}).join("")}</div></div>`).join("")+`</div></details>`}
 function buildJourney(){const ix={};D.tappe.forEach((t,i)=>ix[t.id]=i);let h="";
  D.capitoli.forEach(([title,ids],ci)=>{h+=`<header class="chapter reveal"><span class="num">${ROMAN[ci]}</span><span class="mono">Capitolo ${ci+1}</span><h2>${esc(CH_V[ci]||title)}</h2><div class="rule"></div></header>`;
   ids.filter(id=>id in ix).forEach(id=>{const ti=ix[id],t=D.tappe[ti];const pages=t.pages.length===1?(ti===0?[null,t.pages[0]]:[t.pages[0],null]):t.pages;
@@ -285,40 +290,48 @@ function buildJourney(){const ix={};D.tappe.forEach((t,i)=>ix[t.id]=i);let h="";
  observe()}
 
 
-// ---- Pokégear: la mappa di Johto, ogni luogo porta alle sue tappe ----
-const LAND=["....####################","....####################","....####################","....####################","###.####################","###.####################","###.####################","###..###################","###..###################","###...##################","###...##################","###....#################","........#####...########",".........##.....########","..........#.....########"];
-const PLACES=[
- ["Borgo Foglianova",148,112,1,["frontespizio","foglianova","partenza"]],["Fiorpescopoli",122,110,1,["percorsi-29-32","luce-ombra"]],["Violapoli",108,62,1,["violapoli"]],
- ["Rovine d'Alfa",90,84,0,["alfa"]],["Azalina",78,118,1,["azalina"]],["Bosco di Lecci",62,110,0,["lecci"]],["Fiordoropoli",72,92,1,["fiordoropoli"]],
- ["Parco Nazionale",80,70,0,["percorsi-35-36"]],["Amarantopoli",72,45,1,["amarantopoli","torre-bruciata","ho-oh"]],["Olivinopoli",52,70,1,["olivinopoli","faro"]],
- ["Isole Vorticose",42,104,0,["vorticose"]],["Fiorlisopoli",20,95,1,["fiorlisopoli"]],["Zona Safari",14,58,0,["hgss"]],["Lago d'Ira",128,18,0,["lago"]],
- ["Mogania",128,45,1,["mogania"]],["Ebanopoli",165,40,1,["ebanopoli"]],["Via Vittoria",195,108,0,["vittoria"]],["Altopiano Blu",205,80,1,["superquattro-1","superquattro-2","campione"]],
- ["Kanto",222,118,1,["kanto"]],["Monte Argento",212,26,0,["monte-argento","vetta"]]];
-const ROADS=[[148,112,122,110],[122,110,122,72],[122,72,108,62],[108,62,108,118],[108,118,78,118],[78,118,62,110],[62,110,62,92],[62,92,72,92],[72,92,72,45],[72,62,108,62],[72,45,52,45],[52,45,52,70],[72,45,165,45],[128,45,128,18],[165,45,165,88],[165,88,135,88],[135,88,135,112],[148,112,195,112],[195,112,195,80],[195,80,222,80],[212,80,212,26],[222,80,222,118],[20,95,14,58],[86,84,108,84]];
-const SEA_ROUTE=[[52,74,42,104],[42,104,20,95]];
-function pokegear(){const ix={};D.tappe.forEach((t,i)=>ix[t.id]=i);let land="";LAND.forEach((r,y)=>[...r].forEach((c,x)=>{if(c==="#")land+=`<rect x="${x*10}" y="${y*10}" width="10" height="10"/>`}));
- const roads=ROADS.map(([a,b,c,d])=>`<line x1="${a}" y1="${b}" x2="${c}" y2="${d}"/>`).join("");const sea=SEA_ROUTE.map(([a,b,c,d])=>`<line x1="${a}" y1="${b}" x2="${c}" y2="${d}"/>`).join("");
- const nodes=PLACES.map(([nm,x,y,city,ids],i)=>{const sz=city?8:5;return `<g class="nd" data-pl="${i}" tabindex="0" role="button" aria-label="${esc(nm)}"><rect class="hit" x="${x-9}" y="${y-9}" width="18" height="18" fill="transparent"/>${city?`<rect x="${x-sz/2}" y="${y-sz/2}" width="${sz}" height="${sz}" fill="#f8f8f0" stroke="#0e0f12" stroke-width="1.4"/>`:`<rect x="${x-sz/2}" y="${y-sz/2}" width="${sz}" height="${sz}" fill="#0e0f12"/>`}</g>`}).join("");
- return `<div class="pg2" id="pg2"><div class="pg2-tabs" aria-hidden="true"><span>ORA</span><span class="on">MAPPA</span><span>TEL</span><span>RADIO</span></div><div class="pg2-scr">
-  <div class="pg2-bar"><span id="pg2-name"></span><small id="pg2-pp"></small></div>
-  <svg viewBox="0 0 240 150" role="group" aria-label="Mappa di Johto: tocca un luogo">
-   <rect width="240" height="150" fill="#3060c0"/><g fill="#78b850">${land}</g>
-   <rect x="120" y="12" width="16" height="12" fill="#3060c0"/>
-   <g fill="#3060c0"><rect x="38" y="100" width="4" height="4"/><rect x="46" y="106" width="4" height="4"/><rect x="40" y="110" width="3" height="3"/></g>
-   <g stroke="#a8d0f0" stroke-width="1.2" stroke-dasharray="2 2">${sea}</g>
-   <g stroke="#f8e8a0" stroke-width="2.4">${roads}</g>
-   <line x1="180" y1="0" x2="180" y2="150" stroke="#0e0f12" stroke-opacity=".25" stroke-dasharray="3 3"/>
-   <text x="226" y="142" text-anchor="end" font-family="DM Mono,monospace" font-size="7" fill="#0e0f12" fill-opacity=".55" letter-spacing="1">KANTO</text>
-   <text x="70" y="142" text-anchor="middle" font-family="DM Mono,monospace" font-size="7" fill="#f8f8f0" fill-opacity=".7" letter-spacing="1">JOHTO</text>
-   ${nodes}<rect class="cur" id="pg2-cur" width="14" height="14"/></svg>
-  <div class="pg2-list" id="pg2-list"></div></div><p class="pg2-hint">Tocca un luogo · ▶ per andare alla tappa</p></div>`}
-function pgSelect(i,focusList){const [nm,x,y,,ids]=PLACES[i];const ix={};D.tappe.forEach((t,k)=>ix[t.id]=k);const ts=ids.filter(id=>id in ix).map(id=>D.tappe[ix[id]]);
- document.getElementById("pg2-name").textContent=nm;const pp=ts.flatMap(t=>t.pages.map(p=>p.n));document.getElementById("pg2-pp").textContent=pp.length?(pp.length>1?`pp. ${Math.min(...pp)}–${Math.max(...pp)}`:`p. ${pp[0]}`):"";
- const c=document.getElementById("pg2-cur");c.setAttribute("x",x-7);c.setAttribute("y",y-7);
- document.getElementById("pg2-list").innerHTML=ts.map(t=>`<a href="#t-${t.id}"><span>${esc(t.title)}</span><small>${pagesLabel(t)}</small></a>`).join("");
- try{localStorage.setItem("johto-viaggio-pg",i)}catch(e){}if(focusList){const a=document.querySelector("#pg2-list a");a&&a.focus()}}
-document.addEventListener("click",e=>{const n=e.target.closest(".pg2 .nd");if(n)pgSelect(+n.dataset.pl)});
-document.addEventListener("keydown",e=>{const n=e.target.closest&&e.target.closest(".pg2 .nd");if(n&&(e.key==="Enter"||e.key===" ")){e.preventDefault();pgSelect(+n.dataset.pl,true)}});
+// ---- La carta del viaggio: Johto in oro, una stazione numerata per ogni tappa ----
+const STOPS={"frontespizio":[238,180],"foglianova":[256,186],"partenza":[246,201],"percorsi-29-32":[197,150],"violapoli":[180,103],"alfa":[150,138],"azalina":[130,197],"lecci":[104,182],"fiordoropoli":[121,155],"percorsi-35-36":[134,118],"amarantopoli":[121,76],"torre-bruciata":[138,63],"olivinopoli":[104,93],"faro":[82,124],"fiorlisopoli":[34,150],"vorticose":[64,184],"lago":[214,28],"mogania":[214,78],"ebanopoli":[276,66],"ho-oh":[106,56],"vittoria":[322,180],"superquattro-1":[338,138],"superquattro-2":[354,128],"campione":[340,118],"luce-ombra":[205,184],"kanto":[372,200],"monte-argento":[352,58],"hgss":[24,96],"vetta":[366,36]};
+const GYMS=new Set(["violapoli","azalina","fiordoropoli","amarantopoli","faro","fiorlisopoli","mogania","ebanopoli"]);
+const PLACE_LBL=[["Borgo Foglianova",262,214],["Fiorpescopoli",205,203],["Violapoli",180,88],["Azalina",130,216],["Fiordoropoli",121,173],["Amarantopoli",128,36],["Olivinopoli",58,112],["Fiorlisopoli",34,170],["Mogania",214,96],["Lago d'Ira",214,12],["Ebanopoli",276,84],["Altopiano Blu",352,103],["Monte Argento",345,20],["Isole Vorticose",64,206]];
+const ROUTES=[[247,187,203,183],[203,183,203,120,180,103],[180,103,180,197,130,197],[130,197,103,183,103,153,120,153],[120,153,120,75],[120,103,180,103],[120,75,87,75,87,117],[120,75,275,67],[213,75,213,30],[275,67,275,147,225,147,225,187],[247,187,325,180],[325,180,342,133],[342,133,370,133,370,197],[353,133,353,43],[34,158,24,97]];
+const SEA_TRIP=[[87,125,70,173],[70,173,34,158]];
+function smooth(pts,closed){const P=closed?[pts[pts.length-1],...pts,pts[0],pts[1]]:[pts[0],...pts,pts[pts.length-1]];let d=`M${pts[0][0]},${pts[0][1]}`;
+ for(let i=1;i<P.length-2;i++){const[p0,p1,p2,p3]=[P[i-1],P[i],P[i+1],P[i+2]];d+=`C${(p1[0]+(p2[0]-p0[0])/6).toFixed(1)},${(p1[1]+(p2[1]-p0[1])/6).toFixed(1)} ${(p2[0]-(p3[0]-p1[0])/6).toFixed(1)},${(p2[1]-(p3[1]-p1[1])/6).toFixed(1)} ${p2[0]},${p2[1]}`}return d+(closed?"Z":"")}
+const MAIN=[[58,0],[60,30],[66,55],[72,80],[78,100],[86,108],[92,130],[90,150],[96,170],[92,195],[100,214],[122,222],[148,226],[170,214],[188,200],[205,198],[222,208],[244,214],[266,218],[288,226],[320,232],[352,236],[400,238],[400,0]];
+const ISLAND=[[12,74],[34,70],[48,86],[50,118],[46,150],[48,170],[34,180],[16,176],[6,150],[4,110]];
+const wave=(x,y)=>`<path d="M${x},${y}q3,-3 6,0t6,0" />`;
+const mount=(x,y,s=1)=>`<path d="M${x-6*s},${y+4*s}L${x},${y-5*s}L${x+6*s},${y+4*s}M${x-2*s},${y-1*s}L${x},${y+1*s}L${x+2*s},${y-1*s}"/>`;
+function mappa(){const ix={};D.tappe.forEach((t,i)=>ix[t.id]=i);
+ const routes=ROUTES.map(r=>{let d=`M${r[0]},${r[1]}`;for(let i=2;i<r.length;i+=2)d+=`L${r[i]},${r[i+1]}`;return `<path d="${d}"/>`}).join("");
+ const stations=D.tappe.map((t,i)=>{const c=STOPS[t.id];if(!c)return"";const g=GYMS.has(t.id);
+  return `<g class="st" data-st="${i}" tabindex="0" role="button" aria-label="Tappa ${i+1}: ${esc(t.title)}"><circle cx="${c[0]}" cy="${c[1]}" r="13" fill="transparent"/><circle class="halo" cx="${c[0]}" cy="${c[1]}" r="9"/>${g?`<circle class="ring" cx="${c[0]}" cy="${c[1]}" r="10.5"/>`:""}<circle class="b" cx="${c[0]}" cy="${c[1]}" r="7.5"/><text x="${c[0]}" y="${c[1]+.5}">${i+1}</text></g>`}).join("");
+ return `<div class="jm" id="jm"><svg viewBox="0 0 400 250" role="group" aria-label="Carta di Johto: tocca una tappa">
+  <defs><radialGradient id="jm-land" cx="45%" cy="45%" r="75%"><stop offset="0" stop-color="#1d3a28"/><stop offset="1" stop-color="#132a1c"/></radialGradient></defs>
+  <g fill="none" stroke="#d8b765" stroke-opacity=".22" stroke-width=".8">${[[20,30],[30,212],[70,236],[150,240],[18,198],[64,60],[36,40],[120,244],[250,238]].map(([x,y])=>wave(x,y)).join("")}</g>
+  <path d="${smooth(MAIN,true)}" fill="url(#jm-land)" stroke="#d8b765" stroke-width="1.2"/>
+  <path d="${smooth(MAIN,true)}" fill="none" stroke="#d8b765" stroke-opacity=".25" stroke-width="4" transform="translate(0 0)"/>
+  <path d="${smooth(ISLAND,true)}" fill="url(#jm-land)" stroke="#d8b765" stroke-width="1.2"/>
+  <ellipse cx="214" cy="28" rx="15" ry="9" fill="#0b1811" stroke="#d8b765" stroke-width=".9"/>
+  <g fill="#132a1c" stroke="#d8b765" stroke-width=".9"><ellipse cx="58" cy="178" rx="5" ry="3.5"/><ellipse cx="72" cy="192" rx="4.5" ry="3"/><ellipse cx="74" cy="170" rx="3.5" ry="2.5"/><ellipse cx="60" cy="194" rx="3" ry="2"/></g>
+  <line x1="306" y1="6" x2="306" y2="232" stroke="#d8b765" stroke-opacity=".35" stroke-dasharray="1 4" stroke-linecap="round"/>
+  <g fill="none" stroke="#d8b765" stroke-width=".9" stroke-opacity=".75">${mount(340,30,1.3)+mount(356,24,1.6)+mount(372,34,1.2)+mount(246,50)+mount(256,56,.8)+mount(176,52,.9)+mount(84,40,.8)+mount(300,110,.9)+mount(290,120,.7)}</g>
+  <g fill="none" stroke="#d8b765" stroke-opacity=".55" stroke-width="1.1" stroke-dasharray="0.1 3.4" stroke-linecap="round">${routes}</g>
+  <g fill="none" stroke="#d8b765" stroke-opacity=".4" stroke-width=".8" stroke-dasharray="3 3">${SEA_TRIP.map(([a,b,c,d])=>`<path d="M${a},${b}Q${(a+c)/2-6},${(b+d)/2+6} ${c},${d}"/>`).join("")}</g>
+  ${PLACE_LBL.map(([n,x,y])=>`<text class="lbl" x="${x}" y="${y}" text-anchor="middle">${esc(n)}</text>`).join("")}
+  <text class="lbl k" x="252" y="122" text-anchor="middle">JOHTO</text><text class="lbl k" x="352" y="222" text-anchor="middle">KANTO</text>
+  <g transform="translate(24 222)" stroke="#d8b765" fill="none" stroke-width=".8" stroke-opacity=".8"><circle r="11"/><path d="M0,-15L3,0L0,15L-3,0Z" fill="#d8b765" fill-opacity=".35"/><path d="M-15,0L0,3L15,0L0,-3Z"/></g><text class="lbl" x="24" y="203" text-anchor="middle" style="font-size:7px">N</text>
+  ${stations}</svg>
+  <div class="jm-card" id="jm-card" aria-live="polite"></div>
+  <p class="jm-hint">Ogni numero è una tappa del binder, nello stesso ordine delle pagine. I cerchi doppi sono le palestre.</p></div>`}
+let jmCur=0;
+function jmSelect(i,go){const t=D.tappe[i];if(!t)return;jmCur=i;document.querySelectorAll(".jm .st").forEach(g=>g.classList.toggle("on",+g.dataset.st===i));
+ const first=String(t.desc||"").split(/(?<=[.!?])\s/)[0];
+ document.getElementById("jm-card").innerHTML=`<span class="n">${i+1}</span><span class="mono">${pagesLabel(t)}${t.jp?" · "+esc(t.jp):""}</span><h3>${esc(t.title)}</h3><p>${esc(first)}</p>
+  <div class="jm-acts"><button class="btn" data-jm="-1" ${i?"":"disabled"} aria-label="Tappa precedente">‹</button><button class="btn" data-jm="1" ${i<D.tappe.length-1?"":"disabled"} aria-label="Tappa successiva">›</button><span class="sp"></span><a class="btn gold" href="#t-${t.id}">Vai alla tappa</a></div>`;
+ try{localStorage.setItem("johto-viaggio-jm",i)}catch(e){}if(go)document.getElementById("t-"+t.id).scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth"})}
+document.addEventListener("click",e=>{const g=e.target.closest(".jm .st");if(g){jmSelect(+g.dataset.st);return}const b=e.target.closest("[data-jm]");if(b)jmSelect(Math.max(0,Math.min(D.tappe.length-1,jmCur+ +b.dataset.jm)))});
+document.addEventListener("keydown",e=>{const g=e.target.closest&&e.target.closest(".jm .st");if(g&&(e.key==="Enter"||e.key===" ")){e.preventDefault();jmSelect(+g.dataset.st,true)}});
 
 // ---- comparsa dolce e immagini caricate quando servono ----
 let DB=null;const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{rootMargin:"0px 0px -8% 0px"});
@@ -357,7 +370,7 @@ const goto=document.getElementById("goto");new IntersectionObserver(es=>goto.cla
 
 // ---- avvio: subito con il contenuto del progetto, poi i cambi e le immagini di Leo ----
 try{MODS=JSON.parse(localStorage.getItem("johto-viaggio-mods")||"{}")||{};UPS=JSON.parse(localStorage.getItem("johto-viaggio-ups")||"{}")||{}}catch(e){}
-apply();buildStatic();buildJourney();(()=>{let i=0;try{i=+(localStorage.getItem("johto-viaggio-pg")||0)||0}catch(e){}pgSelect(i<PLACES.length?i:0)})();
+apply();buildStatic();buildJourney();(()=>{let i=0;try{i=+(localStorage.getItem("johto-viaggio-jm")||0)||0}catch(e){}jmSelect(i<D.tappe.length?i:0)})();
 if(location.hash&&location.hash.length>1){const el=document.getElementById(location.hash.slice(1));el&&el.scrollIntoView({behavior:"instant"})}
 (function(){const cfg=window.FIREBASE_CONFIG;if(!cfg||!window.firebase)return;try{firebase.initializeApp(cfg);DB=firebase.firestore()}catch(e){return}
  let m=null,u=null,ready=0;const done=()=>{if(++ready<2)return;const nm=JSON.stringify(m),nu=JSON.stringify(u);if(nm===JSON.stringify(MODS)&&nu===JSON.stringify(UPS)){observe();return}
