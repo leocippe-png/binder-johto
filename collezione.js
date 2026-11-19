@@ -2,7 +2,7 @@
 // Unico file da modificare per cambiare carte e stampe: l'app lo legge all'avvio.
 // Ogni tasca: t = "c" carta / "p" stampa, n = nome, s = set e numero, note, f = anchor · arita · pers · ita
 window.COLLEZIONE={
- versione:"2026-11-17",
+ versione:"2026-11-19",
  medaglie:[["Zefiro",9],["Alveare",13],["Piana",17],["Nebbia",21],["Tempesta",29],["Minerale",27],["Gelo",35],["Levante",37]],
  capitoli:[["Il viaggio inizia",["frontespizio","foglianova","partenza","percorsi-29-32"]],["Le palestre di Johto",["violapoli","alfa","azalina","lecci","fiordoropoli","percorsi-35-36","amarantopoli","torre-bruciata","olivinopoli","faro","fiorlisopoli","vorticose","lago","mogania","ebanopoli"]],["Verso la Lega",["ho-oh","vittoria","superquattro-1","superquattro-2","campione"]],["Dopo la Lega",["luce-ombra","kanto","monte-argento","hgss","vetta"]]],
  set:{
@@ -12,7 +12,7 @@ window.COLLEZIONE={
  nomiInglesi:{"Energia Fuoco":"Fire Energy","Energia Erba":"Grass Energy","Energia Acqua":"Water Energy","Energia Lampo":"Lightning Energy","Energia Metallo":"Metal Energy","Energia Psico":"Psychic Energy","Energia Lotta":"Fighting Energy","Energia Oscurità":"Darkness Energy","Altopiano Blu":"Indigo Plateau","Cinturanera":"Black Belt","Tifo della ragazza pon pon":"Cheerleader's Cheer","Chiacchiere del presentatore":"Emcee's Chatter","Giudice":"Judge","Domande dell'intervistatore":"Interviewer's Questions","Metodo d'allenamento del Prof. Elm":"Professor Elm's Training Method","Teletrasporto di Bill":"Bill's Teleporter","Pescatore":"Fisherman","Trucco del Team Rocket":"Team Rocket's Trickery","Sguardo di Jasmine":"Jasmine's Gaze","Avventura di Ethan":"Ethan's Adventure","Lezione del Prof. Elm":"Professor Elm's Lecture","Valerio (Falkner)":"Falkner","Torre Sprout":"Sprout Tower","Allenamento del Saggio":"Sage's Training","Rovine d'Alfa":"Ruins of Alph","Muro delle Rovine":"Ruin Wall","Litografia di Alfa":"Alph Lithograph","Chiara (Whitney)":"Whitney","Latte Mumù":"Moomoo Milk","Torre Radio":"Radio Tower","Fioraia":"Flower Shop Lady","Sala Giochi":"Arcade Game","Angelo (Morty)":"Morty","Determinazione di Angelo":"Morty's Conviction","Torre Bruciata":"Burned Tower","Gyarados rosso":"Gyarados","Covo Rocket":"Rocket's Hideout","Dewgong Luce":"Light Dewgong","Dragonite Luce":"Light Dragonite","Pino (Will)":"Will","Trappola di Koga":"Koga's Trap","Sfida di Rosso":"Red's Challenge","Energia Arcobaleno":"Rainbow Energy","Feraligatr Prime":"Feraligatr","Donphan Prime":"Donphan"},
  tappe:[
   {id:"frontespizio",title:"Frontespizio",jp:"はじまり",
-   desc:"Pagina singola a destra. Riprende la copertina: la pagoda e il faro, poi la mappa e il via del Prof. Elm.",
+   desc:"Prima di uscire di casa. La pagoda e il faro che si vedono da lontano, la mappa del Pokégear aperta per la prima volta, la porta del laboratorio di Elm.",
    pages:[
     {n:1,h:"Il viaggio comincia",s:[
      {"t":"p","n":"Torre Campana","s":"Stampa oro su verde","note":"Riprende la pagoda dorata della copertina."},
@@ -27,7 +27,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"foglianova",title:"Borgo Foglianova",jp:"ワカバタウン",
-   desc:"Gli starter. A sinistra la linea classica, tutta Expedition, con il Feraligatr di Arita. A destra una pagina intera per Feraligatr: la linea dell'epoca Oro e Argento, quella del remake e il Mega moderno.",
+   desc:"Il vento che soffia sul borgo, la mamma che ti regola l'orologio, tre Poké Ball sul tavolo. A sinistra la scelta di sempre, una linea per riga; a destra il compagno di questo binder, Feraligatr, in tre epoche.",
    pages:[
     {n:2,h:"Expedition, una linea per riga",s:[
      {"t":"c","n":"Chikorita","s":"Expedition 99/165"},
@@ -53,7 +53,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"partenza",title:"La partenza",jp:"はじまりのひ",
-   desc:"Il laboratorio di Elm, le tre Poké Ball sul tavolo e l'uovo misterioso; di fronte Ethan, il protagonista di HeartGold e SoulSilver, con la sua squadra.",
+   desc:"Il laboratorio, la finestra lasciata aperta da un ragazzo dai capelli rossi, l'uovo che ti affida Mr. Pokémon. Di fronte Ethan, che anni dopo ha rifatto la stessa strada.",
    pages:[
     {n:4,h:"Il laboratorio di Elm",s:[
      {"t":"c","n":"Professor Elm","s":"Neo Genesis 96/111","note":"La prima carta del professore, uscita insieme a Oro e Argento.","f":["pers"]},
@@ -79,7 +79,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"percorsi-29-32",title:"Percorsi 29–32",jp:"みち",
-   desc:"I primi incontri sull'erba alta, da Fiorpescopoli fino alla strada per Violapoli.",
+   desc:"Sentret che spunta dall'erba alta, Hoothoot che esce solo di notte: è qui che l'orologio ha cominciato a contare davvero. Il vecchietto di Fiorpescopoli ti fa da guida, poi la strada sale verso Violapoli.",
    pages:[
     {n:6,h:"Percorso 29 e Fiorpescopoli",s:[
      {"t":"c","n":"Sentret","s":"Neo Genesis 71/111","note":"Neo Genesis è il set uscito insieme a Oro e Argento: le prime illustrazioni di Johto in assoluto."},
@@ -105,7 +105,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"violapoli",title:"Violapoli",jp:"キキョウシティ",
-   desc:"La Torre Sprout dei monaci e la palestra volante di Valerio.",
+   desc:"La Torre Sprout che ondeggia a ogni passo attorno al suo pilastro, i monaci con i loro Bellsprout; poi Valerio e i suoi uccelli, la prima medaglia.",
    pages:[
     {n:8,h:"Torre Sprout",s:[
      {"t":"c","n":"Torre Sprout","s":"Neo Genesis 97/111 · Stadio","note":"La torre di legno di Violapoli come carta stadio dell'epoca."},
@@ -131,7 +131,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"alfa",title:"Rovine d'Alfa",jp:"アルフのいせき",
-   desc:"Le prime righe delle due pagine, lette a binder aperto, scrivono J O H T O ! con gli Unown.",
+   desc:"Le lastre da ricomporre, i segni sulle pareti che nessuno sapeva leggere. Apri il binder e leggi le prime righe delle due pagine, da sinistra a destra.",
    pages:[
     {n:10,h:"La camera degli enigmi",s:[
      {"t":"c","n":"Unown J","s":"Legends Awakened 76/146"},
@@ -157,7 +157,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"azalina",title:"Azalina",jp:"ヒワダタウン",
-   desc:"La Grotta di Mezzo e il Pozzo Slowpoke, dove il Team Rocket taglia le code; di fronte la palestra di Raffaello.",
+   desc:"Il pozzo dove i Rocket tagliavano le code agli Slowpoke, Franz e le sue Ball ricavate dalle ghicocche; di fronte Raffaello e quello Scyther che ti ha fatto sudare.",
    pages:[
     {n:12,h:"Grotta di Mezzo e Pozzo Slowpoke",s:[
      {"t":"c","n":"Slowpoke","s":"30th Celebration 016/128","note":"Gli Slowpoke del pozzo, a cui il Team Rocket taglia la coda. Dal set del 30° anniversario."},
@@ -183,7 +183,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"lecci",title:"Bosco di Lecci e Pensione Pokémon",jp:"ウバメのもり",
-   desc:"Il santuario di Celebi nel bosco; di fronte la Pensione Pokémon sul Percorso 34, dove nascono le uova e i Pokémon baby.",
+   desc:"Il bosco dove il Farfetch'd ti scappa sempre dalla parte sbagliata, il piccolo santuario di legno e chi viaggia nel tempo. Di fronte la Pensione sul Percorso 34: lasci due Pokémon e, al ritorno, trovi un uovo.",
    pages:[
     {n:14,h:"Il santuario del bosco",s:[
      {"t":"c","n":"Celebi","s":"Neo Revelation 3/64 · holo","note":"Il Celebi dell'era Oro e Argento, per il santuario del Bosco di Lecci."},
@@ -209,7 +209,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"fiordoropoli",title:"Fiordoropoli",jp:"コガネシティ",
-   desc:"La città più grande: la Torre Radio, la Sala Giochi, Bill e il suo Eevee; di fronte la palestra di Chiara.",
+   desc:"La città grande: la Sala Giochi, la Torre Radio, il Treno Magnetico ancora fermo, Bill che ti affida il suo Eevee. Di fronte Chiara, il suo Miltank e un Rotolamento che non si dimentica; quando perde, scoppia a piangere.",
    pages:[
     {n:16,h:"Torre Radio e Sala Giochi",s:[
      {"t":"c","n":"Torre Radio","s":"Neo Destiny 95/105 · Stadio","note":"La Torre Radio di Fiordoropoli, poi occupata dal Team Rocket."},
@@ -235,7 +235,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"percorsi-35-36",title:"Percorsi 35–36",jp:"しぜんこうえん",
-   desc:"Il Parco Nazionale con la gara Pigliamosche e il finto albero che blocca il Percorso 36.",
+   desc:"Il Parco Nazionale e la Gara Pigliamosche, il martedì, il giovedì e il sabato. Poco più avanti, un albero che si muove quando lo bagni.",
    pages:[
     {n:18,h:"Parco Nazionale",s:[
      {"t":"p","n":"Parco Nazionale","s":"Stampa"},
@@ -261,7 +261,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"amarantopoli",title:"Amarantopoli",jp:"エンジュシティ",
-   desc:"La città antica: le cinque ragazze kimono con le evoluzioni di Eevee; di fronte la palestra di Angelo.",
+   desc:"La città più antica di Johto: il teatro delle danze, le cinque sorelle in kimono con le loro Eevee evolute, due torri che si guardano da lontano. Di fronte Angelo, che si allena da sempre per vedere un Pokémon leggendario.",
    pages:[
     {n:20,h:"Le ragazze kimono",s:[
      {"t":"c","n":"Espeon","s":"Undaunted 2/90 · holo","note":"Tutta la pagina viene da Undaunted: le cinque ragazze kimono e i loro Eevee evoluti sono una scena del remake."},
@@ -287,7 +287,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"torre-bruciata",title:"Torre Bruciata",jp:"やけたとう",
-   desc:"La torre andata a fuoco, da cui fuggono Raikou, Entei e Suicune; di fronte le tre Bestie in tutte le loro versioni.",
+   desc:"Una torre arsa in una notte di temporale, tre Pokémon caduti tra le fiamme e riportati in vita da un uccello arcobaleno. Scendi nel sotterraneo: si alzano e corrono via. Uno lo inseguirai per tutta Johto.",
    pages:[
     {n:22,h:"Torre Bruciata",s:[
      {"t":"p","n":"Il risveglio","s":"Stampa","note":"Le tre Bestie che fuggono dalla Torre Bruciata."},
@@ -313,7 +313,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"olivinopoli",title:"Percorsi 38–39 e Olivinopoli",jp:"アサギシティ",
-   desc:"La Fattoria MuMu sulla strada per il mare, poi il porto di Olivinopoli.",
+   desc:"La Fattoria MuMu, il latte che rimette in piedi la squadra, il Miltank malato che guarisce con le bacche. Poi l'odore del porto e la nave che porta a Kanto.",
    pages:[
     {n:24,h:"Fattoria MuMu",s:[
      {"t":"p","n":"Fattoria MuMu","s":"Stampa"},
@@ -339,7 +339,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"faro",title:"Faro di Olivinopoli",jp:"とうだい",
-   desc:"Il faro dove Jasmine assiste Amphy, l'Ampharos malato; di fronte la sua palestra.",
+   desc:"Il faro senza luce: in cima Amphy respira a fatica e Jasmine non vuole lasciarla sola. Torni da Fiorlisopoli con la medicina, e solo allora lei scende ad aspettarti in palestra.",
    pages:[
     {n:26,h:"Il faro e Amphy",s:[
      {"t":"p","n":"Amphy al faro","s":"Stampa","note":"L'Ampharos malato che Jasmine assiste in cima al faro; la medicina arriva da Fiorlisopoli, sulla pagina accanto."},
@@ -365,7 +365,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"fiorlisopoli",title:"Fiorlisopoli",jp:"タンバシティ",
-   desc:"Dall'altra parte del mare, la città della farmacia e di Furio.",
+   desc:"Dall'altra parte del mare, a nuoto o in Surf: la farmacia con la medicina per Amphy e Furio che si allena sotto la cascata con il suo Poliwrath.",
    pages:[
     {n:28,h:"Percorsi 40–41 e Fiorlisopoli",s:[
      {"t":"p","n":"Farmacia di Fiorlisopoli","s":"Stampa","note":"Dove si compra la Medicina Segreta per Amphy."},
@@ -391,7 +391,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"vorticose",title:"Isole Vorticose",jp:"うずまきじま",
-   desc:"Il mare tra Olivinopoli e Fiorlisopoli e, negli abissi delle isole, Lugia.",
+   desc:"Le correnti che girano attorno alle isole, scale nel buio, un vortice dopo l'altro fino in fondo. Lì, nella grotta più profonda, Lugia.",
    pages:[
     {n:30,h:"Il mare delle isole",s:[
      {"t":"c","n":"Remoraid","s":"Aquapolis 105","note":"Illustrata da Mitsuhiro Arita.","f":["arita"]},
@@ -417,7 +417,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"lago",title:"Lago d'Ira e Mogania",jp:"いかりのみずうみ",
-   desc:"Il Gyarados rosso e Lance al lago; di fronte il covo del Team Rocket sotto il negozio di Mogania.",
+   desc:"Un segnale ha costretto i Magikarp del lago a evolversi: in mezzo, un Gyarados rosso. Sulla riva Lance ti chiede di seguirlo; a Mogania, sotto il negozio di souvenir, il covo del Team Rocket.",
    pages:[
     {n:32,h:"Lago d'Ira",s:[
      {"t":"c","n":"Gyarados rosso","s":"HeartGold SoulSilver 123/123 · segreta","note":"Il Gyarados shiny del Lago d'Ira, carta segreta del set HGSS.","f":["anchor"]},
@@ -443,7 +443,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"mogania",title:"Via Gelata e palestra di Alfredo",jp:"チョウジタウン",
-   desc:"La Via Gelata verso Ebanopoli; di fronte la palestra di ghiaccio di Alfredo.",
+   desc:"La Via Gelata e il ghiaccio che scivola sotto i piedi. Poi Alfredo, il capopalestra più anziano, in fondo a una palestra di lastre su cui scivolare fino a lui.",
    pages:[
     {n:34,h:"Via Gelata",s:[
      {"t":"c","n":"Swinub","s":"Journey Together 165/159 · IR"},
@@ -469,7 +469,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"ebanopoli",title:"Ebanopoli",jp:"フスベシティ",
-   desc:"La Tana del Drago dietro la palestra; di fronte Sandra e la sua palestra.",
+   desc:"La città dei domatori di draghi. Sandra ti dà la medaglia solo dopo la prova del Saggio nella Tana del Drago, dove nel laghetto nuota un Dratini.",
    pages:[
     {n:36,h:"Tana del Drago",s:[
      {"t":"p","n":"Tana del Drago","s":"Stampa"},
@@ -495,7 +495,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"ho-oh",title:"Torre Campana e Ho-Oh",jp:"スズのとう",
-   desc:"La torre di Amarantopoli e, in cima, Ho-Oh con i Pokémon di Ethan.",
+   desc:"La torre d'oro di Amarantopoli, chiusa a chi non porta la piuma giusta. In cima, nella luce, Ho-Oh.",
    pages:[
     {n:38,h:"Torre Campana",s:[
      {"t":"p","n":"Torre Campana al tramonto","s":"Stampa"},
@@ -521,7 +521,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"vittoria",title:"Percorsi 45–46 e Via Vittoria",jp:"チャンピオンロード",
-   desc:"Le strade di montagna a sud di Ebanopoli, con i Pokémon dei Percorsi 45 e 46 e il Dunsparce della Grotta Scura; di fronte la Via Vittoria verso l'Altopiano Blu.",
+   desc:"La lunga strada verso la Lega: i Percorsi 45 e 46 in discesa ripida, la Grotta Scura e il Dunsparce che nessuno trova al primo colpo, e infine la Via Vittoria, dove il rivale ti aspetta un'ultima volta.",
    pages:[
     {n:40,h:"Percorso 45 e Grotta Scura",s:[
      {"t":"c","n":"Spearow","s":"Unleashed 62/95","note":"Spearow e Fearow vivono sui Percorsi 45 e 46."},
@@ -547,7 +547,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"superquattro-1",title:"Superquattro · Pino e Koga",jp:"してんのう",
-   desc:"Una pagina per ciascuno, con lo stesso schema delle palestre: stanza, allenatore, asso.",
+   desc:"Le porte si chiudono alle tue spalle. Pino e la sua maschera, poi Koga, che a Kanto era un capopalestra e qui siede tra i Superquattro.",
    pages:[
     {n:42,h:"Pino",s:[
      {"t":"p","n":"Stanza di Pino","s":"Stampa","note":"La sala psichica. Le quattro stanze, una per colonna, usano la stessa cornice."},
@@ -573,7 +573,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"superquattro-2",title:"Superquattro · Bruno e Karen",jp:"してんのう",
-   desc:"Gli ultimi due dei Superquattro, sempre una pagina ciascuno.",
+   desc:"Bruno, che lotta a mani nude, e Karen, per cui contano i Pokémon che ami, non quelli più forti.",
    pages:[
     {n:44,h:"Bruno",s:[
      {"t":"p","n":"Stanza di Bruno","s":"Stampa","note":"La sala della lotta."},
@@ -599,7 +599,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"campione",title:"Il Campione",jp:"チャンピオン",
-   desc:"Lance, il Campione, e la Sala d'Onore.",
+   desc:"Lance e i suoi Dragonite, poi una stanza silenziosa dove la tua squadra resta registrata per sempre.",
    pages:[
     {n:46,h:"Lance",s:[
      {"t":"p","n":"Stanza del Campione","s":"Stampa","note":"Stessa cornice delle quattro stanze, in oro."},
@@ -625,7 +625,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"luce-ombra",title:"Silver e le energie di Johto",jp:"ライバルとエネルギー",
-   desc:"Il rivale Silver, figlio di Giovanni, con la squadra nelle versioni Dark di Neo Destiny; di fronte le energie base di HeartGold e SoulSilver, con i Pokémon e i luoghi simbolo di Johto sullo sfondo.",
+   desc:"Il ragazzo dai capelli rossi del laboratorio, che a ogni incontro cambia un po'. Di fronte le energie, con Johto sullo sfondo.",
    pages:[
     {n:48,h:"Il rivale Silver",s:[
      {"t":"p","n":"Silver","s":"Stampa","note":"Silver non ha una carta allenatore."},
@@ -651,7 +651,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"kanto",title:"Kanto",jp:"カントー",
-   desc:"Dopo la Lega il viaggio prosegue a Kanto: Misty ed Erika con le loro medaglie, poi tre tappe con i loro Pokémon. Zapdos e Articuno arrivano dal set Fossil; Moltres chiude il trio sul Monte Argento.",
+   desc:"Il Treno Magnetico ti riporta dove tutto era cominciato: Misty a Celestopoli, Erika tra i fiori di Azzurropoli, uno Snorlax che si sveglia solo con la musica giusta alla radio, e tre leggende che tornano dal primo viaggio.",
    pages:[
     {n:50,h:"Le capopalestra di Kanto",s:[
      {"t":"p","n":"Medaglia Cascata","s":"Stampa","note":"Stampa medaglia"},
@@ -677,7 +677,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"monte-argento",title:"Monte Argento",jp:"シロガネやま",
-   desc:"Le pendici e la grotta della montagna più alta, dove si sale solo dopo aver vinto le sedici medaglie. Fuori le due coppie esclusive di Oro e Argento, dentro la linea di Larvitar e Moltres.",
+   desc:"Sedici medaglie, e solo allora ti lasciano salire. Fuori i Pokémon che si trovavano solo in Oro o solo in Argento; dentro il buio, un Larvitar, e in fondo una sagoma ferma nella neve.",
    pages:[
     {n:52,h:"Le pendici del Monte Argento",s:[
      {"t":"p","n":"Percorso 28","s":"Stampa","note":"L'unica strada per il Monte Argento parte da Kanto."},
@@ -703,7 +703,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"hgss",title:"Le novità di HeartGold e SoulSilver",jp:"ハートゴールド・ソウルシルバー",
-   desc:"Quello che il remake ha aggiunto a Johto: la Zona Safari oltre Fiorlisopoli, il Pokéathlon e il Parco Lotta, con i personaggi di HGSS nelle carte allenatore di Unleashed.",
+   desc:"Quello che il ritorno a Johto ci ha regalato: il Pokémon che ti segue a piedi, la Zona Safari oltre Fiorlisopoli, il Pokéathlon e il Parco Lotta.",
    pages:[
     {n:54,h:"Zona Safari di Johto",s:[
      {"t":"p","n":"Zona Safari di Johto","s":"Stampa","note":"Aggiunta in HeartGold e SoulSilver, oltre Fiorlisopoli sui Percorsi 47 e 48."},
@@ -729,7 +729,7 @@ window.COLLEZIONE={
     ]}
    ]},
   {id:"vetta",title:"La battaglia finale",jp:"さいごのたたかい",
-   desc:"Pagina singola a sinistra, la chiusura del binder: in vetta al Monte Argento, l'ultima battaglia contro Rosso.",
+   desc:"Nessuna musica, solo il vento. Rosso non dice niente: si gira, e la lotta comincia.",
    pages:[
     {n:56,h:"La battaglia finale",s:[
      {"t":"p","n":"Monte Argento","s":"Stampa","note":"La vetta innevata, ultimo luogo del gioco."},
