@@ -7,7 +7,9 @@
   if (!cfg || !cfg.apiKey || !window.firebase) { window.claude = { use: async function(){ return null; } }; return; }
   firebase.initializeApp(cfg);
   var auth = firebase.auth(), fs = firebase.firestore(), FP = firebase.firestore.FieldPath;
-  try { fs.enablePersistence({ synchronizeTabs: true }).catch(function(){}); } catch (e) {}
+  // copia locale per l'uso senza rete: la tiene una finestra sola. Se l'app è aperta anche altrove,
+  // questa finestra va direttamente in rete invece di aspettare l'altra (che il browser può aver sospeso).
+  try { fs.enablePersistence().catch(function(){}); } catch (e) {}
   var authReady = new Promise(function(res){ var un = auth.onAuthStateChanged(function(u){ un(); res(u); }); });
   var isLeo = function(u){ return !!(u && !u.isAnonymous && OWNER && u.uid === OWNER); };
 
