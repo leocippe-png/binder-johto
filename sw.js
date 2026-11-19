@@ -1,5 +1,5 @@
 // Binder Johto · funziona anche senza rete (in fiera): tiene una copia dell'app sul telefono.
-const CACHE = "johto-v15", IMG = "johto-img";
+const CACHE = "johto-v16", IMG = "johto-img";
 const SHELL = ["./", "index.html", "collezione.js", "arte.js", "viaggio.html", "adapter.js", "firebase-config.js", "stato-iniziale.js", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener("activate", e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE && k !== IMG).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
