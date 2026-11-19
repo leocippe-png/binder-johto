@@ -572,7 +572,7 @@ body.preview .preview-bar{display:flex}
 @media (max-width:520px){.item{grid-template-columns:auto auto minmax(0,1fr)}.item .r{grid-column:3}}
 .ck-main{grid-template-columns:auto minmax(0,1fr) minmax(0,240px)}
 @media (max-width:760px){.ck-main{grid-template-columns:auto minmax(0,1fr)}.ck-main .ck-mini{grid-column:1/-1}}
-@media (max-width:420px){.ck-main{grid-template-columns:minmax(0,1fr)}.ck-main .th.big{--w:min(220px,60vw);justify-self:center}}
+
 div.of-row{grid-template-columns:auto minmax(0,1fr) auto}
 div.of-row input[type=text]{grid-column:1/-1}
 .of-sent{font-size:12px;color:var(--own);font-weight:700}
@@ -582,6 +582,37 @@ div.of-row input[type=text]{grid-column:1/-1}
 .wl-prog{height:4px;border-radius:2px;background:var(--line);overflow:hidden;margin-top:4px;width:min(160px,40vw)}
 .wl-prog i{display:block;height:100%;background:var(--own)}
 .group h3 .gh{display:grid;gap:2px}
+/* ---- Ottimizzazione telefono ---- */
+@media (max-width:760px){
+ .controls{grid-template-columns:auto minmax(0,1fr);align-items:center}
+ .controls>#bmode{grid-column:1}.controls>#filters{grid-column:2;min-width:0}.controls>.jump{grid-column:1/-1}
+ body.sf-on .controls>#bmode{grid-column:1/-1}
+ #bmode,#filters{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
+ #bmode::-webkit-scrollbar,#filters::-webkit-scrollbar{display:none}
+ #bmode .chip,#filters .chip{scroll-snap-align:start}
+ body:not(.sf-on) #bmode .sep{display:none}
+ .btn{min-height:40px;padding:8px 14px}
+ input,textarea,select{font-size:16px!important}
+ .item.card{grid-template-columns:auto auto minmax(0,1fr)}.item.card .r{grid-column:3;justify-content:flex-start}
+ .item{gap:4px 10px;padding:10px 12px}
+ .sheet{padding-top:26px}
+ .sheet::before{content:"";position:absolute;top:8px;left:50%;width:42px;height:5px;border-radius:3px;background:var(--line);transform:translateX(-50%)}
+ .sh-own-acts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+ .sh-own-acts .btn{justify-content:center;text-align:center;display:flex;align-items:center}
+ .sh-own-acts .linkbtn{grid-column:1/-1;justify-self:start}
+ .sh-acts{display:grid;grid-template-columns:1fr;gap:8px}
+ .sf-head .sf-pos{display:none}
+ .sf-head h2{font-size:21px}
+ .sf-nav{position:sticky;bottom:calc(66px + env(safe-area-inset-bottom,0px));z-index:3}
+ .sf-nav .btn{box-shadow:var(--shadow);background:var(--paper)}
+ .tq-res{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .dia-it{padding:8px 10px}
+}
+@media (max-width:420px){
+ .ck-main{grid-template-columns:auto minmax(0,1fr)}.ck-main .th.big{--w:112px;justify-self:start}
+ .ck-main .ck-mini{grid-column:1/-1}
+ .ck-pos{flex-wrap:wrap}
+}
 /* Cambia carta (solo Leo) */
 .sheet{max-height:calc(100dvh - 12px);overflow-y:auto;overscroll-behavior:contain}
 .sheet.editing>:not(.k):not(#sh-name):not(#sh-close):not(#cc-form){display:none!important}
@@ -1274,7 +1305,10 @@ document.querySelectorAll("#sh-seg button").forEach(b=>b.onclick=()=>{setSlot(cu
 document.getElementById("sh-offer").onclick=()=>{if(!cur)return;toggleOffer(cur.id);paintSheetViewer()};
 document.getElementById("sh-comment").onclick=()=>{const x=cur;if(!x)return;sheet.hidden=true;scrim.hidden=true;const el=document.getElementById("slot-"+x.id);commentOn(el,document.getElementById("sh-comment"))};
 document.getElementById("sh-wl").onclick=()=>{const x=cur;sheet.hidden=true;scrim.hidden=true;showInList(x)};
-scrim.onclick=close;document.getElementById("sh-close").onclick=close;
+scrim.onclick=close;
+(()=>{let y0=null,dy=0;sheet.addEventListener("touchstart",e=>{y0=sheet.scrollTop<=0&&!sheet.classList.contains("uploading")?e.touches[0].clientY:null;dy=0},{passive:true});
+ sheet.addEventListener("touchmove",e=>{if(y0===null)return;dy=e.touches[0].clientY-y0;if(dy>0){sheet.style.transform=`translate(-50%,${dy}px)`;sheet.style.transition="none"}},{passive:true});
+ sheet.addEventListener("touchend",()=>{if(y0===null)return;sheet.style.transition="";sheet.style.transform="";if(dy>110)close();y0=null})})();document.getElementById("sh-close").onclick=close;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!sheet.hidden)close()});
 
 // ---- Le carte che un amico ha: restano nel suo browser, le manda a Leo copiando il messaggio ----
@@ -1831,9 +1865,9 @@ function renderMods(){const box=document.getElementById("mods");if(!box)return;c
 function saveSf(){try{localStorage.setItem("johto-binder-v2-sf",JSON.stringify(SF))}catch(e){}}
 function paintBm(){document.querySelectorAll("#bmode [data-bm]").forEach(b=>b.setAttribute("aria-pressed",(b.dataset.bm==="sf")===SF.on));
  document.querySelectorAll("#bmode [data-sfv]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.sfv===SF.v));
- document.querySelectorAll(".sf-only").forEach(e=>e.hidden=!SF.on);document.getElementById("binder").hidden=SF.on;document.getElementById("sf").hidden=!SF.on;document.getElementById("filters").hidden=SF.on}
+ document.body.classList.toggle("sf-on",SF.on);document.querySelectorAll(".sf-only").forEach(e=>e.hidden=!SF.on);document.getElementById("binder").hidden=SF.on;document.getElementById("sf").hidden=!SF.on;document.getElementById("filters").hidden=SF.on}
 document.getElementById("bmode").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
- if(b.dataset.bm){const on=b.dataset.bm==="sf";if(on===SF.on)return;SF.on=on;saveSf();paintBm();if(on){renderSf()}else{render();goSpread(curSp)}}
+ if(b.dataset.bm){const on=b.dataset.bm==="sf";if(on===SF.on)return;SF.on=on;saveSf();paintBm();if(on){renderSf();goSpread(curSp)}else{render();goSpread(curSp)}}
  else if(b.dataset.sfv){SF.v=b.dataset.sfv;saveSf();paintBm();renderSf()}});
 function renderSf(){const box=document.getElementById("sf");if(!SF.on||!box)return;const sp=SPREADS[curSp],n=SPREADS.length;
  box.innerHTML=`<div class="sf-head"><h2>${sp.title}</h2><span class="jp">${sp.jp}</span><span class="sf-pos">tappa ${curSp+1} di ${n}</span></div><div class="sf-book" id="sf-book"></div>
