@@ -435,7 +435,7 @@ const goto=document.getElementById("goto");new IntersectionObserver(es=>goto.cla
  function load(){if(ctrl||loading)return;loading=true;
   window.onSpotifyIframeApiReady=API=>{API.createController(document.getElementById("mu-embed"),{uri:pend||"spotify:track:"+TR[0][2],width:"100%",height:80,theme:"dark"},c=>{ctrl=c;
    c.addListener("ready",()=>{if(pend){pend=null;c.play()}});
-   c.addListener("playback_update",e=>{const d=e&&e.data||{};playing=!d.isPaused;if(playing){started=true;disarm()}
+   c.addListener("playback_update",e=>{const d=e&&e.data||{};playing=!d.isPaused;if(playing&&d.position>0){started=true;disarm()}
     // a fine brano passa al successivo
     if(d.isPaused&&wasPlaying&&d.duration&&d.position>=d.duration-1500){wasPlaying=false;playTrack(cur+1);return}wasPlaying=!d.isPaused;paint()})})};
   const sc=document.createElement("script");sc.src="https://open.spotify.com/embed/iframe-api/v1";sc.async=true;
