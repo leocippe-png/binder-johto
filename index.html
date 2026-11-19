@@ -899,6 +899,7 @@ const NOIT=/^(base|neo|ecard)\//;let IMGEN={};try{IMGEN=JSON.parse(localStorage.
 function tcgUrl(x,q){if(x.t!=="c")return "";const [main]=x.s.split(" · ");const m=main.match(/^(.*?)\s+(\S*\d\S*|ONE)$/);if(!m||!TCG[m[1]])return "";
  const id=m[2].split("/")[0],p=TCG[m[1]],lang=NOIT.test(p)||IMGEN[p+"/"+id]?"en":"it";return `https://assets.tcgdex.net/${lang}/${p}/${encodeURIComponent(id)}/${q||"low"}.webp`}
 let UP={};const UPIMG={},upLoading={};
+function imgFrom(b,q){return /assets\.tcgdex\.net/.test(b)?`${b}/${q}.webp`:b}
 const upUrl=v=>typeof v==="string"&&v.startsWith("url:")?v.slice(4):"";
 function imgTag(x,q,cls){const v=UP[x.id];const ov=upUrl(v);
  if(v&&!ov){const k=x.id+"@"+v;return `<img class="${cls}" data-up="${x.id}" alt=""${UPIMG[k]?` src="${UPIMG[k]}"`:""}>`}
@@ -1705,7 +1706,6 @@ const ST_AM={nuova:["Leo deve ancora guardarla",""],fatta:["Leo l'ha accettata",
 // ---- Ricerca su TCGdex (gratuita, senza chiave): italiano prima, poi inglese ----
 const TCGAPI="https://api.tcgdex.net/v2/";const TCG_REV={};Object.entries(TCG).forEach(([k,v])=>TCG_REV[v.split("/")[1]]=k);const SETINFO={};
 // ---- Catalogo carte (TCGdex, tutte le carte esistenti): ricerca per nome, set, numero e codici promo ----
-const imgFrom=(b,q)=>/assets\.tcgdex\.net/.test(b)?`${b}/${q}.webp`:b;
 const PROMO_PFX={svp:"svp",swsh:"swshp",sm:"smp",xy:"xyp",bw:"bwp",hgss:"hgssp",dp:"dpp",np:"np",mep:"mep"};
 let SETS=null;
 async function loadSets(){if(SETS)return SETS;try{const c=JSON.parse(localStorage.getItem(KEY+"-tcgsets")||"null");if(c&&Date.now()-c.t<5*864e5){SETS=c;return SETS}}catch(e){}
