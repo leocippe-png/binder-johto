@@ -68,7 +68,7 @@ button{font:inherit;color:inherit}
 
 /* Controls */
 .controls{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;display:grid;gap:8px;border-bottom:1px solid var(--line)}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--leather)}
 .row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
 .row::-webkit-scrollbar{display:none}
 .chip{flex:none;border:1px solid var(--line);background:var(--paper);border-radius:99px;padding:5px 12px;font-size:13px;cursor:pointer;white-space:nowrap}
@@ -582,6 +582,12 @@ div.of-row input[type=text]{grid-column:1/-1}
 .wl-prog{height:4px;border-radius:2px;background:var(--line);overflow:hidden;margin-top:4px;width:min(160px,40vw)}
 .wl-prog i{display:block;height:100%;background:var(--own)}
 .group h3 .gh{display:grid;gap:2px}
+/* ---- Testi lunghi e link: mai più larghi dello schermo ---- */
+html,body{overflow-x:clip}
+.sg-item,.sg-list,.px-head,.px-head>*,.of-list,.sg-w,.dia-it>span,.leo-r,.cc-ref{min-width:0;max-width:100%}
+.sg-item pre,.cc-ref,.leo-r,.sg-w,.sg-meta,.ck-rt,.item .t,.of-row small{overflow-wrap:anywhere;word-break:break-word}
+.sg-item pre a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--gold)}
+.sg-meta{min-width:0}
 /* ---- Ottimizzazione telefono ---- */
 @media (max-width:760px){
  .controls{grid-template-columns:auto minmax(0,1fr);align-items:center}
@@ -1141,6 +1147,7 @@ const upUrl=v=>typeof v==="string"&&v.startsWith("url:")?v.slice(4):"";
 function imgTag(x,q,cls){const v=UP[x.id];const ov=upUrl(v);
  if(v&&!ov){const k=x.id+"@"+v;return `<img class="${cls}" data-up="${x.id}" alt=""${UPIMG[k]?` src="${UPIMG[k]}"`:""}>`}
  const base=ov||x.img;const u=base?`${base}/${q||"low"}.webp`:tcgUrl(x,q);return u?`<img class="${cls}" alt="" loading="lazy" decoding="async" crossorigin="anonymous" src="${u}" onerror="imgFail(this)">`:""}
+function linkify(t){return esc(t).replace(/https?:\/\/[^\s<]+/g,u=>{const raw=u.replace(/&amp;/g,"&");let host=raw;try{const h=new URL(raw);host=h.hostname.replace(/^www\./,"")+(h.pathname.length>1?"/…":"")}catch(e){}return `<a href="${u}" target="_blank" rel="noopener">${esc(host)}</a>`})}
 function th(x,big){const st=getS(x.id),im=imgTag(x,big?"high":"low","");
  return `<span class="th${big?" big":""} s${st}" style="--era:${x.t==="c"?era(x).c:"#15301f"}" aria-hidden="true">${im||(x.t==="p"?art(x):`<span class="th-ph">${esc(itName(x.n).slice(0,1))}</span>`)}</span>`}
 function imgFail(i){const m=i.src.match(/assets\.tcgdex\.net\/it\/(.+)\/[^/]+\.webp$/);
@@ -1691,7 +1698,7 @@ function sgReset(keepKind){sgSlot=null;sgTcg=null;const r2=document.getElementBy
 $("sg-reset").onclick=()=>sgReset(false);
 function renderMine(){const box=$("sg-mine");
  if(MYMSG&&Object.keys(MYMSG).length){const it=Object.values(MYMSG).sort((a,b)=>b.ts-a.ts);$("sg-mine-h").textContent="Tutto quello che hai mandato a Leo, con la sua risposta.";
-  box.innerHTML=it.map(m=>{const st=ST_AM[m.status]||ST_AM.nuova;return `<article class="sg-item"><div class="sg-meta"><span class="st-b ${st[1]}">${st[0]}</span><span>${new Date(m.ts).toLocaleDateString("it-IT",{day:"numeric",month:"short"})}</span></div><pre>${esc(String(m.text||"").replace(/\n?#johto.*$/gm,"").replace(/^TCGdex: .*$/m,"").trim())}</pre>${m.risposta?`<div class="leo-r"><b>Leo:</b> ${esc(m.risposta)}</div>`:""}</article>`}).join("");return}$("sg-mine-h").textContent=MINE.length?"I suggerimenti che hai mandato a Leo.":"Qui ritrovi i suggerimenti che mandi a Leo.";
+  box.innerHTML=it.map(m=>{const st=ST_AM[m.status]||ST_AM.nuova;return `<article class="sg-item"><div class="sg-meta"><span class="st-b ${st[1]}">${st[0]}</span><span>${new Date(m.ts).toLocaleDateString("it-IT",{day:"numeric",month:"short"})}</span></div><pre>${linkify(String(m.text||"").replace(/\n?#johto.*$/gm,"").replace(/^TCGdex: .*$/m,"").trim())}</pre>${m.risposta?`<div class="leo-r"><b>Leo:</b> ${esc(m.risposta)}</div>`:""}</article>`}).join("");return}$("sg-mine-h").textContent=MINE.length?"I suggerimenti che hai mandato a Leo.":"Qui ritrovi i suggerimenti che mandi a Leo.";
  box.innerHTML=MINE.map(s=>`<article class="sg-item${sgFlash===s.id?" fresh":""}" id="sg-${s.id}"><pre>${esc(sgText(s))}</pre><div class="sg-acts"><button class="btn" data-sg="send" data-id="${s.id}">Manda di nuovo</button>${s.slot?`<button class="btn" data-sg="open" data-id="${s.id}">Vedi la tasca</button>`:""}<button class="linkbtn" data-sg="del" data-id="${s.id}">Elimina</button></div></article>`).join("")}
 $("sg-mine").addEventListener("click",e=>{const b=e.target.closest("[data-sg]");if(!b)return;const s=MINE.find(m=>m.id===b.dataset.id);if(!s)return;
  if(b.dataset.sg==="send")sendSugg(s,b);
@@ -1743,7 +1750,7 @@ function renderProps(){const items=Object.entries(PROPS).filter(([,p])=>p&&p.sta
   const pro=(String(p.text).match(/^TCGdex: (\S+) (\S+)$/m)||[]);
   return `<article class="sg-item st-${p.status}"><div class="px-head">${x?th(x):""}<div style="display:grid;gap:6px;min-width:0"><div class="sg-meta"><b>${esc(p.from||"Amico")}</b>${p.fonte==="commento"?'<span class="src">dai commenti</span>':""}<span>${new Date(p.ts).toLocaleDateString("it-IT",{day:"numeric",month:"short"})}</span>${p.kind==="offerta"?`<span class="src">ce l'ha: ${many.length} ${many.length===1?"carta":"carte"}</span>`:x?`<span>${esc(itName(x.n))} · ${posLabel(x)}</span>`:"<span>idea generale</span>"}
    <span class="sg-st" role="group" aria-label="Decisione">${Object.entries(P_ST).map(([k,l])=>`<button data-ps="${k}" data-v="${k}" data-id="${id}" aria-pressed="${p.status===k}">${l}</button>`).join("")}</span></div>
-   </div></div>${live}${offerBox}${pro[2]?`<div class="px-pro"><img alt="" src="${esc(pro[2])}/low.webp" onerror="imgFail(this)"><span>La carta proposta, scelta dall'amico su TCGdex.</span></div>`:""}<pre>${esc(String(p.text).replace(/^TCGdex: .*$/m,"").trim())}</pre><div class="px-r"><textarea data-pr="${id}" maxlength="500" placeholder="Rispondi a ${esc(p.from||"chi l'ha mandata")}: lo legge nell'app">${esc(p.risposta||"")}</textarea></div><div class="sg-acts"><button class="btn" data-pa="reply" data-id="${id}">${p.risposta?"Aggiorna risposta":"Manda risposta"}</button>${x&&canApply(p)?`<button class="btn primary" data-pa="apply" data-id="${id}">${x.t==="p"?"Cambia la stampa":"Cambia la carta"}</button>`:""}${x?`<button class="btn" data-pa="open" data-id="${id}">Vedi la tasca</button>`:""}<button class="linkbtn" data-pa="del" data-id="${id}">Elimina</button></div></article>`}).join("")
+   </div></div>${live}${offerBox}${pro[2]?`<div class="px-pro"><img alt="" src="${esc(pro[2])}/low.webp" onerror="imgFail(this)"><span>La carta proposta, scelta dall'amico su TCGdex.</span></div>`:""}<pre>${linkify(String(p.text).replace(/^TCGdex: .*$/m,"").trim())}</pre><div class="px-r"><textarea data-pr="${id}" maxlength="500" placeholder="Rispondi a ${esc(p.from||"chi l'ha mandata")}: lo legge nell'app">${esc(p.risposta||"")}</textarea></div><div class="sg-acts"><button class="btn" data-pa="reply" data-id="${id}">${p.risposta?"Aggiorna risposta":"Manda risposta"}</button>${x&&canApply(p)?`<button class="btn primary" data-pa="apply" data-id="${id}">${x.t==="p"?"Cambia la stampa":"Cambia la carta"}</button>`:""}${x?`<button class="btn" data-pa="open" data-id="${id}">Vedi la tasca</button>`:""}<button class="linkbtn" data-pa="del" data-id="${id}">Elimina</button></div></article>`}).join("")
   :`<div class="ce-empty">${pFilter==="nuova"?"Nessuna proposta da valutare.":"Nessuna proposta in questo elenco."}</div>`}
 $("px-filter").addEventListener("click",e=>{const b=e.target.closest("[data-pf]");if(b){pFilter=b.dataset.pf;renderProps()}});
 $("px-list").addEventListener("click",e=>{const b=e.target.closest("[data-ps],[data-pa]");if(!b)return;const id=b.dataset.id,p=PROPS[id];if(!p)return;
