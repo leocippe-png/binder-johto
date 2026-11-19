@@ -9,6 +9,8 @@ Web app gratuita: sito su GitHub Pages, dati su Firebase (piano Spark, gratuito)
 - **Gli amici** non devono accedere: vedono il binder e i progressi, segnano le carte che hanno e mandano suggerimenti a Leo.
 
 ## File
+- `viaggio.html` — «Il viaggio di Johto»: la vista per chi inquadra il QR nel binder (sola lettura, nessun accesso); `qr-viaggio.png` è la stampa 63×88 col QR
+- `arte.js` — illustrazioni delle stampe, condivise tra app e viaggio
 - `index.html` — l'app
 - `collezione.js` — il contenuto di partenza del binder; i cambi fatti dall'app stanno in `binder/modifiche` e si sovrappongono a questo file
 - `firebase-config.js` — configurazione del progetto Firebase e UID di Leo
