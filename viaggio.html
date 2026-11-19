@@ -65,19 +65,20 @@ h1,h2,h3{font-family:var(--f-display);font-weight:800;margin:0;text-wrap:balance
 /* Mappa dei capitoli */
 .map{margin-top:64px;display:grid;gap:18px}
 /* La carta del viaggio: Johto disegnata in oro, come le stampe del binder */
-.jm{max-width:760px;width:100%;margin:0 auto;display:grid;gap:14px}
+.jm{max-width:820px;width:100%;margin:0 auto;display:grid;gap:14px}
 .jm svg{display:block;width:100%;height:auto;border-radius:16px;background:#0b1811;box-shadow:inset 0 0 0 1px var(--line),0 24px 50px rgba(0,0,0,.45)}
 .jm .st{cursor:pointer;outline:none}
-.jm .st circle.b{fill:var(--gold);transition:r .2s ease}
-.jm .st text{font-family:var(--f-mono);font-size:7.5px;font-weight:500;fill:#1a1408;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.jm .st circle.b{fill:#0b1811;stroke:var(--gold);stroke-width:1.6}
+.jm .st text{font-family:var(--f-mono);font-size:10px;font-weight:500;fill:var(--gold-2);text-anchor:middle;dominant-baseline:central;pointer-events:none}
 .jm .st .ring{fill:none;stroke:var(--gold);stroke-width:.8}
-.jm .st:hover circle.b,.jm .st:focus-visible circle.b{fill:var(--gold-2)}
-.jm .st.on circle.b{fill:var(--gold-2);r:9.5}
+.jm .st:hover circle.b,.jm .st:focus-visible circle.b{fill:#1f3d2b}
+.jm .st.on text{fill:#1a1408}
+.jm .st.on circle.b{fill:var(--gold-2);stroke:var(--gold-2)}
 .jm .halo{fill:none;stroke:var(--gold-2);stroke-width:1;opacity:0;transform-box:fill-box;transform-origin:center}
 .jm .st.on .halo{animation:halo 1.8s ease-out infinite}
 @keyframes halo{0%{transform:scale(1);opacity:.9}100%{transform:scale(2.2);opacity:0}}
-.jm .lbl{font-family:var(--f-display);font-size:8.5px;fill:var(--gold);letter-spacing:.04em;pointer-events:none}
-.jm .lbl.k{font-family:var(--f-mono);font-size:8px;letter-spacing:.4em;fill:var(--dim)}
+.jm .lbl{font-family:var(--f-display);font-size:11.5px;font-weight:700;fill:var(--gold-2);letter-spacing:.03em;pointer-events:none;paint-order:stroke;stroke:#0b1811;stroke-width:3px;stroke-linejoin:round}
+.jm .lbl.k{font-family:var(--f-mono);font-size:11px;letter-spacing:.3em;stroke:none}
 .jm-card{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;align-items:start;background:var(--leather-2);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
 .jm-card .n{grid-row:span 3;width:44px;height:44px;border-radius:50%;background:var(--gold);color:var(--leather);display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:17px}
 .jm-card h3{font-size:22px}
@@ -290,37 +291,49 @@ function buildJourney(){const ix={};D.tappe.forEach((t,i)=>ix[t.id]=i);let h="";
  observe()}
 
 
-// ---- La carta del viaggio: Johto in oro, una stazione numerata per ogni tappa ----
-const STOPS={"frontespizio":[238,180],"foglianova":[256,186],"partenza":[246,201],"percorsi-29-32":[197,150],"violapoli":[180,103],"alfa":[150,138],"azalina":[130,197],"lecci":[104,182],"fiordoropoli":[121,155],"percorsi-35-36":[134,118],"amarantopoli":[121,76],"torre-bruciata":[138,63],"olivinopoli":[104,93],"faro":[82,124],"fiorlisopoli":[34,150],"vorticose":[64,184],"lago":[214,28],"mogania":[214,78],"ebanopoli":[276,66],"ho-oh":[106,56],"vittoria":[322,180],"superquattro-1":[338,138],"superquattro-2":[354,128],"campione":[340,118],"luce-ombra":[205,184],"kanto":[372,200],"monte-argento":[352,58],"hgss":[24,96],"vetta":[366,36]};
+// ---- La carta del viaggio: la mappa di Johto della seconda generazione, ridisegnata in oro su verde ----
+// Disposizione presa dalla mappa del Pokégear (Oro, Argento, Cristallo); a destra il riquadro di Kanto
+const TOWNS=[["Olivinopoli",115,190,115,220],["Amarantopoli",220,140,220,168],["Mogania",350,140,350,190],["Ebanopoli",430,140,430,190],["Violapoli",272,190,262,216],["Fiordoropoli",167,297,190,302,"start"],["Azalina",220,403,220,432],["Fiorpescopoli",330,323,345,306,"start"],["Borgo Foglianova",457,323,457,358],["Fiorlisopoli",60,323,60,377]];
+const SPOTS=[[285,140],[430,113],[272,403],[483,218]];
+const ROADS2=[[105,140,440,140],[105,140,105,190,115,190],[220,140,220,190],[168,190,290,190],[168,190,168,403,220,403],[290,190,290,403,220,403],[290,215,330,215,330,323],[330,323,502,323],[405,140,405,323],[350,140,350,87],[430,140,430,113],[405,218,483,218],[60,323,60,300]];
+const STOPS={"frontespizio":[432,298],"foglianova":[457,294],"partenza":[482,298],"percorsi-29-32":[330,262],"violapoli":[272,166],"alfa":[245,245],"azalina":[220,380],"lecci":[168,352],"fiordoropoli":[167,274],"percorsi-35-36":[168,192],"amarantopoli":[220,117],"torre-bruciata":[195,117],"ho-oh":[245,117],"olivinopoli":[105,163],"faro":[88,190],"fiorlisopoli":[60,348],"vorticose":[92,300],"lago":[350,87],"mogania":[350,163],"ebanopoli":[430,163],"vittoria":[405,255],"luce-ombra":[305,332],"hgss":[30,288],
+ "superquattro-1":[556,150],"superquattro-2":[586,150],"campione":[571,124],"kanto":[571,300],"monte-argento":[556,62],"vetta":[586,48]};
+const SEA_W=[[18,205],[60,200],[95,205],[98,250],[122,258],[140,300],[150,335],[150,447],[18,447]];
+const ISL=[[18,282],[46,278],[76,295],[80,338],[56,356],[18,352]];
+const SEA_SE=[[290,346],[352,342],[400,346],[502,342],[502,447],[290,447]];
+const LAKE=[[322,75],[385,68],[378,98],[328,102]];
+const MOUNTS=[[[18,18],[185,18],[185,55],[150,70],[140,105],[95,118],[70,150],[18,150]],[[380,18],[502,18],[502,95],[470,100],[455,70],[400,60],[390,40]],[[470,172],[502,166],[502,300],[476,300],[466,240]],[[205,215],[262,212],[268,282],[240,286],[212,256]],[[255,152],[320,150],[318,178],[262,180]]];
 const GYMS=new Set(["violapoli","azalina","fiordoropoli","amarantopoli","faro","fiorlisopoli","mogania","ebanopoli"]);
-const PLACE_LBL=[["Borgo Foglianova",262,214],["Fiorpescopoli",205,203],["Violapoli",180,88],["Azalina",130,216],["Fiordoropoli",121,173],["Amarantopoli",128,36],["Olivinopoli",58,112],["Fiorlisopoli",34,170],["Mogania",214,96],["Lago d'Ira",214,12],["Ebanopoli",276,84],["Altopiano Blu",352,103],["Monte Argento",345,20],["Isole Vorticose",64,206]];
-const ROUTES=[[247,187,203,183],[203,183,203,120,180,103],[180,103,180,197,130,197],[130,197,103,183,103,153,120,153],[120,153,120,75],[120,103,180,103],[120,75,87,75,87,117],[120,75,275,67],[213,75,213,30],[275,67,275,147,225,147,225,187],[247,187,325,180],[325,180,342,133],[342,133,370,133,370,197],[353,133,353,43],[34,158,24,97]];
-const SEA_TRIP=[[87,125,70,173],[70,173,34,158]];
-function smooth(pts,closed){const P=closed?[pts[pts.length-1],...pts,pts[0],pts[1]]:[pts[0],...pts,pts[pts.length-1]];let d=`M${pts[0][0]},${pts[0][1]}`;
- for(let i=1;i<P.length-2;i++){const[p0,p1,p2,p3]=[P[i-1],P[i],P[i+1],P[i+2]];d+=`C${(p1[0]+(p2[0]-p0[0])/6).toFixed(1)},${(p1[1]+(p2[1]-p0[1])/6).toFixed(1)} ${(p2[0]-(p3[0]-p1[0])/6).toFixed(1)},${(p2[1]-(p3[1]-p1[1])/6).toFixed(1)} ${p2[0]},${p2[1]}`}return d+(closed?"Z":"")}
-const MAIN=[[58,0],[60,30],[66,55],[72,80],[78,100],[86,108],[92,130],[90,150],[96,170],[92,195],[100,214],[122,222],[148,226],[170,214],[188,200],[205,198],[222,208],[244,214],[266,218],[288,226],[320,232],[352,236],[400,238],[400,0]];
-const ISLAND=[[12,74],[34,70],[48,86],[50,118],[46,150],[48,170],[34,180],[16,176],[6,150],[4,110]];
-const wave=(x,y)=>`<path d="M${x},${y}q3,-3 6,0t6,0" />`;
-const mount=(x,y,s=1)=>`<path d="M${x-6*s},${y+4*s}L${x},${y-5*s}L${x+6*s},${y+4*s}M${x-2*s},${y-1*s}L${x},${y+1*s}L${x+2*s},${y-1*s}"/>`;
-function mappa(){const ix={};D.tappe.forEach((t,i)=>ix[t.id]=i);
- const routes=ROUTES.map(r=>{let d=`M${r[0]},${r[1]}`;for(let i=2;i<r.length;i+=2)d+=`L${r[i]},${r[i+1]}`;return `<path d="${d}"/>`}).join("");
+const pts=a=>a.map(p=>p.join(",")).join(" ");
+function mappa(){const roads=ROADS2.map(r=>{let d=`M${r[0]},${r[1]}`;for(let i=2;i<r.length;i+=2)d+=`L${r[i]},${r[i+1]}`;return d}).join("");
  const stations=D.tappe.map((t,i)=>{const c=STOPS[t.id];if(!c)return"";const g=GYMS.has(t.id);
-  return `<g class="st" data-st="${i}" tabindex="0" role="button" aria-label="Tappa ${i+1}: ${esc(t.title)}"><circle cx="${c[0]}" cy="${c[1]}" r="13" fill="transparent"/><circle class="halo" cx="${c[0]}" cy="${c[1]}" r="9"/>${g?`<circle class="ring" cx="${c[0]}" cy="${c[1]}" r="10.5"/>`:""}<circle class="b" cx="${c[0]}" cy="${c[1]}" r="7.5"/><text x="${c[0]}" y="${c[1]+.5}">${i+1}</text></g>`}).join("");
- return `<div class="jm" id="jm"><svg viewBox="0 0 400 250" role="group" aria-label="Carta di Johto: tocca una tappa">
-  <defs><radialGradient id="jm-land" cx="45%" cy="45%" r="75%"><stop offset="0" stop-color="#1d3a28"/><stop offset="1" stop-color="#132a1c"/></radialGradient></defs>
-  <g fill="none" stroke="#d8b765" stroke-opacity=".22" stroke-width=".8">${[[20,30],[30,212],[70,236],[150,240],[18,198],[64,60],[36,40],[120,244],[250,238]].map(([x,y])=>wave(x,y)).join("")}</g>
-  <path d="${smooth(MAIN,true)}" fill="url(#jm-land)" stroke="#d8b765" stroke-width="1.2"/>
-  <path d="${smooth(MAIN,true)}" fill="none" stroke="#d8b765" stroke-opacity=".25" stroke-width="4" transform="translate(0 0)"/>
-  <path d="${smooth(ISLAND,true)}" fill="url(#jm-land)" stroke="#d8b765" stroke-width="1.2"/>
-  <ellipse cx="214" cy="28" rx="15" ry="9" fill="#0b1811" stroke="#d8b765" stroke-width=".9"/>
-  <g fill="#132a1c" stroke="#d8b765" stroke-width=".9"><ellipse cx="58" cy="178" rx="5" ry="3.5"/><ellipse cx="72" cy="192" rx="4.5" ry="3"/><ellipse cx="74" cy="170" rx="3.5" ry="2.5"/><ellipse cx="60" cy="194" rx="3" ry="2"/></g>
-  <line x1="306" y1="6" x2="306" y2="232" stroke="#d8b765" stroke-opacity=".35" stroke-dasharray="1 4" stroke-linecap="round"/>
-  <g fill="none" stroke="#d8b765" stroke-width=".9" stroke-opacity=".75">${mount(340,30,1.3)+mount(356,24,1.6)+mount(372,34,1.2)+mount(246,50)+mount(256,56,.8)+mount(176,52,.9)+mount(84,40,.8)+mount(300,110,.9)+mount(290,120,.7)}</g>
-  <g fill="none" stroke="#d8b765" stroke-opacity=".55" stroke-width="1.1" stroke-dasharray="0.1 3.4" stroke-linecap="round">${routes}</g>
-  <g fill="none" stroke="#d8b765" stroke-opacity=".4" stroke-width=".8" stroke-dasharray="3 3">${SEA_TRIP.map(([a,b,c,d])=>`<path d="M${a},${b}Q${(a+c)/2-6},${(b+d)/2+6} ${c},${d}"/>`).join("")}</g>
-  ${PLACE_LBL.map(([n,x,y])=>`<text class="lbl" x="${x}" y="${y}" text-anchor="middle">${esc(n)}</text>`).join("")}
-  <text class="lbl k" x="252" y="122" text-anchor="middle">JOHTO</text><text class="lbl k" x="352" y="222" text-anchor="middle">KANTO</text>
-  <g transform="translate(24 222)" stroke="#d8b765" fill="none" stroke-width=".8" stroke-opacity=".8"><circle r="11"/><path d="M0,-15L3,0L0,15L-3,0Z" fill="#d8b765" fill-opacity=".35"/><path d="M-15,0L0,3L15,0L0,-3Z"/></g><text class="lbl" x="24" y="203" text-anchor="middle" style="font-size:7px">N</text>
+  return `<g class="st" data-st="${i}" tabindex="0" role="button" aria-label="Tappa ${i+1}: ${esc(t.title)}"><circle cx="${c[0]}" cy="${c[1]}" r="16" fill="transparent"/><circle class="halo" cx="${c[0]}" cy="${c[1]}" r="11"/>${g?`<circle class="ring" cx="${c[0]}" cy="${c[1]}" r="13.5"/>`:""}<circle class="b" cx="${c[0]}" cy="${c[1]}" r="10"/><text x="${c[0]}" y="${c[1]+.5}">${i+1}</text></g>`}).join("");
+ return `<div class="jm" id="jm"><svg viewBox="0 0 646 465" role="group" aria-label="Mappa di Johto: tocca una tappa">
+  <defs><pattern id="jm-sea" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="9" height="9" fill="#0a1610"/><line x1="0" y1="0" x2="0" y2="9" stroke="#d8b765" stroke-opacity=".28" stroke-width="2.4"/></pattern>
+   <pattern id="jm-mt" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><rect width="7" height="7" fill="#24331b"/><line x1="0" y1="0" x2="0" y2="7" stroke="#d8b765" stroke-opacity=".12" stroke-width="1.2"/></pattern></defs>
+  <rect x="6" y="6" width="504" height="453" rx="10" fill="#0b1811" stroke="#d8b765" stroke-width="2"/>
+  <rect x="18" y="18" width="484" height="429" fill="#1b3526"/>
+  ${MOUNTS.map(m=>`<polygon points="${pts(m)}" fill="url(#jm-mt)"/>`).join("")}
+  <polygon points="${pts(SEA_W)}" fill="url(#jm-sea)"/><polygon points="${pts(SEA_SE)}" fill="url(#jm-sea)"/><polygon points="${pts(LAKE)}" fill="url(#jm-sea)"/>
+  <polygon points="${pts(ISL)}" fill="#1b3526"/>
+  <g fill="#1b3526"><rect x="80" y="288" width="12" height="9"/><rect x="98" y="306" width="10" height="8"/><rect x="78" y="312" width="8" height="7"/></g>
+  <path d="${roads}" fill="none" stroke="#d8b765" stroke-opacity=".3" stroke-width="16" stroke-linejoin="miter" stroke-linecap="square"/>
+  <path d="${roads}" fill="none" stroke="#f3dfa2" stroke-opacity=".55" stroke-width="1" stroke-dasharray="2 5"/>
+  <path d="M60,330Q78,300 92,300T112,212" fill="none" stroke="#d8b765" stroke-opacity=".45" stroke-width="1.2" stroke-dasharray="3 4"/>
+  <rect x="18" y="18" width="484" height="429" fill="none" stroke="#d8b765" stroke-opacity=".5" stroke-width="1"/>
+  ${SPOTS.map(([x,y])=>`<circle cx="${x}" cy="${y}" r="6" fill="#d8b765"/>`).join("")}
+  ${TOWNS.map(([n,x,y])=>`<rect x="${x-11}" y="${y-11}" width="22" height="22" fill="#d8b765"/><rect x="${x-5}" y="${y-5}" width="10" height="10" fill="#3b2c0c"/>`).join("")}
+  ${TOWNS.map(([n,x,y,lx,ly,an])=>`<text class="lbl" x="${lx}" y="${ly}" text-anchor="${an||"middle"}">${esc(n)}</text>`).join("")}
+  <text class="lbl" x="350" y="58" text-anchor="middle">Lago d'Ira</text>
+  <g><rect x="414" y="420" width="82" height="22" fill="#0b1811" stroke="#d8b765" stroke-width="1"/><text class="lbl k" x="455" y="435" text-anchor="middle" style="fill:#d8b765">JOHTO</text></g>
+  <rect x="522" y="6" width="118" height="453" rx="10" fill="#0b1811" stroke="#d8b765" stroke-width="2"/>
+  <rect x="532" y="18" width="98" height="429" fill="#1b3526"/>
+  <polygon points="532,18 630,18 630,90 600,96 560,84 532,92" fill="url(#jm-mt)"/>
+  <polygon points="532,380 630,370 630,447 532,447" fill="url(#jm-sea)"/>
+  <path d="M502,323H545V200H571V124M571,124V62M545,240H571V300" fill="none" stroke="#d8b765" stroke-opacity=".3" stroke-width="12" stroke-linecap="square"/>
+  <rect x="560" y="113" width="22" height="22" fill="none"/><text class="lbl" x="571" y="183" text-anchor="middle">Altopiano Blu</text><text class="lbl" x="571" y="30" text-anchor="middle">Monte Argento</text><text class="lbl" x="571" y="330" text-anchor="middle">Kanto</text>
+  <text class="lbl" x="571" y="222" text-anchor="middle" style="font-size:9px;fill:#a99a6e">Via Vittoria</text>
+  <g><rect x="538" y="420" width="88" height="22" fill="#0b1811" stroke="#d8b765" stroke-width="1"/><text class="lbl k" x="582" y="435" text-anchor="middle" style="fill:#d8b765">KANTO</text></g>
   ${stations}</svg>
   <div class="jm-card" id="jm-card" aria-live="polite"></div>
   <p class="jm-hint">Ogni numero è una tappa del binder, nello stesso ordine delle pagine. I cerchi doppi sono le palestre.</p></div>`}
