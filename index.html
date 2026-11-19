@@ -795,7 +795,7 @@ html,body{overflow-x:clip}
   <div class="sh-chg owner-only" id="sh-chg" hidden></div>
   <div class="sh-own-acts owner-only"><button class="btn" id="sh-change">Cambia carta</button><label class="btn" id="sh-up-l">Carica immagine<input type="file" id="sh-up" accept="image/*" class="sr"></label><button class="btn" id="sh-pick">Cerca un'altra immagine</button><button class="btn" id="sh-swap">Scambia con un'altra tasca</button><button class="linkbtn" id="sh-up-del" hidden>Togli l'immagine scelta</button></div>
   <div class="pk-panel owner-only" id="pk-panel" hidden><p class="cc-was">Scegli l'immagine da mostrare per questa tasca. La carta resta la stessa.</p>
-   <div class="tq"><div class="tq-row"><input id="pk-q" type="search" autocomplete="off" enterkeyhint="search"><button type="button" class="btn" id="pk-qb">Cerca</button></div><span class="sg-hint" id="pk-qh"></span><div class="tq-res" id="pk-res"></div></div>
+   <div class="tq"><div class="tq-row"><input id="pk-q" type="search" autocomplete="off" enterkeyhint="search"><button type="button" class="btn" id="pk-qb">Cerca</button></div><span class="sg-hint" id="pk-qh"></span><div class="tq-res" id="pk-res"></div><div class="tq-row"><input id="pk-url" type="url" inputmode="url" placeholder="…oppure incolla il link di un'immagine (https://…)" autocomplete="off" style="flex:1;min-width:0;font:inherit;font-size:16px;padding:9px 12px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink)"><button type="button" class="btn" id="pk-urlb">Usa</button></div></div>
    <div class="sg-acts"><button class="btn" id="pk-cancel">Annulla</button></div></div>
   <div class="sw-panel owner-only" id="sw-panel" hidden><p class="cc-was" id="sw-was"></p>
    <input type="search" id="sw-q" class="sw-q" placeholder="Cerca la tasca: nome, numero o pagina (es. 27)" autocomplete="off" style="font:inherit;font-size:16px;padding:9px 12px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink)">
@@ -806,7 +806,7 @@ html,body{overflow-x:clip}
    <p class="cc-was" id="cc-was"></p>
    <p class="cc-ref" id="cc-ref" hidden></p>
    <div class="tq"><span class="sg-lbl">Cerca la carta</span><div class="tq-row"><input id="cc-q" type="search" placeholder="Nome, anche con il numero: es. Jasmine 145" autocomplete="off" enterkeyhint="search"><button type="button" class="btn" id="cc-qb">Cerca</button></div>
-    <span class="sg-hint" id="cc-qh">Cerco su TCGdex, prima le carte italiane: toccane una e compilo io nome, set, numero e immagine.</span><div class="tq-res" id="cc-res"></div></div>
+    <span class="sg-hint" id="cc-qh">Cerco su TCGdex, prima le carte italiane: toccane una e compilo io nome, set, numero e immagine.</span><div class="tq-res" id="cc-res"></div><input id="cc-url" type="url" inputmode="url" placeholder="…oppure incolla il link di un'immagine (https://…)" autocomplete="off" style="font:inherit;font-size:16px;padding:9px 12px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink)"></div>
    <fieldset><legend>Cosa ci metti</legend><div class="sg-kinds"><label><input type="radio" name="cct" value="c"><span>Una carta</span></label><label><input type="radio" name="cct" value="p"><span>Una stampa</span></label></div></fieldset>
    <label class="sg-field"><span class="sg-lbl">Nome</span><input id="cc-n" maxlength="80" autocomplete="off" required></label>
    <label class="sg-field"><span class="sg-lbl" id="cc-s-l">Set e numero</span><input id="cc-s" list="cc-sets" maxlength="80" autocomplete="off" autocapitalize="off"><span class="sg-hint" id="cc-s-h"></span></label>
@@ -902,7 +902,7 @@ let UP={};const UPIMG={},upLoading={};
 const upUrl=v=>typeof v==="string"&&v.startsWith("url:")?v.slice(4):"";
 function imgTag(x,q,cls){const v=UP[x.id];const ov=upUrl(v);
  if(v&&!ov){const k=x.id+"@"+v;return `<img class="${cls}" data-up="${x.id}" alt=""${UPIMG[k]?` src="${UPIMG[k]}"`:""}>`}
- const base=ov||x.img;const u=base?`${base}/${q||"low"}.webp`:tcgUrl(x,q);return u?`<img class="${cls}" alt="" loading="lazy" decoding="async" crossorigin="anonymous" src="${u}" onerror="imgFail(this)">`:""}
+ const base=ov||x.img;const u=base?imgFrom(base,q||"low"):tcgUrl(x,q);return u?`<img class="${cls}" alt="" loading="lazy" decoding="async" crossorigin="anonymous" src="${u}" onerror="imgFail(this)">`:""}
 function linkify(t){return esc(t).replace(/https?:\/\/[^\s<]+/g,u=>{const raw=u.replace(/&amp;/g,"&");let host=raw;try{const h=new URL(raw);host=h.hostname.replace(/^www\./,"")+(h.pathname.length>1?"/…":"")}catch(e){}return `<a href="${u}" target="_blank" rel="noopener">${esc(host)}</a>`})}
 function th(x,big){const st=getS(x.id),im=imgTag(x,big?"high":"low","");
  return `<span class="th${big?" big":""} s${st}" style="--era:${x.t==="c"?era(x).c:"#15301f"}" aria-hidden="true">${im||(x.t==="p"?art(x):`<span class="th-ph">${esc(itName(x.n).slice(0,1))}</span>`)}</span>`}
@@ -1506,7 +1506,7 @@ function renderProps(){const items=Object.entries(PROPS).filter(([,p])=>p&&p.sta
   const pro=(String(p.text).match(/^TCGdex: (\S+) (\S+)$/m)||[]);
   return `<article class="sg-item st-${p.status}"><div class="px-head">${x?th(x):""}<div style="display:grid;gap:6px;min-width:0"><div class="sg-meta"><b>${esc(p.from||"Amico")}</b>${p.fonte==="commento"?'<span class="src">dai commenti</span>':""}<span>${new Date(p.ts).toLocaleDateString("it-IT",{day:"numeric",month:"short"})}</span>${p.kind==="offerta"?`<span class="src">ce l'ha: ${many.length} ${many.length===1?"carta":"carte"}</span>`:x?`<span>${esc(itName(x.n))} · ${posLabel(x)}</span>`:"<span>idea generale</span>"}
    <span class="sg-st" role="group" aria-label="Decisione">${Object.entries(P_ST).map(([k,l])=>`<button data-ps="${k}" data-v="${k}" data-id="${id}" aria-pressed="${p.status===k}">${l}</button>`).join("")}</span></div>
-   </div></div>${live}${offerBox}${pro[2]?`<div class="px-pro"><img alt="" src="${esc(pro[2])}/low.webp" onerror="imgFail(this)"><span>La carta proposta, scelta dall'amico su TCGdex.</span></div>`:""}<pre>${linkify(String(p.text).replace(/^TCGdex: .*$/m,"").trim())}</pre><div class="px-r"><textarea data-pr="${id}" maxlength="500" placeholder="Rispondi a ${esc(p.from||"chi l'ha mandata")}: lo legge nell'app">${esc(p.risposta||"")}</textarea></div><div class="sg-acts"><button class="btn" data-pa="reply" data-id="${id}">${p.risposta?"Aggiorna risposta":"Manda risposta"}</button>${x&&canApply(p)?`<button class="btn primary" data-pa="apply" data-id="${id}">${x.t==="p"?"Cambia la stampa":"Cambia la carta"}</button>`:""}${x?`<button class="btn" data-pa="open" data-id="${id}">Vedi la tasca</button>`:""}<button class="linkbtn" data-pa="del" data-id="${id}">Elimina</button></div></article>`}).join("")
+   </div></div>${live}${offerBox}${pro[2]?`<div class="px-pro"><img alt="" src="${esc(imgFrom(pro[2],"low"))}" onerror="imgFail(this)"><span>La carta proposta, scelta dall'amico su TCGdex.</span></div>`:""}<pre>${linkify(String(p.text).replace(/^TCGdex: .*$/m,"").trim())}</pre><div class="px-r"><textarea data-pr="${id}" maxlength="500" placeholder="Rispondi a ${esc(p.from||"chi l'ha mandata")}: lo legge nell'app">${esc(p.risposta||"")}</textarea></div><div class="sg-acts"><button class="btn" data-pa="reply" data-id="${id}">${p.risposta?"Aggiorna risposta":"Manda risposta"}</button>${x&&canApply(p)?`<button class="btn primary" data-pa="apply" data-id="${id}">${x.t==="p"?"Cambia la stampa":"Cambia la carta"}</button>`:""}${x?`<button class="btn" data-pa="open" data-id="${id}">Vedi la tasca</button>`:""}<button class="linkbtn" data-pa="del" data-id="${id}">Elimina</button></div></article>`}).join("")
   :`<div class="ce-empty">${pFilter==="nuova"?"Nessuna proposta da valutare.":"Nessuna proposta in questo elenco."}</div>`}
 $("px-filter").addEventListener("click",e=>{const b=e.target.closest("[data-pf]");if(b){pFilter=b.dataset.pf;renderProps()}});
 $("px-list").addEventListener("click",e=>{const b=e.target.closest("[data-ps],[data-pa]");if(!b)return;const id=b.dataset.id,p=PROPS[id];if(!p)return;
@@ -1556,12 +1556,12 @@ function startEdit(x,opt={}){if(!isOwnerView())return;ccSlot=x.id;ccProp=opt.pro
  const g=opt.guess||{};ccForm.querySelector(`input[name="cct"][value="${opt.t||x.t}"]`).checked=true;
  document.getElementById("cc-n").value=g.n||"";document.getElementById("cc-s").value=g.s||"";document.getElementById("cc-note").value="";
  document.getElementById("cc-arita").checked=false;document.getElementById("cc-pers").checked=false;document.getElementById("cc-err").textContent="";
- ccPick=null;document.getElementById("cc-q").value=opt.guess&&opt.guess.n?(opt.guess.n+" "+(opt.guess.s||"").replace(/^.*?\s(?=\S*\d)/,"")).trim():"";document.getElementById("cc-res").innerHTML="";
+ ccPick=null;document.getElementById("cc-url").value="";document.getElementById("cc-q").value=opt.guess&&opt.guess.n?(opt.guess.n+" "+(opt.guess.s||"").replace(/^.*?\s(?=\S*\d)/,"")).trim():"";document.getElementById("cc-res").innerHTML="";
  ccLabels();ccSeg();ccPrev();sheet.classList.add("editing");ccForm.hidden=false;sheet.scrollTop=0;
  if(document.getElementById("cc-q").value&&x.t==="c"){tqRun("cc")}else document.getElementById(ccType()==="c"?"cc-q":"cc-n").focus()}
 function ccCard(){const t=ccType();return{id:"tmp",t,n:clean(document.getElementById("cc-n").value),s:t==="c"?canonSet(clean(document.getElementById("cc-s").value)):"",f:[],img:ccPick?ccPick.img:""}}
 let ccPT=0;function ccPrev(){clearTimeout(ccPT);ccPT=setTimeout(()=>{const c=ccCard(),box=document.getElementById("cc-prev");if(c.t!=="c"){box.hidden=true;return}
- const u=c.img?c.img+"/low.webp":tcgUrl(c,"low");const im=document.getElementById("cc-prev-img"),t=document.getElementById("cc-prev-t");box.hidden=!c.n&&!c.s;
+ const u=c.img?imgFrom(c.img,"low"):tcgUrl(c,"low");const im=document.getElementById("cc-prev-img"),t=document.getElementById("cc-prev-t");box.hidden=!c.n&&!c.s;
  if(!u){im.removeAttribute("src");t.textContent=c.s?"Nessuna immagine per questo set: cercala qui sopra, o carica la tua foto dopo il salvataggio.":"";return}
  t.textContent="Anteprima dell'immagine che vedrai nel binder.";im.onerror=()=>{if(im.src.includes("/it/"))im.src=im.src.replace("/it/","/en/");else{im.removeAttribute("src");t.textContent="Immagine non trovata con questo set e numero: prova a cercarla qui sopra."}};im.src=u},250)}
 document.getElementById("cc-s").addEventListener("input",()=>{ccPick=null;markPick("cc",null);ccPrev()});document.getElementById("cc-n").addEventListener("input",ccPrev);
@@ -1704,21 +1704,50 @@ const ST_AM={nuova:["Leo deve ancora guardarla",""],fatta:["Leo l'ha accettata",
 
 // ---- Ricerca su TCGdex (gratuita, senza chiave): italiano prima, poi inglese ----
 const TCGAPI="https://api.tcgdex.net/v2/";const TCG_REV={};Object.entries(TCG).forEach(([k,v])=>TCG_REV[v.split("/")[1]]=k);const SETINFO={};
-async function tcgSearch(q){q=String(q||"").trim();const m=q.match(/(?:^|\s)#?([a-z]{0,3}\d{1,3})(?:\s*\/\s*\S+)?\s*$/i);const num=m?m[1].toLowerCase().replace(/^([a-z]*)0+(?=\d)/,"$1"):"";const name=(m?q.slice(0,m.index):q).trim();if(name.length<2)return[];
- const get=l=>fetch(`${TCGAPI}${l}/cards?name=${encodeURIComponent(name)}&pagination:itemsPerPage=60`).then(r=>r.ok?r.json():[]).catch(()=>[]);
- const [it,en]=await Promise.all([get("it"),get("en")]);const out=new Map();
- [...it.map(c=>({...c,lang:"it"})),...en.map(c=>({...c,lang:"en"}))].forEach(c=>{if(!c.image||/\/tcgp\//.test(c.image))return;
-  const o=out.get(c.id);if(o){if(c.lang==="en")o.en=c.name;return}out.set(c.id,{id:c.id,set:c.id.slice(0,c.id.lastIndexOf("-")),localId:c.localId,name:c.name,img:c.image,lang:c.lang,en:c.lang==="en"?c.name:""})});
- let r=[...out.values()];if(num)r=r.filter(c=>c.localId.toLowerCase().replace(/^([a-z]*)0+(?=\d)/,"$1")===num);
- return r.sort((a,b)=>(TCG_REV[b.set]?1:0)-(TCG_REV[a.set]?1:0)||(a.lang==="it"?-1:1)-(b.lang==="it"?-1:1)).slice(0,40)}
-async function setInfo(id){if(SETINFO[id])return SETINFO[id];try{const d=await (await fetch(`${TCGAPI}en/sets/${encodeURIComponent(id)}`)).json();SETINFO[id]={name:TCG_REV[id]||d.name,tot:d.cardCount&&d.cardCount.official||""}}catch(e){SETINFO[id]={name:TCG_REV[id]||id,tot:""}}return SETINFO[id]}
+// ---- Catalogo carte (TCGdex, tutte le carte esistenti): ricerca per nome, set, numero e codici promo ----
+const imgFrom=(b,q)=>/assets\.tcgdex\.net/.test(b)?`${b}/${q}.webp`:b;
+const PROMO_PFX={svp:"svp",swsh:"swshp",sm:"smp",xy:"xyp",bw:"bwp",hgss:"hgssp",dp:"dpp",np:"np",mep:"mep"};
+let SETS=null;
+async function loadSets(){if(SETS)return SETS;try{const c=JSON.parse(localStorage.getItem(KEY+"-tcgsets")||"null");if(c&&Date.now()-c.t<5*864e5){SETS=c;return SETS}}catch(e){}
+ const [en,it]=await Promise.all(["en","it"].map(l=>fetch(`${TCGAPI}${l}/sets`).then(r=>r.ok?r.json():[]).catch(()=>[])));
+ const name={},by={};en.forEach(x=>{name[x.id]={en:x.name};by[norm(x.name)]=x.id});it.forEach(x=>{(name[x.id]=name[x.id]||{}).it=x.name;by[norm(x.name)]=x.id});
+ Object.entries(TCG).forEach(([k,v])=>{const id=v.split("/")[1];by[norm(k)]=id;if(SET_IT[k])by[norm(SET_IT[k])]=id});
+ SETS={t:Date.now(),name,by};if(en.length)try{localStorage.setItem(KEY+"-tcgsets",JSON.stringify(SETS))}catch(e){}return SETS}
+const setLabel=id=>TCG_REV[id]?setIt(TCG_REV[id]):(SETS&&SETS.name[id]&&(SETS.name[id].it||SETS.name[id].en))||id;
+const nNum=n=>String(n||"").toLowerCase().replace(/^([a-z]*)0+(?=\d)/,"$1");
+// "Wobbuffet SVP-203", "Jasmine 145/181", "Rivali Predestinati 203", "Lugia Neo Genesis 9", "TG12", "SWSH050"…
+function parseTq(q){let rest=" "+String(q||"").trim()+" ",set=null,num=null,pfx=null,m;
+ if(m=rest.match(/[\s(](svp|swsh|sm|xy|bw|hgss|dp|np|mep)\s*[-#]?\s*(\d{1,3})(?=[\s),.]|$)/i)){pfx=m[1].toLowerCase();set=PROMO_PFX[pfx];num=m[2];rest=rest.replace(m[0]," ")}
+ if(!num&&(m=rest.match(/\s#?([a-z]{0,3}\d{1,3})(?:\s*\/\s*[a-z]{0,3}\d{1,3})?(?=\s)/i))){num=m[1];rest=rest.replace(m[0]," ")}
+ const raw=rest.replace(/\s+/g," ").trim();let n=norm(raw),api=raw;const full=raw;let fromName=false;
+ if(!set&&SETS){let best="";for(const k in SETS.by)if(k.length>3&&(" "+n+" ").includes(" "+k+" ")&&k.length>best.length)best=k;if(best){set=SETS.by[best];fromName=true;n=(" "+n+" ").replace(" "+best+" "," ").trim();const bw=best.split(" ");api=raw.split(" ").filter(w=>!bw.includes(norm(w))).join(" ")}}
+ return{name:api,set,num,pfx,full,fromName}}
+function numVariants(num,pfx){const d=String(num),v=[d,d.padStart(3,"0"),d.padStart(2,"0")];if(pfx){const P=pfx.toUpperCase();v.push(P+d,P+d.padStart(3,"0"),P+d.padStart(2,"0"))}return[...new Set(v)]}
+async function cardDirect(set,num,pfx){for(const v of numVariants(num,pfx))for(const l of["it","en"]){try{const r=await fetch(`${TCGAPI}${l}/sets/${encodeURIComponent(set)}/${encodeURIComponent(v)}`);if(r.ok){const d=await r.json();if(d&&d.id)return{...d,lang:l}}}catch(e){}}return null}
+async function tcgSearch(q){await loadSets();const P=parseTq(q);let r=await tcgRun(P);
+ // «Wobbuffet del Team Rocket»: se il set trovato nel nome non dà risultati, cerco il nome intero
+ if(!r.length&&P.fromName&&P.full){r=await tcgRun({...P,name:P.full,set:null,fromName:false})}return r}
+async function tcgRun(P){const out=new Map();
+ const add=(c,l)=>{if(!c||!c.id||c.image&&/\/tcgp\//.test(c.image)||/^(A|B|P-A)\d/i.test(c.id))return;const set=c.set&&c.set.id||c.id.slice(0,c.id.lastIndexOf("-"));const o=out.get(c.id);
+  if(o){if(l==="en")o.en=c.name;if(!o.img&&c.image)o.img=c.image;return}out.set(c.id,{id:c.id,set,localId:c.localId,name:c.name,img:c.image||"",lang:l,en:l==="en"?c.name:""})};
+ if(P.set&&P.num){const d=await cardDirect(P.set,P.num,P.pfx);if(d)add(d,d.lang)}
+ if(P.name.length>=2){const get=l=>fetch(`${TCGAPI}${l}/cards?name=${encodeURIComponent(P.name)}&pagination:itemsPerPage=250`).then(r=>r.ok?r.json():[]).catch(()=>[]);
+  const [it,en]=await Promise.all([get("it"),get("en")]);it.forEach(c=>add(c,"it"));en.forEach(c=>add(c,"en"))}
+ else if(P.set&&!P.num){for(const l of["it","en"]){try{const d=await (await fetch(`${TCGAPI}${l}/sets/${encodeURIComponent(P.set)}`)).json();(d.cards||[]).forEach(c=>add({...c,set:{id:P.set}},l));if(out.size)break}catch(e){}}}
+ let r=[...out.values()];if(P.set)r=r.filter(c=>c.set===P.set);if(P.num)r=r.filter(c=>{const a=nNum(c.localId),b=nNum(P.num);return a===b||a.replace(/^[a-z]+/,"")===b.replace(/^[a-z]+/,"")});
+ // le immagini che l'API non indica spesso esistono: le ricostruisco dalla serie del set
+ const miss=[...new Set(r.filter(c=>!c.img).map(c=>c.set))].slice(0,12);await Promise.all(miss.map(setInfo));
+ r.forEach(c=>{if(!c.img){const si=SETINFO[c.set];if(si&&si.serie)c.img=`https://assets.tcgdex.net/${c.lang}/${si.serie}/${c.set}/${c.localId}`}});
+ const nq=norm(P.name);return r.sort((a,b)=>(norm(b.name)===nq||norm(b.en)===nq?1:0)-(norm(a.name)===nq||norm(a.en)===nq?1:0)||(TCG_REV[b.set]?1:0)-(TCG_REV[a.set]?1:0)||(a.lang==="it"?-1:1)-(b.lang==="it"?-1:1)).slice(0,60)}
+async function setInfo(id){if(SETINFO[id])return SETINFO[id];try{const d=await (await fetch(`${TCGAPI}en/sets/${encodeURIComponent(id)}`)).json();const promo=/p$/.test(id)||/promo/i.test(d.name||"");
+  SETINFO[id]={name:TCG_REV[id]||d.name,tot:promo?"":(d.cardCount&&d.cardCount.official||""),serie:d.serie&&d.serie.id||""}}catch(e){SETINFO[id]={name:TCG_REV[id]||id,tot:"",serie:""}}return SETINFO[id]}
 const TQ={cc:[],pk:[]};
 function markPick(k,id){document.querySelectorAll(`#${k}-res .tq-it`).forEach(b=>b.setAttribute("aria-pressed",b.dataset.tq===id))}
 async function tqRun(k){const q=document.getElementById(k+"-q").value,hint=document.getElementById(k+"-qh"),res=document.getElementById(k+"-res");
  if(q.trim().length<2){res.innerHTML="";return}if(!navigator.onLine){hint.textContent="Sei senza rete: la ricerca riparte quando torni online.";return}
  hint.textContent="Cerco…";const r=await tcgSearch(q);TQ[k]=r;
- hint.textContent=r.length?`${r.length} ${r.length===1?"carta trovata":"carte trovate"}${r.length===40?" (le prime 40: aggiungi il numero per restringere)":""}. Tocca quella giusta.`:"Nessuna carta trovata: prova il nome inglese, o togli il numero.";
- res.innerHTML=r.map(c=>`<button type="button" class="tq-it" data-tq="${esc(c.id)}"><img loading="lazy" alt="" src="${esc(c.img)}/low.webp" onerror="imgFail(this)"><b>${esc(c.name)}</b><small>${esc(TCG_REV[c.set]?setIt(TCG_REV[c.set]):c.set)} · ${esc(c.localId)}${c.lang==="en"?" · EN":""}</small></button>`).join("")}
+ hint.textContent=r.length?`${r.length} ${r.length===1?"carta trovata":"carte trovate"}${r.length===60?" (le prime 60: aggiungi set o numero per restringere)":""}. Tocca quella giusta.`:"Nessuna carta trovata: prova il nome inglese, il set (es. Rivali Predestinati 203) o il codice promo (es. SVP-203). Se non c'è, incolla qui sotto il link di un'immagine.";
+ res.innerHTML=r.map(c=>`<button type="button" class="tq-it" data-tq="${esc(c.id)}"><img loading="lazy" alt="" src="${esc(imgFrom(c.img,"low"))}" onerror="imgFail(this)"><b>${esc(c.name)}</b><small>${esc(setLabel(c.set))} · ${esc(c.localId)}${c.lang==="en"?" · EN":""}</small></button>`).join("")}
 let tqT={};["cc","pk"].forEach(k=>{const i=document.getElementById(k+"-q");i.addEventListener("input",()=>{clearTimeout(tqT[k]);tqT[k]=setTimeout(()=>tqRun(k),450)});
  i.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();clearTimeout(tqT[k]);tqRun(k)}});document.getElementById(k+"-qb").onclick=()=>tqRun(k)});
 document.getElementById("cc-res").addEventListener("click",e=>{const b=e.target.closest("[data-tq]");if(!b)return;const c=TQ.cc.find(z=>z.id===b.dataset.tq);if(!c)return;markPick("cc",c.id);ccApply(c)});
@@ -1768,13 +1797,21 @@ async function ccApply(c){const si=await setInfo(c.set);ccForm.querySelector('in
 document.getElementById("sg-qb").onclick=async()=>{const q=document.getElementById("sg-new").value.trim(),hint=document.getElementById("sg-qh"),res=document.getElementById("sg-res2");
  if(q.length<2){hint.textContent="Scrivi prima il nome della carta qui sopra.";document.getElementById("sg-new").focus();return}
  hint.textContent="Cerco…";const r=await tcgSearch(q);TQ.sg=r;hint.textContent=r.length?"Tocca la carta giusta: Leo la vedrà con l'immagine.":"Nessuna carta trovata: prova il nome inglese, o togli il numero.";
- res.innerHTML=r.map(c=>`<button type="button" class="tq-it" data-tq="${esc(c.id)}" aria-pressed="${sgTcg&&sgTcg.id===c.id}"><img loading="lazy" alt="" src="${esc(c.img)}/low.webp" onerror="imgFail(this)"><b>${esc(c.name)}</b><small>${esc(TCG_REV[c.set]?setIt(TCG_REV[c.set]):c.set)} · ${esc(c.localId)}</small></button>`).join("")};
+ res.innerHTML=r.map(c=>`<button type="button" class="tq-it" data-tq="${esc(c.id)}" aria-pressed="${sgTcg&&sgTcg.id===c.id}"><img loading="lazy" alt="" src="${esc(imgFrom(c.img,"low"))}" onerror="imgFail(this)"><b>${esc(c.name)}</b><small>${esc(setLabel(c.set))} · ${esc(c.localId)}</small></button>`).join("")};
 document.getElementById("sg-res2").addEventListener("click",async e=>{const b=e.target.closest("[data-tq]");if(!b)return;const c=(TQ.sg||[]).find(z=>z.id===b.dataset.tq);if(!c)return;sgTcg=c;
  document.querySelectorAll("#sg-res2 .tq-it").forEach(z=>z.setAttribute("aria-pressed",z===b));const si=await setInfo(c.set);document.getElementById("sg-new").value=`${c.name} ${si.name} ${c.localId}${si.tot?"/"+si.tot:""}`;sgWarn()});
 document.getElementById("sg-new").addEventListener("input",()=>{if(sgTcg){sgTcg=null;document.querySelectorAll("#sg-res2 .tq-it").forEach(z=>z.setAttribute("aria-pressed","false"))}});
 // Mancolista stampe: carica il file direttamente dalla riga
 document.getElementById("list-stampe").addEventListener("click",e=>{const b=e.target.closest("[data-up-go]");if(!b)return;e.preventDefault();e.stopPropagation();const x=byId[b.dataset.upGo];open(x);document.getElementById("sh-up").click()},true);
 (()=>{const b=document.getElementById("nofile-stampe");if(!b)return;b.onclick=()=>{WL.stampe.nofile=!WL.stampe.nofile;b.setAttribute("aria-pressed",WL.stampe.nofile);b.textContent=WL.stampe.nofile?"Solo senza file: sì":"Solo senza file";renderLists()}})();
+
+// link d'immagine incollato a mano: per carte che nessun catalogo ha ancora
+const okUrl=u=>/^https:\/\/\S+$/i.test(String(u||"").trim());
+document.getElementById("cc-url").addEventListener("change",e=>{const u=e.target.value.trim();if(!u){if(ccPick&&!/tcgdex/.test(ccPick.img))ccPick=null;ccPrev();return}
+ if(!okUrl(u)){document.getElementById("cc-err").textContent="Il link deve iniziare con https://";return}document.getElementById("cc-err").textContent="";ccPick={img:u,en:ccPick&&ccPick.en||""};markPick("cc",null);ccPrev()});
+document.getElementById("pk-urlb").onclick=()=>{const u=document.getElementById("pk-url").value.trim(),x=cur;if(!x||!okUrl(u)){flashBtn(document.getElementById("pk-urlb"),"Serve un link https://");return}
+ if(!upRef){flashBtn(document.getElementById("pk-urlb"),"Riprova tra un attimo");return}const old=UP[x.id],v="url:"+u;setUps({[x.id]:v}).catch(()=>vtoast("<span>Non sono riuscito a salvare l'immagine: riprova.</span>"));UP={...UP,[x.id]:v};
+ if(typeof old==="number")DB.doc("stampe/"+x.id).delete().catch(()=>{});else dropUpDoc(old);document.getElementById("pk-url").value="";endPick();render();open(byId[x.id]);flashBtn(document.getElementById("sh-change"),"Immagine aggiornata")};
 
 // ---- Rete: in fiera si lavora anche offline, e lo diciamo ----
 function netState(){if(!navigator.onLine){setSync("offline")}else if(document.getElementById("sync").dataset.state==="offline")setSync(isOwnerView()?"on":"view")}
