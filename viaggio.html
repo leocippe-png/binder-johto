@@ -100,17 +100,14 @@ h1,h2,h3{font-family:var(--f-display);font-weight:800;margin:0;text-wrap:balance
 .pk img,.pk svg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .ph{position:absolute;inset:0;display:grid;align-content:end;gap:3px;padding:8px;text-align:left;background:linear-gradient(170deg,var(--era,#2a4a37),#0e1d14 75%)}
 .ph b{font-size:12px;line-height:1.2}.ph small{font-family:var(--f-mono);font-size:9.5px;color:var(--muted)}
-.pk .ar{position:absolute;left:5px;top:5px;z-index:2;font-size:9px;font-weight:700;background:rgba(12,26,18,.8);color:var(--gold-2);border:1px solid var(--gold);border-radius:4px;padding:1px 5px}
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s ease}
 .reveal.in{opacity:1;transform:none}
 @media (max-width:760px){.book{grid-template-columns:minmax(0,1fr);gap:16px;padding:10px}.book::before{display:none}.pg.empty{display:none}.stop-head{grid-template-columns:minmax(0,1fr)}.stop-n{display:none}.stop-head>*{grid-column:1!important}}
 
-/* Arita e medaglie */
+/* Medaglie */
 .band{margin-top:130px;padding-block:70px;background:linear-gradient(180deg,transparent,var(--leather-2) 18%,var(--leather-2) 82%,transparent)}
 .band h2{font-size:clamp(28px,6vw,42px);text-align:center}
 .band p.sub{text-align:center;color:var(--muted);max-width:56ch;margin:10px auto 0}
-.strip{display:flex;gap:14px;overflow-x:auto;padding:26px 4px 10px;scroll-snap-type:x mandatory;scrollbar-width:thin}
-.strip .pk{flex:none;width:clamp(120px,30vw,170px);scroll-snap-align:start}
 .medals{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:30px}
 .medals .pk{cursor:zoom-in}
 @media (max-width:560px){.medals{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -173,20 +170,13 @@ h1,h2,h3{font-family:var(--f-display);font-weight:800;margin:0;text-wrap:balance
 <main class="wrap">
  <section id="intro">
   <div class="facts" id="facts"></div>
-  <p class="intro">Ogni doppia pagina del binder è una tappa del viaggio di Oro e Argento. Le carte sono scelte per l'illustrazione, non per il valore: <em>tutti i cento Pokémon di Johto</em>, gli otto capopalestra, la Lega, Kanto e infine Rosso, in cima al Monte Argento. Tra una carta e l'altra, stampe originali in oro su verde raccontano i luoghi.</p>
+  <p class="intro">Ogni doppia pagina del binder è una tappa del viaggio di Oro e Argento: <em>tutti i cento Pokémon di Johto</em>, gli otto capopalestra, la Lega, Kanto e infine Rosso, in cima al Monte Argento. Tra una carta e l'altra, stampe originali in oro su verde raccontano i luoghi.</p>
  </section>
  <nav class="map" id="mappa" aria-label="Le tappe del viaggio"></nav>
  <div id="journey"></div>
 </main>
 
-<section class="band" id="arita"><div class="wrap">
- <span class="mono" style="display:block;text-align:center">Il filo rosso</span>
- <h2>Le carte di Mitsuhiro Arita</h2>
- <p class="sub">Il pezzo chiave del binder è il Feraligatr di Expedition, illustrato da Arita. Le sue carte attraversano tutto il viaggio: eccole in fila.</p>
- <div class="strip" id="arita-strip"></div>
-</div></section>
-
-<section class="band" id="medaglie" style="margin-top:20px"><div class="wrap">
+<section class="band" id="medaglie"><div class="wrap">
  <span class="mono" style="display:block;text-align:center">Le otto palestre</span>
  <h2>Le medaglie di Johto</h2>
  <div class="medals" id="medals"></div>
@@ -228,7 +218,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:800;margin:0;text-wrap:balance
 "use strict";
 const D=window.COLLEZIONE;
 const esc=t=>String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
-const TAGL={arita:"Arita",pers:"personaggio",ita:"verifica ITA"};
+const TAGL={pers:"personaggio"};
 const itName=n=>n.replace(/ · (alto|basso)$/,"");
 const SET_IT=D.set.italiano,setIt=s=>SET_IT[s]||s;
 // tutte le tasche, con il contenuto di partenza; i cambi di Leo arrivano dal database
@@ -247,7 +237,7 @@ function visual(x,q){const k=upKey(x);if(k)return `<img alt="" data-up="${esc(k)
  if(x.t==="p")return art(x);const e=era(x);const p=parseSet(x.s);return `<span class="ph" style="--era:${e.c}"><b>${esc(itName(x.n))}</b><small>${esc(setIt(p.set))} ${esc(p.num)}</small></span>`}
 function imgFail(i){if(/assets\.tcgdex\.net\/it\//.test(i.src)){i.src=i.src.replace("/it/","/en/");return}const x=BYID[i.closest("[data-id]")&&i.closest("[data-id]").dataset.id];
  if(x){const t=document.createElement("span");t.innerHTML=x.t==="p"?art(x):`<span class="ph" style="--era:${era(x).c}"><b>${esc(itName(x.n))}</b></span>`;i.replaceWith(...t.childNodes)}else i.remove()}
-const pocket=x=>`<button class="pk" data-id="${x.id}" aria-label="${esc(itName(x.n))}, pagina ${x.page}">${visual(x,"low")}${x.f.includes("arita")?'<span class="ar">Arita</span>':""}</button>`;
+const pocket=x=>`<button class="pk" data-id="${x.id}" aria-label="${esc(itName(x.n))}, pagina ${x.page}">${visual(x,"low")}</button>`;
 
 // ---- costruzione del racconto ----
 const ROMAN=["I","II","III","IV","V","VI","VII","VIII"];
@@ -264,7 +254,6 @@ function buildJourney(){const ix={};D.tappe.forEach((t,i)=>ix[t.id]=i);let h="";
    h+=`<section class="stop reveal" id="t-${t.id}"><div class="stop-head"><span class="stop-n">${ti+1}</span><span class="mono">${pagesLabel(t)}</span><h3>${esc(t.title)}</h3><span class="jp">${esc(t.jp||"")}</span>${med?`<span class="medal-chip"><svg viewBox="0 0 63 76" aria-hidden="true">${medal(med)}</svg>Medaglia ${esc(med)}</span>`:""}<p>${esc(t.desc||"")}</p></div>
     <div class="book">${pages.map(pg=>pg?`<div class="pg"><div class="pg-h"><span>${esc(pg.h)}</span><span>p. ${pg.n}</span></div>${POCKETS.filter(x=>x.page===pg.n).map(pocket).join("")}</div>`:'<div class="pg empty"></div>').join("")}</div></section>`})});
  document.getElementById("journey").innerHTML=h;
- document.getElementById("arita-strip").innerHTML=POCKETS.filter(x=>x.t==="c"&&x.f.includes("arita")).map(pocket).join("");
  document.getElementById("medals").innerHTML=POCKETS.filter(x=>/^Medaglia /.test(x.n)).map(pocket).join("");
  const fr=[...new Set(POCKETS.map(x=>x.consiglio).filter(Boolean))];const th=document.getElementById("thanks");th.hidden=!fr.length;
  if(fr.length)th.innerHTML=`Alcune carte le hanno scelte gli amici di Leo: grazie a <b>${fr.map(esc).join("</b>, <b>")}</b>.`;
@@ -286,12 +275,12 @@ function paintLb(){const x=BYID[LB[LBi]],p=parseSet(x.s),r=Math.floor(+x.id.spli
  document.getElementById("lb-k").textContent=(x.t==="p"?"Stampa originale":"Carta")+" · "+D.tappe[x.tappa].title;
  document.getElementById("lb-name").textContent=itName(x.n);
  document.getElementById("lb-set").textContent=x.t==="p"?"Illustrazione oro su verde, 63×88 mm":`${setIt(p.set)}${p.num?" · "+p.num:""}${p.variant?" · "+p.variant:""}`;
- document.getElementById("lb-tags").innerHTML=x.f.filter(f=>f==="arita"||f==="pers").map(f=>`<span>${f==="arita"?"Illustrata da Mitsuhiro Arita":"Personaggio di Johto"}</span>`).join("")+(x.consiglio?`<span>Consigliata da ${esc(x.consiglio)}</span>`:"");
+ document.getElementById("lb-tags").innerHTML=x.f.filter(f=>f==="pers").map(()=>`<span>Personaggio di Johto</span>`).join("")+(x.consiglio?`<span>Consigliata da ${esc(x.consiglio)}</span>`:"");
  const note=x.note||(x.t==="p"?"Una delle stampe originali che raccontano i luoghi del viaggio.":"");document.getElementById("lb-note").textContent=note;document.getElementById("lb-note").hidden=!note;
  document.getElementById("lb-pos").textContent=`Nel binder: pagina ${x.page}, riga ${r}, colonna ${c} · ${x.pageTitle}`;
  document.getElementById("lb-prev").disabled=LBi===0;document.getElementById("lb-next").disabled=LBi===LB.length-1}
 function closeLb(){lb.hidden=true;document.body.style.overflow="";lastFocus&&lastFocus.focus&&lastFocus.focus({preventScroll:true})}
-document.addEventListener("click",e=>{const b=e.target.closest(".pk");if(!b)return;const sc=b.closest(".book,.strip,.medals");const scope=[...(sc||document).querySelectorAll(".pk")].map(z=>z.dataset.id);openLb(b.dataset.id,scope)});
+document.addEventListener("click",e=>{const b=e.target.closest(".pk");if(!b)return;const sc=b.closest(".book,.medals");const scope=[...(sc||document).querySelectorAll(".pk")].map(z=>z.dataset.id);openLb(b.dataset.id,scope)});
 document.getElementById("lb-x").onclick=closeLb;lb.addEventListener("click",e=>{if(e.target===lb)closeLb()});
 document.getElementById("lb-prev").onclick=()=>{if(LBi>0){LBi--;paintLb()}};document.getElementById("lb-next").onclick=()=>{if(LBi<LB.length-1){LBi++;paintLb()}};
 document.addEventListener("keydown",e=>{if(lb.hidden)return;if(e.key==="Escape")closeLb();else if(e.key==="ArrowRight")document.getElementById("lb-next").click();else if(e.key==="ArrowLeft")document.getElementById("lb-prev").click()});
